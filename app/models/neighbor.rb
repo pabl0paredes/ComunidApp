@@ -6,3 +6,4 @@ class Neighbor < ApplicationRecord
   validates :unit, presence: true, length: { maximum: 10 }
   validates :unit, uniqueness: { scope: :community_id }
 end
+
