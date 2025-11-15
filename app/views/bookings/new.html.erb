@@ -1,0 +1,31 @@
+<div class="container mt-4">
+  <h2 class="fw-bold">Nueva reserva para <%= @common_space.name %></h2>
+
+  <div class="mt-3">
+    <%= simple_form_for [@common_space, @booking] do |f| %>
+      
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :start,
+              as: :datetime,
+              label: "Inicio",
+              input_html: { class: "form-control rounded-pill" } %>
+        </div>
+
+        <div class="col-md-6">
+          <%= f.input :end,
+              as: :datetime,
+              label: "Fin",
+              input_html: { class: "form-control rounded-pill" } %>
+        </div>
+      </div>
+
+      <%= f.button :submit, "Crear reserva",
+          class: "btn btn-primary mt-3 rounded-pill" %>
+
+    <% end %>
+  </div>
+
+  <%= link_to "Volver", common_space_bookings_path(@common_space),
+      class: "btn btn-secondary mt-3 rounded-pill" %>
+</div>
