@@ -1,0 +1,35 @@
+<h1>Detalles del Gasto Común</h1>
+
+<p>
+  <strong>Gasto común:</strong>
+  <%= @common_expense.date.strftime("%d/%m/%Y") %> —
+  Total: <%= number_to_currency(@common_expense.total, unit: "$") %>
+</p>
+
+<hr>
+
+<h2>Detalles</h2>
+
+<% if @expense_details.any? %>
+  <ul>
+    <% @expense_details.each do |detail| %>
+      <li>
+        <strong><%= detail.detail %></strong> —
+        <%= number_to_currency(detail.amount, unit: "$") %>
+
+        · <%= link_to "Ver", expense_detail_path(detail) %>
+        · <%= link_to "Editar", edit_expense_detail_path(detail) %>
+        · <%= link_to "Eliminar", expense_detail_path(detail),
+                      data: { turbo_method: :delete, confirm: "¿Seguro?" } %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No hay detalles cargados.</p>
+<% end %>
+
+<hr>
+
+<%= link_to "Agregar nuevo detalle", new_common_expense_expense_detail_path(@common_expense) %>
+<br>
+<%= link_to "Volver a gastos comunes", community_common_expenses_path(@common_expense.community) %>

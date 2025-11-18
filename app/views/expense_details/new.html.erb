@@ -1,0 +1,19 @@
+<h1>Nuevo Detalle de Gasto</h1>
+
+<%= form_with model: [@common_expense, @expense_detail] do |f| %>
+  <p>
+    <%= f.label :detail, "Detalle" %><br>
+    <%= f.text_field :detail %>
+  </p>
+
+  <p>
+    <%= f.label :amount, "Monto" %><br>
+    <%= f.number_field :amount %>
+  </p>
+
+  <%= f.submit "Crear" %>
+<% end %>
+
+<br>
+<%= link_to "Volver", common_expense_expense_details_path(@common_expense) %>
+

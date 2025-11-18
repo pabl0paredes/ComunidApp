@@ -1,0 +1,18 @@
+<h1>Editar Detalle</h1>
+
+<%= form_with model: @expense_detail do |f| %>
+  <p>
+    <%= f.label :detail, "Detalle" %><br>
+    <%= f.text_field :detail, value: @expense_detail.detail %>
+  </p>
+
+  <p>
+    <%= f.label :amount, "Monto" %><br>
+    <%= f.number_field :amount, value: @expense_detail.amount %>
+  </p>
+
+  <%= f.submit "Actualizar" %>
+<% end %>
+
+<br>
+<%= link_to "Volver", expense_detail_path(@expense_detail) %>
