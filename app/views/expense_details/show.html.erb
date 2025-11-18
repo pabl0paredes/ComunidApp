@@ -1,0 +1,23 @@
+<h1>Detalle del Gasto</h1>
+
+<p>
+  <strong>Detalle:</strong> <%= @expense_detail.detail %>
+</p>
+
+<p>
+  <strong>Monto:</strong>
+  <%= number_to_currency(@expense_detail.amount, unit: "$") %>
+</p>
+
+<p>
+  <strong>Gasto común:</strong>
+  <%= @expense_detail.common_expense.date.strftime("%d/%m/%Y") %>
+</p>
+
+<hr>
+
+<%= link_to "Editar", edit_expense_detail_path(@expense_detail) %>
+<br>
+<%= link_to "Volver al listado", common_expense_expense_details_path(@expense_detail.common_expense) %>
+
+

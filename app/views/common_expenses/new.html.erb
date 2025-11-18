@@ -1,0 +1,9 @@
+<h1>Nuevo gasto común</h1>
+
+<%= simple_form_for([@community, @common_expense]) do |f| %>
+  <%= f.input :date, label: "Fecha", as: :date %>
+  <%= f.input :total, label: "Total", as: :integer %>
+  <%= f.button :submit, "Crear" %>
+<% end %>
+
+<%= link_to "Volver", community_common_expenses_path(@community) %>

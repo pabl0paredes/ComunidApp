@@ -1,0 +1,31 @@
+<h1>Gastos Comunes</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Fecha</th>
+      <th>Total</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @common_expenses.each do |common_expense| %>
+      <tr>
+        <td><%= l(common_expense.date) %></td>
+        <td><%= number_to_currency(common_expense.total) %></td>
+        <td>
+          <%= link_to 'Mostrar', common_expense_path(common_expense) %> |
+          <%= link_to 'Editar', edit_common_expense_path(common_expense) %> |
+          <%= link_to 'Eliminar',
+                      common_expense_path(common_expense),
+                      method: :delete,
+                      data: { confirm: "¿Seguro que deseas eliminar este gasto común?" } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to "Nuevo Gasto Común", new_community_common_expense_path(@community) %> |
+<%= link_to "Volver a la comunidad", community_path(@community) %>
