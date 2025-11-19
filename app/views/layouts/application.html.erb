@@ -6,12 +6,20 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+    <!-- CSS de la app -->
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+
+    <!-- CSS de Flatpickr (tema material_blue) -->
+    <%= stylesheet_link_tag "https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css", media: "all" %>
+    <%= stylesheet_link_tag "https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/themes/material_blue.css", media: "all" %>
+
+    <!-- JS Importmaps -->
     <%= javascript_importmap_tags %>
   </head>
 
-  <body><%= render "shared/navbar" %>
-<%= render "shared/flashes" %>
+  <body>
+    <%= render "shared/navbar" %>
+    <%= render "shared/flashes" %>
 
     <%= yield %>
   </body>
