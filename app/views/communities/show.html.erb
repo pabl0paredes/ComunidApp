@@ -1,0 +1,22 @@
+<h1> <%= @community.name %> </h1>
+<ul>
+  <li>Usuarios: .../ <%= @community.size %></li>
+  <li>Administrador: <%= @community.administrator.user.name %></li>
+</ul>
+<div
+  id="map-show"
+  data-lat="<%= @community.latitude %>"
+  data-lng="<%= @community.longitude %>"
+  style="height: 400px; border-radius: 8px; margin-bottom: 20px;"
+>
+</div>
+
+<%= link_to "Editar Comunidad",  edit_community_path(@community), class: "btn btn-primary"%>
+
+<%= link_to "Volver a Mis Comunidades", communities_path, class: "btn btn-secondary" %>
+
+<%= link_to "Eliminar",
+  community_path(@community),
+  data: {turbo_method: :delete, turbo_confirm: "Are you sure?"},
+  class: "btn btn-danger"
+%>
