@@ -1,35 +1,76 @@
-<h1>Detalles del Gasto Común</h1>
+<div class="container mt-4">
 
-<p>
-  <strong>Gasto común:</strong>
-  <%= @common_expense.date.strftime("%d/%m/%Y") %> —
-  Total: <%= number_to_currency(@common_expense.total, unit: "$") %>
-</p>
 
-<hr>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h4">Detalles del Gasto Común</h1>
 
-<h2>Detalles</h2>
+    <%= link_to "Agregar nuevo detalle",
+        new_common_expense_expense_detail_path(@common_expense),
+        class: "btn btn-primary" %>
+  </div>
 
-<% if @expense_details.any? %>
-  <ul>
-    <% @expense_details.each do |detail| %>
-      <li>
-        <strong><%= detail.detail %></strong> —
-        <%= number_to_currency(detail.amount, unit: "$") %>
 
-        · <%= link_to "Ver", expense_detail_path(detail) %>
-        · <%= link_to "Editar", edit_expense_detail_path(detail) %>
-        · <%= link_to "Eliminar", expense_detail_path(detail),
-                      data: { turbo_method: :delete, confirm: "¿Seguro?" } %>
-      </li>
-    <% end %>
-  </ul>
-<% else %>
-  <p>No hay detalles cargados.</p>
-<% end %>
+  <div class="alert alert-info">
+    <strong>Gasto común:</strong>
+    <%= @common_expense.date.strftime("%d/%m/%Y") %> —
+    <strong>Total:</strong>
+    <%= number_to_currency(@common_expense.total, unit: "$") %>
+  </div>
 
-<hr>
 
-<%= link_to "Agregar nuevo detalle", new_common_expense_expense_detail_path(@common_expense) %>
-<br>
-<%= link_to "Volver a gastos comunes", community_common_expenses_path(@common_expense.community) %>
+  <div class="card shadow-sm">
+    <div class="card-body p-0">
+
+      <% if @expense_details.any? %>
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Detalle</th>
+              <th>Monto</th>
+              <th class="text-end">Acciones</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <% @expense_details.each do |detail| %>
+              <tr>
+                <td><%= detail.detail %></td>
+                <td><%= number_to_currency(detail.amount, unit: "$") %></td>
+
+                <td class="text-end">
+                  <%= link_to "Ver",
+                      expense_detail_path(detail),
+                      class: "btn btn-sm btn-outline-secondary" %>
+
+                  <%= link_to "Editar",
+                      edit_expense_detail_path(detail),
+                      class: "btn btn-sm btn-outline-primary" %>
+
+                  <%= link_to "Eliminar",
+                      expense_detail_path(detail),
+                      method: :delete,
+                      data: { confirm: "¿Seguro que deseas eliminar este detalle?" },
+                      class: "btn btn-sm btn-outline-danger" %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+
+      <% else %>
+        <div class="p-3">
+          <p class="text-muted mb-0">No hay detalles cargados.</p>
+        </div>
+      <% end %>
+
+    </div>
+  </div>
+
+
+  <div class="mt-3">
+    <%= link_to "Volver a gastos comunes",
+        community_common_expenses_path(@common_expense.community),
+        class: "btn btn-secondary" %>
+  </div>
+
+</div>
