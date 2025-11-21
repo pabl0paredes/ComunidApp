@@ -1,38 +1,81 @@
-<h1>Detalle de gasto común</h1>
-<p>
-  <strong>Total:</strong>
-  <%= number_to_currency(@common_expense.total) %>
-</p>
-<p>
-  <strong>Fecha:</strong>
-  <%= l(@common_expense.date) %>
-</p>
-<hr>
-<h2>Detalles del gasto</h2>
-<% if @common_expense.expense_details.any? %>
-  <ul>
-    <% @common_expense.expense_details.each do |detail| %>
-      <li>
-        <strong><%= detail.detail %></strong> —
-        <%= number_to_currency(detail.amount) %> |
-        <%= link_to "Ver", expense_detail_path(detail) %>
-      </li>
-    <% end %>
-  </ul>
-<% else %>
-  <p>No hay detalles asociados.</p>
-<% end %>
-<p>
-  <%= link_to 'Agregar detalle', new_common_expense_expense_detail_path(@common_expense) %>
-</p>
-<hr>
-<p>
-  <%= link_to 'Editar', edit_common_expense_path(@common_expense) %> |
-  <%= link_to 'Volver a la lista de gastos comunes', community_common_expenses_path(@common_expense.community) %>
-</p>
-<p>
-  <%= link_to 'Eliminar gasto común', @common_expense, method: :delete, data: { confirm: '¿Estás seguro?' } %>
-</p>
-<p>
-  <%= link_to 'Volver a la comunidad', community_path(@common_expense.community) %>
-</p>
+<div class="container mt-4">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3">Detalle del Gasto Común</h1>
+
+    <%= link_to "Volver a la comunidad",
+        community_path(@common_expense.community),
+        class: "btn btn-secondary" %>
+  </div>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+
+      <p class="mb-2">
+        <strong>Total:</strong>
+        <span class="ms-2"><%= number_to_currency(@common_expense.total) %></span>
+      </p>
+
+      <p class="mb-0">
+        <strong>Fecha:</strong>
+        <span class="ms-2"><%= l(@common_expense.date) %></span>
+      </p>
+
+    </div>
+  </div>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+
+      <h2 class="h5 mb-3">Detalles del gasto</h2>
+
+      <% if @common_expense.expense_details.any? %>
+        <table class="table table-hover">
+          <thead class="table-light">
+            <tr>
+              <th>Detalle</th>
+              <th>Monto</th>
+              <th class="text-end">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @common_expense.expense_details.each do |detail| %>
+              <tr>
+                <td><strong><%= detail.detail %></strong></td>
+                <td><%= number_to_currency(detail.amount) %></td>
+                <td class="text-end">
+                  <%= link_to "Ver",
+                      expense_detail_path(detail),
+                      class: "btn btn-sm btn-outline-secondary" %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% else %>
+        <p class="text-muted">No hay detalles asociados.</p>
+      <% end %>
+
+      <%= link_to "Agregar detalle",
+          new_common_expense_expense_detail_path(@common_expense),
+          class: "btn btn-primary mt-2" %>
+
+    </div>
+  </div>
+
+  <div class="d-flex gap-2">
+    <%= link_to "Editar",
+        edit_common_expense_path(@common_expense),
+        class: "btn btn-outline-primary" %>
+
+    <%= link_to "Volver a la lista",
+        community_common_expenses_path(@common_expense.community),
+        class: "btn btn-outline-secondary" %>
+
+    <%= link_to "Eliminar gasto común",
+        @common_expense,
+        data: { turbo_method: :delete, turbo_confirm: "¿Estás seguro de eliminar este gasto?" },
+        class: "btn btn-outline-danger ms-auto" %>
+  </div>
+
+</div>
