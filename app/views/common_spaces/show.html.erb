@@ -1,0 +1,33 @@
+<h1><%= @common_space.name %></h1>
+
+<p><%= @common_space.description %></p>
+<p>Precio: S/ <%= @common_space.price %></p>
+
+<hr>
+
+<h3>Horarios Disponibles</h3>
+
+<% @usable_hours.each do |hour| %>
+  <p>
+    <strong><%= Date::DAYNAMES[hour.weekday] %>:</strong>
+    <%= hour.start.strftime("%H:%M") %> - <%= hour.end.strftime("%H:%M") %>
+  </p>
+<% end %>
+
+<hr>
+
+<h3>Reservas</h3>
+
+<%= link_to "Nueva reserva", new_common_space_booking_path(@common_space), class: "btn btn-success mb-3" %>
+
+<ul class="list-group">
+  <% @bookings.each do |booking| %>
+    <li class="list-group-item d-flex justify-content-between">
+      <span>
+        <strong><%= booking.neighbor.user.name %></strong><br>
+        <%= booking.start.strftime("%d-%m %H:%M") %> → <%= booking.end.strftime("%d-%m %H:%M") %>
+      </span>
+      <%= link_to "Ver", booking_path(booking), class: "btn btn-primary btn-sm" %>
+    </li>
+  <% end %>
+</ul>

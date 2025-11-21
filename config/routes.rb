@@ -22,13 +22,15 @@ Rails.application.routes.draw do
   resources :neighbors, only: [:show, :edit, :update, :destroy]
 
   resources :common_spaces, only: [:show, :destroy, :edit, :update] do
-    resources :bookings, only: [:create]
+    # resources :bookings, only: [:create] #para ver las reservas dentro de los common spaces y posteriormente hacer una reserva
+    resources :bookings, only: [:index, :new, :create, :show]
     resources :usable_hours, only: [:create, :update]
   end
 
   resources :usable_hours, only: [:destroy]
 
-  resources :bookings, only: [:show, :destroy, :edit, :update, :index]
+  #resources :bookings, only: [:show, :destroy, :edit, :update, :index]
+  resources :bookings, only: [:destroy, :edit, :update]
 
   resources :common_expenses, only: [:show, :destroy, :edit, :update] do
     resources :expense_details, only: [:new, :create, :index]
