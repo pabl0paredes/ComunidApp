@@ -1,0 +1,27 @@
+<div class="container mt-4">
+  <h2 class="fw-bold">Editar reserva</h2>
+
+  <div class="mt-3">
+    <%= simple_form_for @booking do |f| %>
+
+      <%= f.error_notification %>
+
+      <% if @booking.errors.any? %>
+        <div class="alert alert-danger">
+          <ul>
+            <% @booking.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <%= render "form", f: f %>
+
+    <% end %>
+  </div>
+
+  <%= link_to "Volver",
+      common_space_bookings_path(@booking.common_space),
+      class: "btn btn-secondary mt-3 rounded-pill" %>
+</div>
