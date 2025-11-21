@@ -1,0 +1,96 @@
+<div class="container mt-3">
+  <%= link_to "← Volver a chats", community_chats_path(@chat.community), class: "btn btn-secondary mb-3" %>
+
+  <% if @show_chat.is_hidden? %>
+  <%= button_to "Mostrar chat", show_chat_path(@show_chat),
+      method: :patch,
+      params: { show_chat: { is_hidden: false } },
+      class: "btn btn-success mb-3" %>
+  <% else %>
+  <%= button_to "Ocultar chat", show_chat_path(@show_chat),
+      method: :patch,
+      params: { show_chat: { is_hidden: true } },
+      class: "btn btn-warning mb-3" %>
+  <% end %>
+  <!-- Título del chat -->
+  <h2><%= @chat.name %></h2>
+  <p class="text-muted">Categoría: <%= @chat.category %></p>
+
+  <hr>
+
+  <!-- LISTA DE MENSAJES -->
+  <h4>Mensajes</h4>
+
+  <div id="messages-container" class="messages-list mb-4" style="max-height: 400px; overflow-y: auto; padding: 10px; background: #f8f9fa; border-radius: 8px;">
+
+    <% if @messages.any? %>
+      <% @messages.each do |msg| %>
+        <% own = msg.user_id == current_user.id %>
+
+        <div class="message-wrapper <%= own ? 'message-right' : 'message-left' %>">
+
+          <div class="message-bubble <%= own ? 'my-bubble' : 'other-bubble' %> shadow-sm">
+
+            <!-- Nombre del usuario -->
+            <strong>
+              <%= own ? "Tú" : msg.user.name %>:
+            </strong>
+
+            <p class="mb-1"><%= msg.content %></p>
+
+            <span class="small <%= own ? 'text-light' : 'text-muted' %>">
+              <%= msg.created_at.strftime("%d/%m/%Y %H:%M") %>
+            </span>
+            <!-- Botón de eliminar mensaje -->
+            <% if current_user.administrator.present? || msg.user_id == current_user.id %>
+              <div class="mt-1">
+                <%= link_to "Eliminar",
+                            message_path(msg),
+                            method: :delete,
+                            data: { confirm: "¿Seguro que querés eliminar este mensaje?" },
+                            class: "delete-message text-danger small" %>
+              </div>
+            <% end %>
+
+          </div>
+
+        </div>
+      <% end %>
+    <% else %>
+      <p class="text-muted">Todavía no hay mensajes.</p>
+    <% end %>
+
+
+  </div>
+
+  <hr>
+
+  <!-- FORMULARIO DE NUEVO MENSAJE -->
+  <h4>Nuevo mensaje</h4>
+
+  <%= form_with model: [@chat, @message], local: true do |f| %>
+    <div class="mb-3">
+      <%= f.text_area :content,
+            maxlength: 500,
+            rows: 3,
+            class: "form-control",
+            placeholder: "Escribe tu mensaje..." %>
+    </div>
+
+    <%= f.submit "Enviar", class: "btn btn-primary" %>
+  <% end %>
+
+</div>
+
+
+<script>
+  document.addEventListener("turbo:load", scrollToBottom);
+  document.addEventListener("DOMContentLoaded", scrollToBottom);
+
+  function scrollToBottom() {
+    const container = document.getElementById("messages-container");
+    if (container) {
+      container.scrollTop = container.scrollHeight;
+    }
+  }
+</script>

@@ -43,6 +43,8 @@ Rails.application.routes.draw do
     resources :messages, only: [:create]
   end
 
-  resources :show_chats, only: [:create, :udpate]
+  resources :messages, only: [:destroy]
+  
+  resources :show_chats, only: [:create, :update]
 
 end

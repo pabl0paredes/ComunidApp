@@ -1,0 +1,42 @@
+/* WRAPPER DE MENSAJES */
+.message-wrapper {
+  display: flex;
+  margin-bottom: 12px;
+}
+
+.message-left {
+  text-align: left;
+  justify-content: flex-start;
+}
+
+.message-right {
+  text-align: right;
+  justify-content: flex-end;
+}
+
+/* BURBUJAS */
+.message-bubble {
+  max-width: 70%;
+  padding: 10px 12px;
+  border-radius: 12px;
+}
+
+/* Burbuja del usuario actual */
+.my-bubble {
+  background-color: #9b59b6; /* violeta/lila */
+  color: #fff;
+}
+
+/* Burbuja de otros usuarios */
+.other-bubble {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  color: #333;
+}
+
+/* Colores para nombres de usuarios */
+.user-name-1 { color: #007bff; }
+.user-name-2 { color: #e67e22; }
+.user-name-3 { color: #2ecc71; }
+.user-name-4 { color: #c0392b; }
+.user-name-5 { color: #16a085; }

@@ -1,0 +1,24 @@
+<%= form_with model: [@community, @chat] do |f| %>
+
+  <% if @chat.errors.any? %>
+    <div class="alert alert-danger">
+      <ul>
+        <% @chat.errors.full_messages.each do |error| %>
+          <li><%= error %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :name, "Nombre del chat" %>
+    <%= f.text_field :name, maxlength: 25, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :category %>
+    <%= f.select :category, ['General','Mantenimiento','Eventos','Seguridad','Otros'], {}, class: "form-control" %>
+  </div>
+
+  <%= f.submit "Guardar", class: "btn btn-primary mt-2" %>
+<% end %>

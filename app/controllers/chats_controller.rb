@@ -1,25 +1,91 @@
 class ChatsController < ApplicationController
-  def index
-  end
+  before_action :set_chat, only: [:show, :edit, :update, :destroy]
+  before_action :require_admin, only: [:edit, :update]
+  before_action :load_categories, only: [:index, :new, :edit]
 
-  def show
+  def index
+    @community = Community.find(params[:community_id])
+    @chats = @community.chats
+
+    @category_descriptions = {
+      "General" => "Conversaciones generales de la comunidad.",
+      "Mantenimiento" => "Reportes, arreglos y mejoras en el edificio.",
+      "Eventos" => "Organización de reuniones y actividades comunitarias.",
+      "Seguridad" => "Alertas, avisos y temas relacionados con la seguridad.",
+      "Otros" => "Cualquier conversación que no encaja en las demás categorías."
+    }
+
+    hidden_chat_ids = ShowChat.where(user: current_user, is_hidden: true).pluck(:chat_id)
+    @visible_chats = @chats.where.not(id: hidden_chat_ids)
+    @hidden_chats  = @chats.where(id: hidden_chat_ids)
   end
 
   def new
+    @community = Community.find(params[:community_id])
+    @chat = @community.chats.new
   end
 
   def create
+    @community = Community.find(params[:community_id])
+    @chat = @community.chats.build(chat_params)
+
+    if @chat.save
+      redirect_to chat_path(@chat), notice: "Chat creado correctamente."
+    else
+      render :new, status: :unprocessable_entity
+    end
+  end
+
+  def show
+    @messages = @chat.messages.includes(:user).order(created_at: :asc)
+    @message  = Message.new
+
+    @show_chat = ShowChat.find_or_create_by!(
+      user: current_user,
+      chat: @chat
+    )
   end
 
   def edit
   end
 
   def update
+    if @chat.update(chat_params)
+      redirect_to chat_path(@chat), notice: "Chat actualizado."
+    else
+      render :edit, status: :unprocessable_entity
+    end
   end
 
   def destroy
+    community = @chat.community
+    @chat.destroy
+    redirect_to community_chats_path(community), notice: "Chat eliminado."
   end
 
   def hidden
+    show_chats = ShowChat.where(user: current_user, is_hidden: true)
+    @hidden_chats = show_chats.includes(:chat).map(&:chat)
+  end
+
+  private
+
+  def set_chat
+    @chat = Chat.find(params[:id])
+  end
+
+  def chat_params
+    params.require(:chat).permit(:category)
+  end
+
+  def require_admin
+    unless current_user.administrator.present?
+      redirect_to chat_path(@chat), alert: "No tenés permiso para hacer eso."
+    end
+  end
+
+  def load_categories
+    @categories = ["General", "Mantenimiento", "Eventos", "Seguridad", "Otros"]
   end
 end
+
