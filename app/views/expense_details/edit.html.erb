@@ -1,0 +1,38 @@
+<div class="container mt-4">
+
+  <h1 class="h4 mb-4">Editar Detalle</h1>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+
+      <%= form_with model: @expense_detail, local: true do |f| %>
+
+        <div class="mb-3">
+          <%= f.label :detail, "Detalle", class: "form-label" %>
+          <%= f.text_field :detail,
+                           value: @expense_detail.detail,
+                           class: "form-control" %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :amount, "Monto", class: "form-label" %>
+          <%= f.number_field :amount,
+                             value: @expense_detail.amount,
+                             class: "form-control",
+                             step: "0.01" %>
+        </div>
+
+        <div class="d-flex gap-2">
+          <%= f.submit "Actualizar", class: "btn btn-primary" %>
+
+          <%= link_to "Volver",
+              expense_detail_path(@expense_detail),
+              class: "btn btn-outline-secondary" %>
+        </div>
+
+      <% end %>
+
+    </div>
+  </div>
+
+</div>
