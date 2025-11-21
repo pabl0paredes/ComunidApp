@@ -1,0 +1,12 @@
+<div class="d-flex justify-content-between">
+  <div>
+    <h2>Editar Comunidad</h2>
+  </div>
+  <div>
+    <%= link_to "Volver a Mis Comunidades", communities_path %>
+  </div>
+</div>
+
+<%= render "form", community: @community %>
+
+<%= link_to "Volver a Mis Comunidades", communities_path %>

@@ -2,7 +2,8 @@ import "@hotwired/turbo-rails"
 import "controllers"
 import "@popperjs/core"
 import "bootstrap"
-
+import "./map"
+import "./maps/show_map"
 // Flatpickr JS
 import flatpickr from "flatpickr"
 

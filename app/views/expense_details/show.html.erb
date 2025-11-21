@@ -1,0 +1,36 @@
+<div class="container mt-4">
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+
+      <h1 class="h4 mb-4">Detalle del Gasto</h1>
+
+      <p class="mb-2">
+        <strong>Detalle:</strong>
+        <%= @expense_detail.detail %>
+      </p>
+
+      <p class="mb-2">
+        <strong>Monto:</strong>
+        <%= number_to_currency(@expense_detail.amount, unit: "$") %>
+      </p>
+
+      <p class="mb-2">
+        <strong>Gasto común:</strong>
+        <%= @expense_detail.common_expense.date.strftime("%d/%m/%Y") %>
+      </p>
+
+    </div>
+  </div>
+
+  <div class="d-flex gap-2">
+    <%= link_to "Editar",
+        edit_expense_detail_path(@expense_detail),
+        class: "btn btn-outline-primary" %>
+
+    <%= link_to "Volver al listado",
+        common_expense_expense_details_path(@expense_detail.common_expense),
+        class: "btn btn-outline-secondary" %>
+  </div>
+
+</div>
