@@ -3,15 +3,5 @@
 <% end %>
 
 <%= turbo_stream.replace "new_message_form" do %>
-  <%= form_with model: [@message.chat, Message.new] do |f| %>
-    <div class="mb-3">
-      <%= f.text_area :content,
-            maxlength: 500,
-            rows: 3,
-            class: "form-control",
-            placeholder: "Escribe tu mensaje..." %>
-    </div>
-
-    <%= f.submit "Enviar", class: "btn btn-primary" %>
-  <% end %>
+  <%= render "messages/form", chat: @message.chat, message: Message.new %>
 <% end %>

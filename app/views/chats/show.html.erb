@@ -13,45 +13,53 @@
         class: "btn btn-warning mb-3" %>
   <% end %>
 
-  <!-- Título del chat -->
   <h2><%= @chat.name %></h2>
   <p class="text-muted">Categoría: <%= @chat.category %></p>
 
   <hr>
 
-  <!-- LISTA DE MENSAJES -->
   <h4>Mensajes</h4>
 
-  <div id="messages" class="messages-list mb-4" style="max-height: 400px; overflow-y: auto; padding: 10px; background: #f8f9fa; border-radius: 8px;">
-
-    <% if @messages.any? %>
-      <%= render @messages %>
-    <% else %>
-      <p class="text-muted">Todavía no hay mensajes.</p>
-    <% end %>
-
-  </div>
+  <%= turbo_frame_tag "messages" do %>
+    <div id="messages" class="messages-list mb-4" style="max-height: 400px; overflow-y: auto; padding: 10px; background: #f8f9fa; border-radius: 8px;">
+      <% if @messages.any? %>
+        <%= render @messages %>
+      <% else %>
+        <p class="text-muted">Todavía no hay mensajes.</p>
+      <% end %>
+    </div>
+  <% end %>
 
   <hr>
 
-  <!-- FORMULARIO DE NUEVO MENSAJE -->
   <h4>Nuevo mensaje</h4>
-
   <div id="new_message_form">
     <%= render "messages/form", chat: @chat, message: @message %>
   </div>
-
-
 </div>
 
 <script>
-  document.addEventListener("turbo:load", scrollToBottom);
-  document.addEventListener("DOMContentLoaded", scrollToBottom);
-
   function scrollToBottom() {
     const container = document.getElementById("messages");
-    if (container) {
+    if (!container) return;
+
+    // Ejecutar después de que el DOM esté listo
+    requestAnimationFrame(() => {
       container.scrollTop = container.scrollHeight;
+      console.log("Scroll aplicado:", container.scrollTop, container.scrollHeight);
+    });
+  }
+
+  // Scroll inicial al cargar la página
+  document.addEventListener("turbo:load", scrollToBottom);
+
+  // Scroll después de actualizar el frame de mensajes (envío/eliminación)
+  const messagesFrame = document.getElementById("messages");
+  if (messagesFrame) {
+    const frameParent = messagesFrame.closest("turbo-frame");
+    if (frameParent) {
+      frameParent.addEventListener("turbo:frame-load", scrollToBottom);
     }
   }
 </script>
+

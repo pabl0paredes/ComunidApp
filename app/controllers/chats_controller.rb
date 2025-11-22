@@ -5,7 +5,9 @@ class ChatsController < ApplicationController
 
   def index
     @community = Community.find(params[:community_id])
-    @chats = @community.chats
+
+    # Pundit requiere policy_scope en index
+    @chats = policy_scope(@community.chats)
 
     @category_descriptions = {
       "General" => "Conversaciones generales de la comunidad.",
@@ -23,11 +25,13 @@ class ChatsController < ApplicationController
   def new
     @community = Community.find(params[:community_id])
     @chat = @community.chats.new
+    authorize @chat
   end
 
   def create
     @community = Community.find(params[:community_id])
     @chat = @community.chats.build(chat_params)
+    authorize @chat
 
     if @chat.save
       redirect_to chat_path(@chat), notice: "Chat creado correctamente."
@@ -37,6 +41,8 @@ class ChatsController < ApplicationController
   end
 
   def show
+    authorize @chat
+
     @messages = @chat.messages.includes(:user).order(created_at: :asc)
     @message  = Message.new
 
@@ -47,9 +53,11 @@ class ChatsController < ApplicationController
   end
 
   def edit
+    authorize @chat
   end
 
   def update
+    authorize @chat
     if @chat.update(chat_params)
       redirect_to chat_path(@chat), notice: "Chat actualizado."
     else
@@ -58,14 +66,19 @@ class ChatsController < ApplicationController
   end
 
   def destroy
+    authorize @chat
     community = @chat.community
     @chat.destroy
     redirect_to community_chats_path(community), notice: "Chat eliminado."
   end
 
   def hidden
-    show_chats = ShowChat.where(user: current_user, is_hidden: true)
-    @hidden_chats = show_chats.includes(:chat).map(&:chat)
+
+    authorize Chat
+    
+    @hidden_chats = ShowChat.where(user: current_user, is_hidden: true)
+                            .includes(:chat)
+                            .map(&:chat)
   end
 
   private
@@ -88,4 +101,3 @@ class ChatsController < ApplicationController
     @categories = ["General", "Mantenimiento", "Eventos", "Seguridad", "Otros"]
   end
 end
-

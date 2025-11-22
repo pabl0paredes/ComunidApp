@@ -1,3 +1,1 @@
-<%= turbo_stream.replace dom_id(@message) do %>
-  <div id="<%= dom_id(@message) %>" class="fade-out"></div>
-<% end %>
+<%= turbo_stream.remove dom_id(@message) %>
