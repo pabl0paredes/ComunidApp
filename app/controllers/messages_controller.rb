@@ -1,24 +1,28 @@
 class MessagesController < ApplicationController
   before_action :set_chat, only: [:create]
   before_action :set_message, only: [:destroy]
-  before_action :authenticate_admin!, only: [:destroy]
+  before_action :authenticate_admin_or_owner!, only: [:destroy]
 
   def create
     @message = @chat.messages.build(message_params)
     @message.user = current_user
 
     if @message.save
-      redirect_to chat_path(@chat)
-    else
-      @messages = @chat.messages.order(:created_at)
-      render "chats/show", status: :unprocessable_entity
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to chat_path(@chat) }
+      end
     end
   end
 
   def destroy
-    chat = @message.chat
+    chat = @message.chat  # guardamos el chat ANTES de borrar
     @message.destroy
-    redirect_to chat_path(chat), notice: "Mensaje eliminado."
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to chat_path(chat), notice: "Mensaje eliminado" }
+    end
   end
 
   private
@@ -35,10 +39,11 @@ class MessagesController < ApplicationController
     params.require(:message).permit(:content)
   end
 
-  # ------- 🔒 Seguridad para administradores ----------
-  def authenticate_admin!
-    unless current_user.administrator.present?
-      redirect_to root_path, alert: "No tenés permiso para eliminar mensajes."
+  # 🔒 Admin o dueño del mensaje puede borrar
+  def authenticate_admin_or_owner!
+    unless current_user.administrator.present? || @message.user == current_user
+      redirect_to chat_path(@message.chat), alert: "No tenés permiso para eliminar este mensaje."
     end
   end
 end
+
