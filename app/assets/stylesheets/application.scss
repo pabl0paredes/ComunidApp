@@ -38,3 +38,19 @@
 .flatpickr-weekday {
   color: #5f6368; /* similar a Google Calendar */
 }
+
+.space-icon-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: #7360f2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 10px auto; /* centrado */
+}
+
+.space-icon-circle i {
+  color: white;
+  font-size: 32px; /* tamaño del ícono */
+}
