@@ -1,0 +1,54 @@
+<div class="container mt-4">
+  <h1 class="fw-bold">
+    <i class="fa-solid fa-building" style="color:#7360f2;"></i>
+    Espacios comunes de <%= @community.name %>
+  </h1>
+
+  <div class="text-end mb-3">
+    <%= link_to new_community_common_space_path(@community),
+        class: "btn btn-primary rounded-pill" do %>
+      <i class="fa-solid fa-plus"></i> Nuevo espacio
+    <% end %>
+  </div>
+
+  <% if @common_spaces.any? %>
+    <div class="row">
+      <% @common_spaces.each do |space| %>
+        <div class="col-md-4">
+          <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <div class="space-icon-circle">
+                <% case space.name.downcase %>
+                <% when "quincho" %>
+                    <i class="fa-solid fa-utensils"></i>
+                <% when "sala multiusos" %>
+                    <i class="fa-solid fa-people-group"></i>
+                <% when "cancha", "cancha deportiva" %>
+                    <i class="fa-solid fa-futbol"></i>  
+                <% else %>
+                    <i class="fa-solid fa-building"></i>
+                <% end %>
+            </div>
+
+<h4 class="fw-bold text-center mt-2"><%= space.name %></h4>
+
+
+              <div class="d-flex justify-content-between mt-3">
+                <%= link_to "Ver", common_space_path(space),
+                    class: "btn btn-outline-primary btn-sm rounded-pill" %>
+
+                <%= link_to "Reservas",
+                    common_space_bookings_path(space),
+                    class: "btn btn-outline-success btn-sm rounded-pill" %>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-muted">No hay espacios comunes creados todavía.</p>
+  <% end %>
+
+</div>

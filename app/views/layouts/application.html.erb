@@ -6,6 +6,7 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+    <!-- CSS de la app -->
     <meta name="mapbox-token" content="<%= Rails.application.credentials.dig(:mapbox, :api_key) || ENV['MAPBOX_API_KEY'] %>">
 
     <!-- Mapbox JS y CSS vía CDN -->
@@ -13,14 +14,21 @@
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+
+    <!-- CSS de Flatpickr (tema material_blue) -->
+    <%= stylesheet_link_tag "https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css", media: "all" %>
+    <%= stylesheet_link_tag "https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/themes/material_blue.css", media: "all" %>
+
+    <!-- JS Importmaps -->
     <%= javascript_importmap_tags %>
 
 
 
   </head>
 
-  <body><%= render "shared/navbar" %>
-<%= render "shared/flashes" %>
+  <body>
+    <%= render "shared/navbar" %>
+    <%= render "shared/flashes" %>
 
     <%= yield %>
   </body>

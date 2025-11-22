@@ -1,12 +1,56 @@
+// ----------------------
+// External libraries
+// ----------------------
+@import "bootstrap";
+@import "font-awesome";
+@import "flatpickr/flatpickr.min.css";
+@import "flatpickr/material_blue.css";
+
+// ----------------------
 // Graphical variables
+// ----------------------
 @import "config/fonts";
 @import "config/colors";
 @import "config/bootstrap_variables";
 
-// External libraries
-@import "bootstrap";
-@import "font-awesome";
-
+// ----------------------
 // Your CSS partials
+// ----------------------
 @import "components/index";
 @import "pages/index";
+
+// ----------------------
+// Custom Flatpickr styles (override theme)
+.flatpickr-calendar {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.flatpickr-day.selected {
+  background-color: #1a73e8; /* azul Google */
+  color: white;
+}
+
+.flatpickr-time input {
+  border-radius: 6px;
+}
+
+.flatpickr-weekday {
+  color: #5f6368; /* similar a Google Calendar */
+}
+
+.space-icon-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: #7360f2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 10px auto; /* centrado */
+}
+
+.space-icon-circle i {
+  color: white;
+  font-size: 32px; /* tamaño del ícono */
+}

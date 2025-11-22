@@ -1,19 +1,33 @@
-<h1>Nuevo Detalle de Gasto</h1>
+<div class="container mt-4">
 
-<%= form_with model: [@common_expense, @expense_detail] do |f| %>
-  <p>
-    <%= f.label :detail, "Detalle" %><br>
-    <%= f.text_field :detail %>
-  </p>
+  <h1 class="h4 mb-4">Nuevo Detalle de Gasto</h1>
 
-  <p>
-    <%= f.label :amount, "Monto" %><br>
-    <%= f.number_field :amount %>
-  </p>
+  <div class="card shadow-sm">
+    <div class="card-body">
 
-  <%= f.submit "Crear" %>
-<% end %>
+      <%= form_with model: [@common_expense, @expense_detail], local: true do |f| %>
 
-<br>
-<%= link_to "Volver", common_expense_expense_details_path(@common_expense) %>
+        <div class="mb-3">
+          <%= f.label :detail, "Detalle", class: "form-label" %>
+          <%= f.text_field :detail, class: "form-control" %>
+        </div>
 
+        <div class="mb-3">
+          <%= f.label :amount, "Monto", class: "form-label" %>
+          <%= f.number_field :amount, class: "form-control", step: "0.01" %>
+        </div>
+
+        <div class="d-flex gap-2">
+          <%= f.submit "Crear", class: "btn btn-primary" %>
+
+          <%= link_to "Volver",
+              common_expense_expense_details_path(@common_expense),
+              class: "btn btn-outline-secondary" %>
+        </div>
+
+      <% end %>
+
+    </div>
+  </div>
+
+</div>

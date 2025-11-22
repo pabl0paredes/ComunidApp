@@ -1,4 +1,3 @@
-// Configure your import map in config/importmap.rb. Read more: https://github.com/rails/importmap-rails
 import "@hotwired/turbo-rails"
 import "controllers"
 import "@popperjs/core"
@@ -6,4 +5,17 @@ import "bootstrap"
 import "./map";
 import "./maps/show_map";
 import "./maps/communities_map";
+// Flatpickr JS
+import flatpickr from "flatpickr"
 
+document.addEventListener("turbo:load", () => {
+  flatpickr(".datetime-picker", {
+    enableTime: true,
+    dateFormat: "Y-m-d H:i",
+    altInput: true,
+    altFormat: "F j, Y H:i",
+    time_24hr: true,
+    minuteIncrement: 30,
+    minDate: "today"
+  });
+});
