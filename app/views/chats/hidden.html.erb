@@ -1,0 +1,13 @@
+<h1>Chats ocultos</h1>
+
+<% if @hidden_chats.any? %>
+  <ul>
+    <% @hidden_chats.each do |chat| %>
+      <li>
+        <%= link_to "Chat ##{chat.id}", chat_path(chat) %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No tenés chats ocultos.</p>
+<% end %>

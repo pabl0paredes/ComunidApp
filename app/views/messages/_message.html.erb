@@ -1,0 +1,32 @@
+<% own = message.user_id == current_user.id %>
+
+<div id="<%= dom_id(message) %>"
+    class="message-wrapper <%= own ? 'message-right' : 'message-left' %>">
+
+  <div class="message-bubble <%= own ? 'my-bubble' : 'other-bubble' %> shadow-sm">
+
+    <strong>
+      <%= own ? "Tú" : message.user.name %>:
+    </strong>
+
+    <p class="mb-1"><%= message.content %></p>
+
+    <span class="small <%= own ? 'text-light' : 'text-muted' %>">
+      <%= message.created_at.strftime("%d/%m/%Y %H:%M") %>
+    </span>
+
+    <% if current_user.administrator.present? || own %>
+      <div class="mt-1">
+        <%= link_to "Eliminar",
+            chat_message_path(message.chat, message),
+            data: {
+              turbo_method: :delete,
+              turbo_confirm: "¿Seguro que querés eliminar este mensaje?"
+            },
+            class: "delete-message text-danger small" %>
+      </div>
+    <% end %>
+
+  </div>
+
+</div>
