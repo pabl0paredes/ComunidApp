@@ -5,3 +5,5 @@ import "@popperjs/core"
 import "bootstrap"
 import "./map";
 import "./maps/show_map";
+import "./maps/communities_map";
+
