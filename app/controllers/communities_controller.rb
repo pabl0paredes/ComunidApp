@@ -6,6 +6,14 @@ class CommunitiesController < ApplicationController
   end
 
   def show
+    unless @community.administrator.user == current_user
+      Neighbor.find_by(user: current_user, community: @community)
+      if neighbor
+        unless neighbor.is_accepted
+          redirect_to auth_waiting_neighbor_path
+        end
+      end
+    end
   end
 
   def new
@@ -14,7 +22,10 @@ class CommunitiesController < ApplicationController
 
   def create
     @community = Community.new(community_params)
-    @community.administrator_id = current_user.administrator.id
+
+    administrator = Administrator.create(user: current_user)
+
+    @community.administrator = administrator
     if @community.save
       redirect_to communities_path()
     else
