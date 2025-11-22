@@ -46,7 +46,7 @@ Rails.application.routes.draw do
     collection do
       get :hidden
     end
-    resources :messages, only: [:create]
+    resources :messages, only: [:create, :destroy]
   end
 
   resources :show_chats, only: [:create, :update]

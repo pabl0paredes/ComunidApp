@@ -1,0 +1,111 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2>Chats de la comunidad: <%= @community.name %></h2>
+  <%= link_to "➕ Crear nuevo chat", new_community_chat_path(@community),
+      class: "btn btn-primary" %>
+</div>
+
+<ul class="nav nav-tabs" id="chatTabs" role="tablist">
+  <% @categories.each_with_index do |cat, index| %>
+    <li class="nav-item" role="presentation">
+      <button
+        class="nav-link <%= "active" if index == 0 %>"
+        id="tab-<%= cat %>"
+        data-bs-toggle="tab"
+        data-bs-target="#content-<%= cat %>"
+        type="button"
+        role="tab">
+
+        <%= cat %>
+      </button>
+    </li>
+  <% end %>
+
+  <!-- Nueva pestaña de Ocultos -->
+  <li class="nav-item" role="presentation">
+    <button
+      class="nav-link"
+      id="tab-ocultos"
+      data-bs-toggle="tab"
+      data-bs-target="#content-ocultos"
+      type="button"
+      role="tab">
+
+      Ocultos
+    </button>
+  </li>
+</ul>
+
+<div class="tab-content mt-3">
+
+  <!-- Contenido de categorías -->
+  <% @categories.each_with_index do |cat, index| %>
+    <div
+      class="tab-pane fade <%= "show active" if index == 0 %>"
+      id="content-<%= cat %>"
+      role="tabpanel">
+
+      <p class="text-secondary small mb-3">
+        <%= @category_descriptions[cat] %>
+      </p>
+
+      <% category_chats = @visible_chats.select { |c| c.category == cat } %>
+
+      <% if category_chats.any? %>
+        <ul class="list-group">
+          <% category_chats.each do |chat| %>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+
+              <!-- Nombre del chat -->
+              <%= link_to chat.name, chat_path(chat) %>
+
+              <!-- Botón eliminar solo para admins -->
+              <% if current_user.administrator.present? %>
+                <%= link_to "Eliminar",
+                            chat_path(chat),
+                            method: :delete,
+                            data: { confirm: "¿Seguro que querés eliminar este chat completo?" },
+                            class: "btn btn-sm btn-danger" %>
+                <%= link_to "Editar categoría", edit_chat_path(chat), class: "btn btn-warning btn-sm mb-3" %>
+              <% end %>
+
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="text-muted">No hay chats en esta categoría.</p>
+      <% end %>
+
+    </div>
+  <% end %>
+
+  <!-- Contenido de la pestaña Ocultos -->
+  <div
+    class="tab-pane fade"
+    id="content-ocultos"
+    role="tabpanel">
+
+    <% if @hidden_chats.any? %>
+      <ul class="list-group">
+        <% @hidden_chats.each do |chat| %>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+
+            <%= link_to chat.name, chat_path(chat) %>
+
+            <%= button_to "Mostrar",
+                show_chat_path(
+                  current_user.show_chats.find_by(chat: chat)
+                ),
+                method: :patch,
+                params: { show_chat: { is_hidden: false } },
+                class: "btn btn-success btn-sm" %>
+
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-muted">No tenés chats ocultos.</p>
+    <% end %>
+
+  </div>
+
+</div>
