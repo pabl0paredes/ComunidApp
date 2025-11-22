@@ -1,0 +1,14 @@
+<div class="container mt-4">
+  <h2 class="fw-bold">Nueva reserva para <%= @common_space.name %></h2>
+
+  <div class="mt-3">
+    <%= simple_form_for [@common_space, @booking] do |f| %>
+
+      <%= render "form", f: f %>
+
+    <% end %>
+  </div>
+
+  <%= link_to "Volver", common_space_bookings_path(@common_space),
+      class: "btn btn-secondary mt-3 rounded-pill" %>
+</div>
