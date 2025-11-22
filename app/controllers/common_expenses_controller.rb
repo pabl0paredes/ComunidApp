@@ -36,7 +36,7 @@ class CommonExpensesController < ApplicationController
       render :edit, status: :unprocessable_entity
     end
   end
-  
+
   def destroy
     community = @common_expense.community
     @common_expense.destroy
@@ -54,6 +54,7 @@ class CommonExpensesController < ApplicationController
   end
 
   def common_expense_params
-    params.require(:common_expense).permit(:date, :total)
+    params.require(:common_expense).permit(:date, :total, neighbor_ids: [])
   end
+
 end
