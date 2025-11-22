@@ -9,6 +9,7 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+  get "/no_community", to: "pages#no_community"
 
   resources :communities do
     resources :chats, only: [:index, :new, :create]

@@ -1,7 +1,14 @@
 <h1> <%= @community.name %> </h1>
 <ul>
-  <li>Usuarios: .../ <%= @community.size %></li>
-  <li>Administrador: <%= @community.administrator.user.name %></li>
+  <li>
+    Usuarios: <%= @community.neighbors.where(is_accepted: true).count %> / <%= @community.size %>
+    <% if @community.administrator.user == current_user %>
+      (<%= @community.neighbors.where(is_accepted: false).count %> solicitudes)
+    <% end %>
+  </li>
+  <li>Administrador: <%= link_to @community.administrator.user.name, community_administrator_path(@community, @community.administrator) %></li>
+  <% vecinos = @community.administrator.user == current_user ? "Gestionar Vecinos" : "Ver Vecinos" %>
+  <li><%= link_to vecinos, community_neighbors_path(@community) %></li>
 </ul>
 <div
   id="map-show"
@@ -11,12 +18,15 @@
 >
 </div>
 
-<%= link_to "Editar Comunidad",  edit_community_path(@community), class: "btn btn-primary"%>
+<% if @community.administrator.user == current_user %>
+  <%= link_to "Editar Comunidad",  edit_community_path(@community), class: "btn btn-primary"%>
 
-<%= link_to "Volver a Mis Comunidades", communities_path, class: "btn btn-secondary" %>
+  <%= link_to "Volver a Mis Comunidades", communities_path, class: "btn btn-secondary" %>
 
-<%= link_to "Eliminar",
-  community_path(@community),
-  data: {turbo_method: :delete, turbo_confirm: "Are you sure?"},
-  class: "btn btn-danger"
-%>
+  <%= link_to "Eliminar",
+    community_path(@community),
+    data: {turbo_method: :delete, turbo_confirm: "Are you sure?"},
+    class: "btn btn-danger"
+  %>
+
+<% end %>

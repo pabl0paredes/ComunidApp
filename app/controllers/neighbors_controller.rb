@@ -4,6 +4,7 @@ class NeighborsController < ApplicationController
     @community = Community.find(params[:community_id])
     @neighbors_accepted = Neighbor.where(community: @community, is_accepted: true)
     @neighbors_waiting = Neighbor.where(community: @community, is_accepted: false)
+    authorize :neighbor, :index?
   end
 
   def show
@@ -12,10 +13,12 @@ class NeighborsController < ApplicationController
   def new
     @neighbor = Neighbor.new
     @communities = Community.all
+    authorize @neighbor
   end
 
   def create
     @neighbor = Neighbor.new(neighbor_params)
+    authorize @neighbor
     @neighbor.user = current_user
     @neighbor.common_expense_fraction = 0
 
@@ -27,9 +30,11 @@ class NeighborsController < ApplicationController
   end
 
   def edit
+    authorize @neighbor
   end
 
   def update
+    authorize @neighbor
     @neighbor.is_accepted = true
     @neighbor.update(neighbor_params)
 
@@ -37,11 +42,13 @@ class NeighborsController < ApplicationController
   end
 
   def destroy
+    authorize @neighbor
   end
 
   def auth_waiting
-    community = @neighbor.community
-    @administrator = community.administrator
+    @community = @neighbor.community
+    @administrator = @community.administrator
+    authorize @neighbor
   end
 
   private

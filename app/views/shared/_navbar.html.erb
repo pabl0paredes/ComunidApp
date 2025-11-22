@@ -12,10 +12,18 @@
       <ul class="navbar-nav me-auto">
         <% if user_signed_in? %>
           <li class="nav-item active">
-            <%= link_to "Home", "#", class: "nav-link" %>
+            <%= link_to "Inicio", root_path, class: "nav-link" %>
           </li>
           <li class="nav-item">
-            <%= link_to "Messages", "#", class: "nav-link" %>
+            <%= link_to "Admin Comunidades", communities_path, class: "nav-link" %>
+          </li>
+          <li class="nav-item">
+            <% community = current_user.community %>
+            <% if community.present? %>
+              <%= link_to "Mi Comunidad", community_path(community), class: "nav-link" %>
+            <% else %>
+              <%= link_to "Mi Comunidad", no_community_path, class: "nav-link" %>
+            <% end %>
           </li>
           <li class="nav-item dropdown">
           <a href="#" class="avatar" id="navbarDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
