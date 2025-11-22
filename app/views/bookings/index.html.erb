@@ -22,9 +22,10 @@
           </div>
 
           <div class="d-flex gap-2">
-            <%= link_to "Editar", edit_booking_path(booking),
-                class: "btn btn-warning btn-sm rounded-pill" %>
-
+            <% if policy(booking).edit?%>
+              <%= link_to "Editar", edit_booking_path(booking),
+                  class: "btn btn-warning btn-sm rounded-pill" %>
+            <%end%>
             <%= link_to "Eliminar",
                 booking_path(booking),
                 data: { turbo_method: :delete, turbo_confirm: "¿Seguro?" },
@@ -36,4 +37,7 @@
   <% else %>
     <p class="text-muted mt-3">Aún no hay reservas para este espacio.</p>
   <% end %>
+
+  <%= link_to "Volver al espacio", common_space_path(@common_space), class: "btn btn-secondary mt-3 mb-3" %>
 </div>
+

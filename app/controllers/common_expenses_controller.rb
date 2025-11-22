@@ -23,7 +23,7 @@ class CommonExpensesController < ApplicationController
   end
 
   def show
-    @expense_details = @common_expense.expense_details
+    @expense_details = @common_expense.expense_detailsr
   end
 
   def edit
