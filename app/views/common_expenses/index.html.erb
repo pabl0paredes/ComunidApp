@@ -1,9 +1,11 @@
 <div class="container mt-4">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="h3">Gastos Comunes</h1>
+  <% if @community.administrator_id == current_user.id %>
     <%= link_to "Nuevo Gasto Común",
-        new_community_common_expense_path(@community),
-        class: "btn btn-primary" %>
+          new_community_common_expense_path(@community),
+          class: "btn btn-primary" %>
+  <% end %>
   </div>
   <div class="card shadow-sm">
     <div class="card-body p-0">
@@ -24,13 +26,17 @@
                 <%= link_to "Mostrar",
                     common_expense_path(common_expense),
                     class: "btn btn-sm btn-outline-secondary" %>
+              <% if policy(common_expense).edit? %>
                 <%= link_to "Editar",
                     edit_common_expense_path(common_expense),
                     class: "btn btn-sm btn-outline-primary" %>
+              <% end %>
+              <% if policy(common_expense).destroy? %>
                 <%= link_to "Eliminar",
                     common_expense_path(common_expense),
                     data: { turbo_method: :delete, turbo_confirm: "¿Seguro que deseas eliminar este gasto común?" },
                     class: "btn btn-sm btn-outline-danger" %>
+              <% end %>
               </td>
             </tr>
           <% end %>
