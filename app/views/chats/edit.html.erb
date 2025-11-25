@@ -1,0 +1,13 @@
+<h2>Editar categoría del Chat</h2>
+
+<%= form_with model: @chat, local: true do |f| %>
+
+  <div class="mb-3">
+    <%= f.label :category, "Categoría" %>
+    <%= f.select :category, @categories, {}, class: "form-select" %>
+  </div>
+
+  <%= f.submit "Guardar cambios", class: "btn btn-primary" %>
+  <%= link_to "Cancelar", chat_path(@chat), class: "btn btn-secondary ms-2" %>
+
+<% end %>

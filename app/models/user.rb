@@ -5,9 +5,10 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
   has_one :administrator
   has_one :neighbor
+  has_one :community, through: :neighbor
   has_many :show_chats
   has_many :messages
 
   validates :name, presence: true
-  validates :phone, presence: true, numericality: { only_integer: true }
+  validates :phone, presence: true
 end

@@ -18,7 +18,12 @@
 // ----------------------
 @import "components/index";
 @import "pages/index";
+@import "chats";
 
+.fade-out {
+  opacity: 0;
+  transition: opacity 0.2s ease-out;
+}
 // ----------------------
 // Custom Flatpickr styles (override theme)
 .flatpickr-calendar {

@@ -1,0 +1,40 @@
+<h1>Vecinos de <%= @community.name %></h1>
+<%= link_to "Volver a Comunidad", @community %>
+<ul>
+  <% @neighbors_accepted.each do |neighbor| %>
+    <li>
+      <%= neighbor.user.name %> |
+      Unidad: <%= neighbor.unit %> |
+      Contacto: <%= neighbor.user.phone %>
+      <% if @community.administrator.user == current_user %> |
+        Fracción GGCC <%= neighbor.common_expense_fraction %> |
+        <%= link_to "Editar", edit_neighbor_path(neighbor) %> |
+        <%= link_to "Eliminar",
+          neighbor_path(neighbor),
+          data: {turbo_method: :delete, turbo_confirm: "Estás seguro?"},
+          class: "btn btn-danger"
+        %>
+      <% end %>
+    </li>
+  <% end %>
+  <% if @community.administrator.user == current_user %>
+    <p>---------- SOLICITUDES ----------</p>
+    <% if @neighbors_waiting.length.positive? %>
+      <% @neighbors_waiting.each do |neighbor| %>
+        <li>
+          <%= neighbor.user.name %> |
+          Unidad: <%= neighbor.unit %> |
+          Fracción GGCC <%= neighbor.common_expense_fraction %> |
+          <%= link_to "Aceptar", edit_neighbor_path(neighbor) %> |
+          <%= link_to "Eliminar",
+            neighbor_path(neighbor),
+            data: {turbo_method: :delete, turbo_confirm: "Estás seguro?"},
+            class: "btn btn-danger"
+          %>
+        </li>
+      <% end %>
+    <% else %>
+      <p>No hay solicitudes pendientes</p>
+    <% end %>
+  <% end %>
+</ul>

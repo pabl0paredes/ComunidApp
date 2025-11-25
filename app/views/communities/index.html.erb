@@ -1,13 +1,20 @@
-<ul>
-  <% @communities.each do |community| %>
-    <li>
-      <%= link_to community.name, community %>
-      <%= link_to "Eliminar",
-        community_path(community),
-        data: {turbo_method: :delete, turbo_confirm: "Are you sure?"},
-        class: "btn btn-danger"
-      %>
-    </li>
-  <% end %>
-</ul>
+
+<% if @communities.length.positive? %>
+  <ul>
+    <% @communities.each do |community| %>
+      <li>
+        <%= link_to community.name, community %>
+        <%= link_to "Eliminar",
+          community_path(community),
+          data: {turbo_method: :delete, turbo_confirm: "Estás seguro?"},
+          class: "btn btn-danger"
+        %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No tienes comunidades creadas.</p>
+<% end %>
+
+
 <%= link_to "Crear nueva Comunidad", new_community_path %>

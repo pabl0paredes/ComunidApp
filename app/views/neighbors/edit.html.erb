@@ -1,0 +1,17 @@
+<h1>Editar Vecino</h1>
+
+<p>Nombre: <%= @neighbor.user.name %></p>
+<p>Contacto <%= @neighbor.user.phone %></p>
+<%= simple_form_for @neighbor do |f| %>
+
+  <div class="form-group">
+    <%= f.input :unit, label: "Unidad" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.input :common_expense_fraction, label: "Fracción de GGCC"%>
+  </div>
+
+  <%= f.submit "Guardar", class: "btn btn-primary" %>
+
+<% end %>

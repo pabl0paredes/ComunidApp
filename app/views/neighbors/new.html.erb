@@ -1,0 +1,34 @@
+<div class="d-flex justify-content-between">
+  <div>
+    <h2>Crear Vecino</h2>
+  </div>
+  <div>
+    <%= link_to "Volver a Inicio", root_path %>
+  </div>
+</div>
+
+<%= simple_form_for @neighbor do |f| %>
+
+  <div class="form-group">
+    <%= f.input :community_id,
+      collection: @communities.map { |c| [c.name, c.id] },
+      prompt: "Seleccione una comunidad",
+      label: "Comunidad",
+      input_html: { id: "community-selector" }
+    %>
+  </div>
+
+  <div class="form-group">
+    <%= f.input :unit, label: "Unidad" %>
+  </div>
+
+  <!-- Mapa -->
+  <h4>Ubicación de Comunidades:</h4>
+  <div id="map-communities"
+       data-communities="<%= @communities.to_json(only: [:id, :name, :latitude, :longitude]) %>"
+       style="height: 500px; width: 100%; border-radius: 8px;">
+  </div>
+
+  <%= f.submit @neighbor.persisted? ? "Guardar" : "Crear Vecino", class: "btn btn-primary" %>
+
+<% end %>

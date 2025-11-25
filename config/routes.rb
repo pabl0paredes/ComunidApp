@@ -9,17 +9,22 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+  get "/no_community", to: "pages#no_community"
 
   resources :communities do
     resources :chats, only: [:index, :new, :create]
     resources :common_expenses, only: [:new, :create, :index]
     resources :common_spaces, only: [:new, :create, :index]
-    resources :neighbors, only: [:index, :new, :create]
+    resources :neighbors, only: [:index]
     resources :administrators, only: [:show]
   end
 
   resources :administrators, only: [:new, :create, :destroy]
-  resources :neighbors, only: [:show, :edit, :update, :destroy]
+  resources :neighbors, only: [:new, :create, :show, :edit, :update, :destroy] do
+    member do
+      get :auth_waiting
+    end
+  end
 
   resources :common_spaces, only: [:show, :destroy, :edit, :update] do
     # resources :bookings, only: [:create] #para ver las reservas dentro de los common spaces y posteriormente hacer una reserva
@@ -42,7 +47,7 @@ Rails.application.routes.draw do
     collection do
       get :hidden
     end
-    resources :messages, only: [:create]
+    resources :messages, only: [:create, :destroy]
   end
 
   resources :show_chats, only: [:create, :update]
