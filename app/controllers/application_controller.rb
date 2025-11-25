@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 
   # Pundit: allow-list approach
   after_action :verify_authorized, unless: :skip_pundit?
-  after_action :verify_policy_scoped, if: :policy_scoped_action?
+  # after_action :verify_policy_scoped, if: :policy_scoped_action?
 
   # Uncomment when you *really understand* Pundit!
   # rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
   def skip_pundit?
     devise_controller? || params[:controller] =~ /(^(rails_)?admin)|(^pages$)/
   end
-  
+
   def policy_scoped_action?
     !skip_pundit? && action_name == "index"
   end

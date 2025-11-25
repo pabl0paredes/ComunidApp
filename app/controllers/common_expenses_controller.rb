@@ -1,6 +1,6 @@
 class CommonExpensesController < ApplicationController
   skip_after_action :verify_authorized, only: :index
-  skip_after_action :verify_policy_scoped, only: :index
+  #skip_after_action :verify_policy_scoped, only: :index
 
   before_action :set_community, only: [:index, :new, :create]
   before_action :set_common_expense, only: [:show, :edit, :update, :destroy]

@@ -4,19 +4,22 @@ class ExpenseDetailsController < ApplicationController
 
 
   def index
-    @expense_details = @common_expense.expense_details
+    @expense_details = @common_expense.expense_details.order(created_at: :desc)
+    authorize @expense_details
   end
 
 
   def new
     @expense_detail = ExpenseDetail.new
+    @expense_detail.common_expense = @common_expense
+    authorize @expense_detail
   end
 
 
   def create
     @expense_detail = ExpenseDetail.new(expense_detail_params)
     @expense_detail.common_expense = @common_expense
-
+    authorize @expense_detail
     if @expense_detail.save
       redirect_to common_expense_expense_details_path(@common_expense), notice: "Detalle creado correctamente."
     else
@@ -26,14 +29,17 @@ class ExpenseDetailsController < ApplicationController
 
 
   def show
+    authorize @expense_detail
   end
 
 
   def edit
+    authorize @expense_detail
   end
 
 
   def update
+    authorize @expense_detail
     if @expense_detail.update(expense_detail_params)
       redirect_to expense_detail_path(@expense_detail), notice: "Detalle actualizado correctamente."
     else
@@ -43,6 +49,7 @@ class ExpenseDetailsController < ApplicationController
 
 
   def destroy
+    authorize @expense_detail
     common_expense = @expense_detail.common_expense
     @expense_detail.destroy
     redirect_to common_expense_expense_details_path(common_expense), notice: "Detalle eliminado correctamente."
