@@ -61,7 +61,8 @@ neighbors = []
     user: user,
     community: comunidad,
     unit: "A#{i+1}",
-    common_expense_fraction: (1.0 / 15).round(4)
+    common_expense_fraction: (1.0 / 15).round(4),
+    is_accepted: true
   )
 end
 
@@ -189,11 +190,12 @@ end
 
 puts "Creando reservas (bookings)…"
 
+days = rand(1..10).days
 7.times do
   neighbor = neighbors.sample
   espacio = [espacio1, espacio2, espacio3].sample
 
-  days = rand(1..10).days
+  days += 1.days
 
   Booking.create!(
     neighbor: neighbor,
