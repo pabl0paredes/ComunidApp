@@ -3,8 +3,8 @@
 // ----------------------
 @import "bootstrap";
 @import "font-awesome";
-@import "flatpickr/flatpickr.min.css";
-@import "flatpickr/material_blue.css";
+// @import "flatpickr/flatpickr.min.css";
+// @import "flatpickr/material_blue.css";
 
 // ----------------------
 // Graphical variables
@@ -26,23 +26,23 @@
 }
 // ----------------------
 // Custom Flatpickr styles (override theme)
-.flatpickr-calendar {
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
+// .flatpickr-calendar {
+//   border-radius: 12px;
+//   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+// }
 
-.flatpickr-day.selected {
-  background-color: #1a73e8; /* azul Google */
-  color: white;
-}
+// .flatpickr-day.selected {
+//   background-color: #1a73e8; /* azul Google */
+//   color: white;
+// }
 
-.flatpickr-time input {
-  border-radius: 6px;
-}
+// .flatpickr-time input {
+//   border-radius: 6px;
+// }
 
-.flatpickr-weekday {
-  color: #5f6368; /* similar a Google Calendar */
-}
+// .flatpickr-weekday {
+//   color: #5f6368; /* similar a Google Calendar */
+// }
 
 .space-icon-circle {
   width: 70px;

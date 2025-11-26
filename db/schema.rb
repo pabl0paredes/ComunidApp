@@ -99,20 +99,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_22_153029) do
     t.index ["user_id"], name: "index_messages_on_user_id"
   end
 
-  create_table "neighbor_charges", force: :cascade do |t|
-    t.bigint "neighbor_id", null: false
-    t.bigint "common_expense_id", null: false
-    t.bigint "booking_id", null: false
-    t.string "description"
-    t.decimal "amount"
-    t.boolean "paid"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["booking_id"], name: "index_neighbor_charges_on_booking_id"
-    t.index ["common_expense_id"], name: "index_neighbor_charges_on_common_expense_id"
-    t.index ["neighbor_id"], name: "index_neighbor_charges_on_neighbor_id"
-  end
-
   create_table "neighbors", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "community_id", null: false
@@ -170,9 +156,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_22_153029) do
   add_foreign_key "expense_details", "common_expenses"
   add_foreign_key "messages", "chats"
   add_foreign_key "messages", "users"
-  add_foreign_key "neighbor_charges", "bookings"
-  add_foreign_key "neighbor_charges", "common_expenses"
-  add_foreign_key "neighbor_charges", "neighbors"
   add_foreign_key "neighbors", "communities"
   add_foreign_key "neighbors", "users"
   add_foreign_key "show_chats", "chats"

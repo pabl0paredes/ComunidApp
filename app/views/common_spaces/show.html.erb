@@ -23,8 +23,8 @@
 
   <h3>Reservas</h3>
 
-  <%= link_to "Nueva reserva", new_common_space_booking_path(@common_space), class: "btn btn-success mb-3 rounded-pill" %>
-
+  <%= link_to "Nueva reserva", new_common_space_booking_path(@common_space), data: {turbo_frame: "new_booking"},  class: "btn btn-success mb-3 rounded-pill" %>
+<%= turbo_frame_tag "new_booking" %>
   <ul class="list-group">
     <% @bookings.each do |booking| %>
       <li class="list-group-item d-flex justify-content-between">
@@ -37,6 +37,6 @@
   </ul>
 
   <%= link_to "← Volver a espacios comunes",
-              community_common_spaces_path(@common_space.community),
-              class: "btn btn-secondary mt-3 mb-3 rounded-pill" %>
+    community_common_spaces_path(@common_space.community),
+    class: "btn btn-secondary mt-3 mb-3 rounded-pill" %>
 </div>
