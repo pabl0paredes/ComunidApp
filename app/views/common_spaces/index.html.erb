@@ -1,4 +1,7 @@
 <div class="container mt-4">
+  <div>
+    <%= link_to "Volver a Comunidad", @community %>
+  </div>
   <h1 class="fw-bold">
     <i class="fa-solid fa-building" style="color:#7360f2;"></i>
     Espacios comunes de <%= @community.name %>
@@ -18,15 +21,15 @@
           <div class="card shadow-sm mb-4">
             <div class="card-body">
               <%= link_to common_space_path(space), class: "space-icon-circle text-decoration-none" do %>
-              
+
                 <% case space.name.downcase %>
-                <% when "quincho" %>  
+                <% when "quincho" %>
                     <i class="fa-solid fa-utensils"></i>
-                    
+
                 <% when "sala multiusos" %>
                     <i class="fa-solid fa-people-group"></i>
                 <% when "cancha", "cancha deportiva" %>
-                    <i class="fa-solid fa-futbol"></i>  
+                    <i class="fa-solid fa-futbol"></i>
                 <% else %>
                     <i class="fa-solid fa-building"></i>
                 <% end %>

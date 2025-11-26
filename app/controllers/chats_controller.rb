@@ -8,6 +8,7 @@ class ChatsController < ApplicationController
 
     # Pundit requiere policy_scope en index
     @chats = policy_scope(@community.chats)
+    authorize @chats
 
     @category_descriptions = {
       "General" => "Conversaciones generales de la comunidad.",
@@ -75,7 +76,7 @@ class ChatsController < ApplicationController
   def hidden
 
     authorize Chat
-    
+
     @hidden_chats = ShowChat.where(user: current_user, is_hidden: true)
                             .includes(:chat)
                             .map(&:chat)

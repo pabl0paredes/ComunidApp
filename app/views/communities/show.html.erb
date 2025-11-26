@@ -18,6 +18,16 @@
 >
 </div>
 
+<div>
+  <%= link_to "Espacios Comunes", community_common_spaces_path(@community) %>
+</div>
+<div>
+  <%= link_to "Gastos Comunes", community_common_expenses_path(@community) %>
+</div>
+<div>
+  <%= link_to "Chats", community_chats_path(@community) %>
+</div>
+
 <% if @community.administrator.user == current_user %>
   <%= link_to "Editar Comunidad",  edit_community_path(@community), class: "btn btn-primary"%>
 
