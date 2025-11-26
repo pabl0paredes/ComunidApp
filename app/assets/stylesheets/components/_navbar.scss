@@ -1,6 +1,6 @@
 .navbar-lewagon {
   justify-content: space-between;
-  background: white;
+  background: #7360f2;
 }
 
 .navbar-lewagon .navbar-collapse {
@@ -9,4 +9,20 @@
 
 .navbar-lewagon .navbar-brand img {
   width: 40px;
+}
+
+#navbarSupportedContent {
+  color: white;
+
+  .nav-link {
+    color: white !important;
+  }
+
+  .dropdown-item {
+    color: black !important; // Si quieres que el dropdown siga siendo negro
+  }
+
+  .avatar {
+    color: white;
+  }
 }
