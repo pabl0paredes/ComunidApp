@@ -1,33 +1,60 @@
 <div class="container mt-4">
-
   <h1 class="h4 mb-4">Nuevo Detalle de Gasto</h1>
-
   <div class="card shadow-sm">
     <div class="card-body">
-
       <%= form_with model: [@common_expense, @expense_detail], local: true do |f| %>
-
         <div class="mb-3">
           <%= f.label :detail, "Detalle", class: "form-label" %>
           <%= f.text_field :detail, class: "form-control" %>
         </div>
-
         <div class="mb-3">
           <%= f.label :amount, "Monto", class: "form-label" %>
           <%= f.number_field :amount, class: "form-control", step: "0.01" %>
         </div>
-
+        <div class="mb-3">
+          <label class="form-label fw-bold">Asignar a vecinos</label>
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped align-middle text-center">
+              <thead class="table-dark">
+                <tr>
+                  <th>Asignar</th>
+                  <th>Nombre</th>
+                  <th>Unidad</th>
+                  <th>% asignado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @neighbors.each do |neighbor| %>
+                  <tr>
+                    <td>
+                      <%= check_box_tag "expense_detail[neighbor_ids][]",
+                                neighbor.id,
+                                false,
+                                id: "neighbor_#{neighbor.id}",
+                                class: "form-check-input" %>
+                    </td>
+                    <td class="text-start">
+                      <%= neighbor.user.name %>
+                    </td>
+                    <td>
+                      <%= neighbor.unit %>
+                    </td>
+                    <td>
+                      <%= neighbor.common_expense_fraction %> %
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
         <div class="d-flex gap-2">
           <%= f.submit "Crear", class: "btn btn-primary" %>
-
           <%= link_to "Volver",
-              common_expense_expense_details_path(@common_expense),
-              class: "btn btn-outline-secondary" %>
+                      common_expense_expense_details_path(@common_expense),
+                      class: "btn btn-outline-secondary" %>
         </div>
-
       <% end %>
-
     </div>
   </div>
-
 </div>

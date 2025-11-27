@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_11_22_153029) do
+ActiveRecord::Schema[7.1].define(version: 2025_11_27_045924) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -44,17 +44,10 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_22_153029) do
   create_table "common_expenses", force: :cascade do |t|
     t.bigint "community_id", null: false
     t.datetime "date"
-    t.integer "total"
+    t.integer "total", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["community_id"], name: "index_common_expenses_on_community_id"
-  end
-
-  create_table "common_expenses_neighbors", id: false, force: :cascade do |t|
-    t.bigint "common_expense_id", null: false
-    t.bigint "neighbor_id", null: false
-    t.index ["common_expense_id", "neighbor_id"], name: "index_common_expenses_neighbors"
-    t.index ["neighbor_id", "common_expense_id"], name: "index_neighbors_common_expenses"
   end
 
   create_table "common_spaces", force: :cascade do |t|
@@ -87,6 +80,15 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_22_153029) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["common_expense_id"], name: "index_expense_details_on_common_expense_id"
+  end
+
+  create_table "expense_details_neighbors", force: :cascade do |t|
+    t.bigint "expense_detail_id", null: false
+    t.bigint "neighbor_id", null: false
+    t.boolean "paid", default: false, null: false
+    t.decimal "amount_due", precision: 10, scale: 2, default: "0.0", null: false
+    t.index ["expense_detail_id", "neighbor_id"], name: "index_expense_details_neighbors_on_detail_and_neighbor"
+    t.index ["neighbor_id", "expense_detail_id"], name: "index_expense_details_neighbors_on_neighbor_and_detail"
   end
 
   create_table "messages", force: :cascade do |t|

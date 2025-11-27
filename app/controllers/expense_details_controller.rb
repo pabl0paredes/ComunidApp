@@ -4,14 +4,25 @@ class ExpenseDetailsController < ApplicationController
 
 
   def index
-    @expense_details = @common_expense.expense_details.order(created_at: :desc)
-    authorize @expense_details
+    if current_user.neighbor.present?
+      @expense_details = @common_expense.expense_details
+                                      .joins(:expense_details_neighbors)
+                                      .where(expense_details_neighbors: { neighbor_id: current_user.neighbor.id })
+                                      .order(updated_at: :desc)
+                                      .distinct
+    else
+    
+      @expense_details = @common_expense.expense_details.order(updated_at: :desc)
+    end
+
+  authorize @expense_details
   end
 
 
   def new
     @expense_detail = ExpenseDetail.new
     @expense_detail.common_expense = @common_expense
+    @neighbors = @common_expense.community.neighbors
     authorize @expense_detail
   end
 
@@ -19,8 +30,10 @@ class ExpenseDetailsController < ApplicationController
   def create
     @expense_detail = ExpenseDetail.new(expense_detail_params)
     @expense_detail.common_expense = @common_expense
+    @neighbors = @common_expense.community.neighbors
     authorize @expense_detail
     if @expense_detail.save
+      @expense_detail.assign_amounts_to_neighbors
       redirect_to common_expense_expense_details_path(@common_expense), notice: "Detalle creado correctamente."
     else
       render :new, status: :unprocessable_entity
@@ -34,18 +47,25 @@ class ExpenseDetailsController < ApplicationController
 
 
   def edit
+    @neighbors = @expense_detail.common_expense.community.neighbors
     authorize @expense_detail
   end
 
 
   def update
-    authorize @expense_detail
-    if @expense_detail.update(expense_detail_params)
-      redirect_to expense_detail_path(@expense_detail), notice: "Detalle actualizado correctamente."
-    else
-      render :edit, status: :unprocessable_entity
-    end
+  authorize @expense_detail
+
+  if @expense_detail.update(expense_detail_params)
+
+    @expense_detail.assign_amounts_to_neighbors
+
+
+    redirect_to @expense_detail.common_expense, notice: "Detalle actualizado correctamente."
+  else
+    render :edit, status: :unprocessable_entity
   end
+end
+
 
 
   def destroy
@@ -66,7 +86,10 @@ class ExpenseDetailsController < ApplicationController
   end
 
   def expense_detail_params
-    params.require(:expense_detail).permit(:detail, :amount)
+    params.require(:expense_detail)
+          .permit(:detail, :amount, neighbor_ids: [])
+          .tap do |whitelisted|
+            whitelisted[:neighbor_ids]&.reject!(&:blank?)
+          end
   end
-
 end
