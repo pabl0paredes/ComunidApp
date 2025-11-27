@@ -9,7 +9,35 @@
       <%= own ? "Tú" : message.user.name %>:
     </strong>
 
-    <p class="mb-1"><%= message.content %></p>
+    <%# Contenido del mensaje %>
+    <% if message.content.present? %>
+      <p class="mb-1"><%= message.content %></p>
+    <% end %>
+
+    <%# === ARCHIVOS ADJUNTOS === %>
+    <% if message.files.attached? %>
+      <div class="mt-2">
+        <% message.files.each do |file| %>
+
+          <% if file.image? %>
+            <%# Miniatura para imágenes %>
+            <%= link_to url_for(file), target: :_blank do %>
+              <%= image_tag file.variant(resize_to_limit: [300, 300]).processed,
+                    class: "img-thumbnail mb-2",
+                    style: "max-width: 150px; height: auto;" %>
+            <% end %>
+
+          <% else %>
+            <%# Link a PDF, Excel, Word, etc %>
+            <div class="mb-1">
+              📎 <%= link_to file.filename.to_s, url_for(file), target: :_blank %>
+            </div>
+          <% end %>
+
+        <% end %>
+      </div>
+    <% end %>
+    <%# === FIN ARCHIVOS === %>
 
     <span class="small <%= own ? 'text-light' : 'text-muted' %>">
       <%= message.created_at.strftime("%d/%m/%Y %H:%M") %>

@@ -25,8 +25,8 @@ class ChatPolicy < ApplicationPolicy
   def destroy?
     user.administrator.present?
   end
-end
 
-def hidden?
-  true
+  def hidden?
+    true
+  end
 end
