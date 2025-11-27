@@ -20,7 +20,7 @@
 
   <h4>Mensajes</h4>
 
-  <%= turbo_frame_tag "messages" do %>
+  <%= turbo_frame_tag "messages_frame" do %>
     <div id="messages" class="messages-list mb-4" style="max-height: 400px; overflow-y: auto; padding: 10px; background: #f8f9fa; border-radius: 8px;">
       <% if @messages.any? %>
         <%= render @messages %>
@@ -43,23 +43,15 @@
     const container = document.getElementById("messages");
     if (!container) return;
 
-    // Ejecutar después de que el DOM esté listo
     requestAnimationFrame(() => {
       container.scrollTop = container.scrollHeight;
-      console.log("Scroll aplicado:", container.scrollTop, container.scrollHeight);
     });
   }
 
-  // Scroll inicial al cargar la página
   document.addEventListener("turbo:load", scrollToBottom);
 
-  // Scroll después de actualizar el frame de mensajes (envío/eliminación)
-  const messagesFrame = document.getElementById("messages");
-  if (messagesFrame) {
-    const frameParent = messagesFrame.closest("turbo-frame");
-    if (frameParent) {
-      frameParent.addEventListener("turbo:frame-load", scrollToBottom);
-    }
+  const frame = document.getElementById("messages_frame");
+  if (frame) {
+    frame.addEventListener("turbo:frame-load", scrollToBottom);
   }
 </script>
-

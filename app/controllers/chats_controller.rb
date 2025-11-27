@@ -9,7 +9,6 @@ class ChatsController < ApplicationController
     # Pundit requiere policy_scope en index
     @chats = policy_scope(@community.chats)
     authorize @chats
-
     @category_descriptions = {
       "General" => "Conversaciones generales de la comunidad.",
       "Mantenimiento" => "Reportes, arreglos y mejoras en el edificio.",
