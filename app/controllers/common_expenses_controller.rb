@@ -10,6 +10,7 @@ class CommonExpensesController < ApplicationController
   end
 
   def show
+    @expense_details = @common_expense.expense_details.order(created_at: :desc)
     authorize @common_expense
   end
 
@@ -63,7 +64,7 @@ class CommonExpensesController < ApplicationController
   end
 
   def common_expense_params
-    params.require(:common_expense).permit(:date, :total, neighbor_ids: [])
+    params.require(:common_expense).permit(:date)
   end
 
 end

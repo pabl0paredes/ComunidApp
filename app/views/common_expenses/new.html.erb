@@ -14,22 +14,6 @@
               input_html: { class: "form-control" } %>
         </div>
 
-        <div class="mb-3">
-          <%= f.input :total,
-              label: "Total",
-              as: :integer,
-              input_html: { class: "form-control" } %>
-        </div>
-
-        <div class="mb-3">
-          <%= f.input :neighbor_ids,
-              collection: @community.neighbors,
-              label_method: ->(n) { "#{n.user.name} - Unidad: #{n.unit}" },
-              value_method: :id,
-              as: :check_boxes,
-              label: "Asignar a vecinos" %>
-        </div>
-
         <%= f.button :submit, "Crear",
             class: "btn btn-primary" %>
 
