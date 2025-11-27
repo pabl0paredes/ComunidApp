@@ -4,8 +4,18 @@ class ExpenseDetailsController < ApplicationController
 
 
   def index
-    @expense_details = @common_expense.expense_details.order(updated_at: :desc)
-    authorize @expense_details
+    if current_user.neighbor.present?
+      @expense_details = @common_expense.expense_details
+                                      .joins(:expense_details_neighbors)
+                                      .where(expense_details_neighbors: { neighbor_id: current_user.neighbor.id })
+                                      .order(updated_at: :desc)
+                                      .distinct
+    else
+    
+      @expense_details = @common_expense.expense_details.order(updated_at: :desc)
+    end
+
+  authorize @expense_details
   end
 
 

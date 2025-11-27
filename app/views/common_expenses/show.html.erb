@@ -31,19 +31,16 @@
           <tbody>
             <% @expense_details.each do |detail| %>
               <tr>
-                <!-- CONCEPTO -->
                 <td>
                   <div class="p-2 border rounded bg-light">
                     <strong><%= detail.detail %></strong>
                   </div>
                 </td>
-                <!-- MONTO -->
                 <td>
                   <div class="p-2 border rounded bg-light">
                     <%= number_to_currency(detail.amount) %>
                   </div>
                 </td>
-                <!-- VECINOS EN FORMATO EXCEL -->
                 <td>
                   <div class="p-2 border rounded bg-light">
                     <% if detail.expense_details_neighbors.any? %>
@@ -76,21 +73,24 @@
                     <% end %>
                   </div>
                 </td>
-                <!-- ACCIONES -->
                 <td class="text-end">
                   <%= link_to "Ver",
       expense_detail_path(detail),
       class: "btn btn-sm btn-outline-secondary mb-1" %>
-                  <%= link_to "Editar",
+                  <% if policy(detail).edit? %>
+                    <%= link_to "Editar",
       edit_expense_detail_path(detail),
       class: "btn btn-sm btn-outline-primary mb-1" %>
-                  <%= link_to "Eliminar",
+                  <% end %>
+                  <% if policy(detail).destroy? %>
+                    <%= link_to "Eliminar",
       expense_detail_path(detail),
       data: {
         turbo_method: :delete,
         turbo_confirm: "¿Estás seguro de eliminar este detalle? Se eliminará también la distribución a los vecinos."
       },
       class: "btn btn-sm btn-outline-danger mb-1" %>
+                  <% end %>
                 </td>
               </tr>
             <% end %>
@@ -99,21 +99,29 @@
       <% else %>
         <p class="text-muted">No hay detalles asociados a este gasto común.</p>
       <% end %>
+
+      <% if policy(@common_expense).new? %>
       <%= link_to "Agregar detalle",
           new_common_expense_expense_detail_path(@common_expense),
           class: "btn btn-primary mt-2" %>
+      <% end %>
     </div>
   </div>
   <div class="d-flex gap-2 mt-4">
+    <% if policy(@common_expense).edit? %>
     <%= link_to "Editar gasto común",
         edit_common_expense_path(@common_expense),
         class: "btn btn-outline-primary" %>
+    <% end %>
     <%= link_to "Volver a la lista",
         community_common_expenses_path(@common_expense.community),
         class: "btn btn-outline-secondary" %>
+
+    <% if policy(@common_expense).destroy? %>
     <%= link_to "Eliminar gasto común",
         @common_expense,
         data: { turbo_method: :delete, turbo_confirm: "¿Estás seguro de eliminar este gasto?" },
         class: "btn btn-outline-danger ms-auto" %>
+    <% end %>
   </div>
 </div>

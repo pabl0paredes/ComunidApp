@@ -6,7 +6,18 @@ class CommonExpensesController < ApplicationController
   before_action :set_common_expense, only: [:show, :edit, :update, :destroy]
 
   def index
-  @common_expenses = @community.common_expenses.order(date: :desc)
+    if current_user == @community.administrator
+
+      @common_expenses = @community.common_expenses.order(date: :desc)
+    else
+
+      @common_expenses = CommonExpense
+        .joins(expense_details: :expense_details_neighbors)
+        .where(expense_details_neighbors: { neighbor_id: current_user.neighbor.id })
+        .where(community: @community)
+        .order(date: :desc)
+        .distinct
+    end
   end
 
   def show
