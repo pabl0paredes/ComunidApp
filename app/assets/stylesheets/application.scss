@@ -19,6 +19,8 @@
 @import "components/index";
 @import "pages/index";
 @import "chats";
+@import "common_expenses";
+@import "expense_details";
 
 .fade-out {
   opacity: 0;
@@ -45,9 +47,9 @@
 }
 
 .space-icon-circle {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  border-radius: 35%;
   background-color: #7360f2;
   display: flex;
   justify-content: center;
@@ -55,7 +57,24 @@
   margin: 0 auto 10px auto; /* centrado */
 }
 
+.space-icon-circle:hover {
+  background-color: #5a4bd1;
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
 .space-icon-circle i {
   color: white;
   font-size: 32px; /* tamaño del ícono */
+}
+
+.availability-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.container-fluid {
+  color: white !important;
 }

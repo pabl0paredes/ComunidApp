@@ -3,10 +3,12 @@ class CommonSpacesController < ApplicationController
 
   def index
     @community = Community.find(params[:community_id])
-    @common_spaces = @community.common_spaces
+    @common_spaces = policy_scope(@community.common_spaces)
+    authorize @common_spaces
   end
 
   def show
+    authorize @common_space 
     @bookings = @common_space.bookings.order(start: :asc)
     @usable_hours = @common_space.usable_hours.order(:weekday, :start)
   end
@@ -14,12 +16,14 @@ class CommonSpacesController < ApplicationController
   def new
     @community = Community.find(params[:community_id])
     @common_space = CommonSpace.new
+    authorize @common_space
   end
 
   def create
     @community = Community.find(params[:community_id])
     @common_spaces= CommonSpace.new(common_space_params)
     @common_space.community = @community
+    authorize @common_space
 
     if @common_space.save
       redirect_to community_common_spaces_path(@community), notice: "Espacio creado correctamente"
@@ -29,9 +33,11 @@ class CommonSpacesController < ApplicationController
   end
 
   def edit
+    authorize @common_space
   end
 
   def update
+    authorize @common_space
     if @common_space.update(common_space_params)
       redirect_to common_space_path(@common_space), notice: "Espacio actualizado"
     else
@@ -40,6 +46,7 @@ class CommonSpacesController < ApplicationController
   end
 
   def destroy
+    authorize @common_space
     @common_space.destroy
     redirect_to community_common_spaces_path(@common_space.comunity), notice: "Espacio eliminado"
   end

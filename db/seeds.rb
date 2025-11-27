@@ -29,7 +29,7 @@ admin_user = User.create!(
   email: "admin@gmail.com",
   password: "123456",
   name: "Administrador General",
-  phone: 987654321
+  phone: "987654321"
 )
 
 administrator = Administrator.create!(user: admin_user)
@@ -53,7 +53,7 @@ neighbors = []
     email: "vecino#{i+1}@gmail.com",
     password: "123456",
     name: "Vecino #{i+1}",
-    phone: 900000000 + i,
+    phone: "#{900000000 + i}",
     picture: "https://example.com/profile#{i+1}.jpg"
   )
 
@@ -61,7 +61,8 @@ neighbors = []
     user: user,
     community: comunidad,
     unit: "A#{i+1}",
-    common_expense_fraction: (1.0 / 15).round(4)
+    common_expense_fraction: (1.0 / 15).round(4),
+    is_accepted: true
   )
 end
 
@@ -189,15 +190,18 @@ end
 
 puts "Creando reservas (bookings)…"
 
+days = rand(1..10).days
 7.times do
   neighbor = neighbors.sample
   espacio = [espacio1, espacio2, espacio3].sample
 
+  days += 1.days
+
   Booking.create!(
     neighbor: neighbor,
     common_space: espacio,
-    start: DateTime.now + rand(1..10).days,
-    end: DateTime.now + rand(1..10).days + 2.hours
+    start: DateTime.now + days,
+    end: DateTime.now + days + 2.hours
   )
 end
 

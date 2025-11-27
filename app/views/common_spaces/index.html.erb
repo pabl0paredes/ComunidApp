@@ -1,4 +1,7 @@
 <div class="container mt-4">
+  <div>
+    <%= link_to "Volver a Comunidad", @community %>
+  </div>
   <h1 class="fw-bold">
     <i class="fa-solid fa-building" style="color:#7360f2;"></i>
     Espacios comunes de <%= @community.name %>
@@ -17,31 +20,40 @@
         <div class="col-md-4">
           <div class="card shadow-sm mb-4">
             <div class="card-body">
-                <div class="space-icon-circle">
+              <%= link_to common_space_path(space), class: "space-icon-circle text-decoration-none" do %>
+
                 <% case space.name.downcase %>
                 <% when "quincho" %>
                     <i class="fa-solid fa-utensils"></i>
+
                 <% when "sala multiusos" %>
                     <i class="fa-solid fa-people-group"></i>
                 <% when "cancha", "cancha deportiva" %>
-                    <i class="fa-solid fa-futbol"></i>  
+                    <i class="fa-solid fa-futbol"></i>
                 <% else %>
                     <i class="fa-solid fa-building"></i>
                 <% end %>
-            </div>
+              <% end %>
 
-<h4 class="fw-bold text-center mt-2"><%= space.name %></h4>
+<h5 class="fw-normal text-center mt-2"><%= space.name %></h5>
 
+<!-- Indicador de disponibilidad -->
+<div class="d-flex align-items-center justify-content-center mt-2">
+    <div
+      style="
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: <%= space.is_available ? '#28a745' : '#dc3545' %>;
+        margin-right: 8px;
+      ">
+    </div>
 
-              <div class="d-flex justify-content-between mt-3">
-                <%= link_to "Ver", common_space_path(space),
-                    class: "btn btn-outline-primary btn-sm rounded-pill" %>
+    <span class="fw-semibold <%= space.is_available ? 'text-success' : 'text-danger' %>">
+      <%= space.is_available ? 'Disponible' : 'No disponible' %>
+    </span>
+  </div>
 
-                <%= link_to "Reservas",
-                    common_space_bookings_path(space),
-                    class: "btn btn-outline-success btn-sm rounded-pill" %>
-
-              </div>
             </div>
           </div>
         </div>
