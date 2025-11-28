@@ -20,7 +20,10 @@ class BookingsController < ApplicationController
     authorize @booking
     
     if @booking.save
-      redirect_to common_space_bookings_path(@common_space), notice: "Reserva creada con éxito."
+      respond_to do |format|
+        format.html {redirect_to common_space_bookings_path(@common_space), notice: "Reserva creada con éxito."}
+        format.turbo_stream 
+      end
     else
       render :new, status: :unprocessable_entity
     end

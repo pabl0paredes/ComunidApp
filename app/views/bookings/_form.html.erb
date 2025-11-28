@@ -3,9 +3,6 @@
 
   <div class="mt-3">
     <%= simple_form_for [@common_space, @booking] do |f| %>
-      <% if @booking.errors.any? %>
-        <p class="text-danger">La fecha ya esta ocupada por otro vecino</p>
-      <% end %>
 
         <div class="row">
           <div class="col-md-6">
@@ -19,6 +16,9 @@
 
         <%= f.submit "Crear reserva", class: "btn btn-primary mt-3 rounded-pill" %>
 
+      <% if @booking.errors.any? %>
+        <p class="text-danger">La fecha ya esta ocupada por otro vecino</p>
+      <% end %>
     <% end %>
   </div>
 

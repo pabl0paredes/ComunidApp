@@ -9,7 +9,7 @@ class CommonSpacesController < ApplicationController
 
   def show
     authorize @common_space 
-    @bookings = @common_space.bookings.order(start: :asc)
+    @bookings = @common_space.bookings.order(start: :desc)
     @usable_hours = @common_space.usable_hours.order(:weekday, :start)
   end
 
