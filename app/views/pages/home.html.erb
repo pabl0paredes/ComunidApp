@@ -1,4 +1,224 @@
-<h1>Pages#home</h1>
-<p>Find me in app/views/pages/home.html.erb</p>
-<%= link_to "Crear Comunidad", new_community_path, class: "btn btn-primary" %>
-<%= link_to "Registrarse como Vecino", new_neighbor_path, class: "btn btn-primary" %>
+<!-- HERO con video de fondo full centrado -->
+<header class="position-relative text-white text-center d-flex align-items-center justify-content-center" style="height: 75vh; background: white;">
+
+  <!-- Video Background -->
+  <video
+    class="position-absolute top-0 start-0 w-100 h-100"
+    autoplay
+    loop
+    muted
+    playsinline
+    style="z-index: 0; object-fit: cover; filter: brightness(0.6) saturate(1.15);">
+    <source src="https://videos.pexels.com/video-files/6874737/6874737-hd_1920_1080_25fps.mp4" type="video/mp4">
+  </video>
+
+  <!-- Overlay Azul elegante degradado -->
+  <div
+    class="position-absolute top-0 start-0 w-100 h-100"
+    style="background: linear-gradient(135deg, rgba(13,110,253,0.35), rgba(7,67,161,0.4)); z-index: 1;">
+  </div>
+
+  <!-- Contenido centrado encima del video -->
+  <div class="container position-relative px-3" style="z-index: 2; max-width: 900px;">
+    <h1 class="display-2 fw-bold mb-3">ComunidApp</h1>
+    <p class="lead fs-3 mb-4">La forma más inteligente de vivir en comunidad</p>
+
+    <!-- Botones principales -->
+    <div class="d-grid gap-3 d-sm-flex justify-content-center">
+      <%= link_to "Crear comunidad", new_community_path, class: "btn btn-light btn-lg px-5 fw-semibold shadow rounded-3" %>
+      <%= link_to "Registrarse como vecino", new_user_registration_path, class: "btn btn-outline-light btn-lg px-5 fw-semibold shadow rounded-3 border-2" %>
+    </div>
+  </div>
+
+</header>
+
+<script>
+  AOS.init();
+</script>
+
+<!-- FEATURES / DE QUÉ SE TRATA -->
+<section class="py-5 bg-white">
+  <div class="container text-center">
+    <h2 class="fw-bold mb-3 text-primary">¿Qué es ComunidApp?</h2>
+    <p class="text-muted mb-5 fs-5">ComunidApp es una plataforma
+      moderna de gestión de comunidades para edificios y condominios.
+      Chats, reservas de espacios comunes, pagos y gastos comunes centralizados
+      para una convivencia más simple, clara y conectada.
+    </p>
+
+    <div class="row g-4" data-aos="fade-up">
+      <div class="col-md-4">
+        <div class="p-4 border rounded-4 shadow-sm h-100 bg-light">
+          <!-- Placeholder para ícono -->
+          <div class="mb-3">
+            <!-- Inserta URL de imagen icon inspiracional -->
+            <i class="fa-solid fa-people-roof" style="font-size: 3rem; color: #0743a1;"></i>
+          </div>
+          <h5 class="fw-semibold text-primary">Gestión de comunidades</h5>
+          <p class="text-secondary">Administradores, vecinos, chats y canales de información centralizados.</p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="p-4 border rounded-4 shadow-sm h-100 bg-light">
+          <div class="mb-3">
+            <i class="fa-solid fa-champagne-glasses" style="font-size: 3rem; color: #0743a1;"></i>
+          </div>
+          <h5 class="fw-semibold text-primary">Reservas en tiempo real</h5>
+          <p class="text-secondary">Para espacios comunes personalizables según las características de la comunidad.</p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="p-4 border rounded-4 shadow-sm h-100 bg-light">
+          <div class="mb-3">
+            <i class="fa-solid fa-credit-card" style="font-size: 3rem; color: #0743a1;"></i>
+          </div>
+          <h5 class="fw-semibold text-primary">Gastos comunes claros</h5>
+          <p class="text-secondary">Cálculo de GGCC, notificaciones a vecinos y pagos dentro de la plataforma.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING / PRICING SECTION -->
+<section class="py-5 bg-light">
+  <div class="container text-center" data-aos="fade-up">
+    <h2 class="fw-bold mb-3 text-primary">Planes & Pricing</h2>
+    <p class="text-muted mb-5 fs-5">Contamos con precios competitivos en el mercado y con features personalizables
+      según las necesidades de cada comunidad.
+    </p>
+
+    <div class="row justify-content-center g-4">
+      <div class="col-md-3">
+        <div class="card shadow-sm border-0 rounded-4 h-100">
+          <div class="card-body d-flex flex-column">
+            <h6 class="text-uppercase text-muted small">Starter</h6>
+            <h3 class="fw-bold text-primary">$0</h3>
+            <p class="text-secondary">Hasta 10 vecinos. Solo chats.</p>
+            <div class="mt-auto">
+              <%= link_to "Comenzar", new_user_registration_path, class: "btn btn-primary w-100 rounded-3 shadow-sm" %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="card shadow border-0 rounded-4 h-100">
+          <div class="card-body d-flex flex-column">
+            <h6 class="text-uppercase text-muted small">Pro</h6>
+            <h3 class="fw-bold text-primary">$30</h3>
+            <p class="text-secondary">Hasta 50 vecinos. Chats, espacios comunes, gastos comunes.</p>
+            <div class="mt-auto">
+              <%= link_to "Crear comunidad", new_community_path, class: "btn btn-primary w-100 rounded-3 shadow-sm" %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="card shadow-sm border-0 rounded-4 h-100">
+          <div class="card-body d-flex flex-column">
+            <h6 class="text-uppercase text-muted small">Enterprise</h6>
+            <h3 class="fw-bold text-primary">Custom</h3>
+            <p class="text-secondary">Features personalizadas</p>
+            <div class="mt-auto">
+              <a href="#contacto" class="btn btn-outline-primary w-100 rounded-3">Contáctanos</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EQUIPO / TEAM SECTION -->
+<section class="py-5 bg-white">
+  <div class="container text-center" data-aos="fade-up">
+    <h2 class="fw-bold mb-3 text-primary">Nuestro equipo</h2>
+    <p class="text-muted mb-5 fs-5">Equipo creado en curso de Web Development & AI de Le Wagon, Batch 2068.</p>
+
+    <div class="row justify-content-center g-4">
+      <div class="col-md-2">
+        <div class="p-3">
+          <img
+            src="https://github.com/pabl0paredes.png"
+            class="rounded-circle shadow mb-3"
+            width="96" height="96"
+            alt="Team 3">
+          <h6 class="fw-bold text-primary">Pablo Paredes Haz</h6>
+          <p class="text-muted small">CEO / Co-Founder</p>
+        </div>
+      </div>
+
+      <div class="col-md-2">
+        <div class="p-3">
+          <img
+            src="https://github.com/aimegonzalo.png"
+            class="rounded-circle shadow mb-3"
+            width="96" height="96"
+            alt="Team 3">
+          <h6 class="fw-bold text-primary">Gonzalo Aime</h6>
+          <p class="text-muted small">CTO / Co-Founder</p>
+        </div>
+      </div>
+
+      <div class="col-md-2">
+        <div class="p-3">
+          <img
+            src="https://github.com/Terran-Tru.png"
+            class="rounded-circle shadow mb-3"
+            width="96" height="96"
+            alt="Team 3">
+          <h6 class="fw-bold text-primary">Oscar Lara</h6>
+          <p class="text-muted small">CFO / Co-Founder</p>
+        </div>
+      </div>
+
+      <div class="col-md-2">
+        <div class="p-3">
+          <img
+            src="https://github.com/DanielFerreroSan.png"
+            class="rounded-circle shadow mb-3"
+            width="96" height="96"
+            alt="Team 3">
+          <h6 class="fw-bold text-primary">Daniel Ferrero</h6>
+          <p class="text-muted small">COO / Co-Founder</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA ADICIONAL -->
+<section class="py-5 bg-light text-center" id="contacto">
+  <div class="container" data-aos="fade-up">
+    <h3 class="fw-bold text-primary mb-3">Construye tu comunidad en minutos</h3>
+    <p class="text-muted fs-5 mb-4">Gestiona reservas, gastos comunes y comunicaciones con transparencia y colaboración.</p>
+    <%= link_to "Crear tu primera comunidad", new_community_path, class: "btn btn-primary btn-lg px-5 rounded-3 shadow-sm" %>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-white py-5 border-top">
+  <div class="container text-center">
+    <div class="mb-4">
+      <img src="inserta-url-de-logo-footer-aquí" alt="Logo ComunidApp" width="64">
+    </div>
+
+    <p class="text-muted small mb-2">Plataforma de gestión comunitaria • Hecha con 💙 para vecinos y administradores</p>
+    <p class="text-muted small mb-4">Contacto: hola@comunidapp.cl | Tel: +56 9 4204 2067</p>
+
+    <div class="d-flex justify-content-center gap-3 mb-4">
+      <a href="INSERTE-LINK-LINKEDIN" class="text-primary fs-4"><i class="bi bi-linkedin"></i></a>
+      <a href="INSERTE-LINK-INSTAGRAM" class="text-primary fs-4"><i class="bi bi-instagram"></i></a>
+      <a href="INSERTE-LINK-GITHUB" class="text-primary fs-4"><i class="bi bi-github"></i></a>
+    </div>
+
+    <p class="text-secondary small">© <%= Time.current.year %> ComunidApp. Todos los derechos reservados.</p>
+  </div>
+</footer>
+
+<!-- Bootstrap Icons si quieres usarlos (instálalos si no los tienes) -->
+<link rel="stylesheet" href="INSERTE-AQUÍ-URL-DE-BOOTSTRAP-ICONS">
