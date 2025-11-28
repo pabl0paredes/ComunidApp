@@ -1,33 +1,67 @@
-<h2>Sign up</h2>
+<div class="container d-flex justify-content-center align-items-center py-5" style="min-height: 80vh; background-color: white;">
+  <div class="card border-0 shadow rounded-4 p-4" style="width: 100%; max-width: 420px;">
 
-<%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-  <%= f.error_notification %>
+    <!-- Encabezado -->
+    <div class="text-center mb-4">
+      <img src="INSERTE-AQUI-URL-DE-TU-LOGO" alt="Logo ComunidApp" width="56" class="mb-2">
+      <h2 class="fw-semibold text-primary mb-2" style="font-size: 1.7rem; letter-spacing: -0.4px;">
+        Crear cuenta
+      </h2>
+      <p class="text-muted" style="font-size: 0.9rem;">
+        Únete y comienza a ser parte de tu comunidad
+      </p>
+    </div>
 
-  <div class="form-inputs">
-    <%= f.input :name,
-                required: true,
-                autofocus: true,
-                input_html: { autocomplete: "name" }%>
-    <%= f.input :phone,
-                required: true,
-                autofocus: true,
-                input_html: { autocomplete: "phone" }%>
-    <%= f.input :email,
-                required: true,
-                autofocus: true,
-                input_html: { autocomplete: "email" }%>
-    <%= f.input :password,
-                required: true,
-                hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length),
-                input_html: { autocomplete: "new-password" } %>
-    <%= f.input :password_confirmation,
-                required: true,
-                input_html: { autocomplete: "new-password" } %>
+    <!-- Formulario -->
+    <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+      <%= f.error_notification %>
+
+      <div class="form-inputs">
+        <%= f.input :name,
+            label: false,
+            placeholder: "Nombre completo",
+            required: true,
+            autofocus: true,
+            input_html: { autocomplete: "name", class: "form-control form-control-lg rounded-3 shadow-sm border-1", style:"font-size:1rem;" } %>
+
+        <%= f.input :phone,
+            label: false,
+            placeholder: "Teléfono",
+            required: true,
+            input_html: { autocomplete: "phone", class: "form-control form-control-lg rounded-3 shadow-sm border-1", style:"font-size:1rem;" } %>
+
+        <%= f.input :email,
+            label: false,
+            placeholder: "Correo electrónico",
+            required: true,
+            input_html: { autocomplete: "email", class: "form-control form-control-lg rounded-3 shadow-sm border-1", style:"font-size:1rem;" } %>
+
+        <%= f.input :password,
+            label: false,
+            placeholder: "Crea tu contraseña",
+            required: true,
+            hint: ("Mínimo #{@minimum_password_length} caracteres" if @minimum_password_length),
+            input_html: { autocomplete: "new-password", class: "form-control form-control-lg rounded-3 shadow-sm border-1", style:"font-size:1rem;" } %>
+
+        <%= f.input :password_confirmation,
+            label: false,
+            placeholder: "Confirma tu contraseña",
+            required: true,
+            input_html: { autocomplete: "new-password", class: "form-control form-control-lg rounded-3 shadow-sm border-1", style:"font-size:1rem;" } %>
+      </div>
+
+      <!-- Submit (menos bold, elegante) -->
+      <div class="form-actions mt-4">
+        <%= f.button :submit, "Registrarse",
+            class: "btn btn-primary btn-lg w-100 fw-medium rounded-3 shadow-sm",
+            style:"background-color:#0743a1; border-color:#0743a1; font-size:1.05rem; font-weight:500; letter-spacing:0.25px;" %>
+      </div>
+    <% end %>
+
+    <!-- Links -->
+    <div class="text-center mt-3">
+      <%= render "devise/shared/links" %>
+    </div>
+
   </div>
-
-  <div class="form-actions">
-    <%= f.button :submit, "Sign up" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</div>
