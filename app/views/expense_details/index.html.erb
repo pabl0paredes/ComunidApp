@@ -1,12 +1,10 @@
 <div class="container mt-4">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="h4">Detalles del Gasto Común</h1>
-
     <%= link_to "Volver a gastos comunes",
     community_common_expenses_path(@common_expense.community),
     class: "btn btn-secondary" %>
   </div>
-
   <div class="card shadow-sm">
     <div class="card-body">
       <% if @expense_details.any? %>
@@ -15,28 +13,23 @@
             <tr>
               <th>Concepto</th>
               <th>Monto</th>
-              <th>Distribución por vecino</th>
+              <th>Distribución</th>
               <th class="text-end">Acciones</th>
             </tr>
           </thead>
           <tbody>
             <% @expense_details.each do |detail| %>
               <tr>
-
                 <td>
                   <div class="p-2 border rounded bg-light">
                     <strong><%= detail.detail %></strong>
                   </div>
                 </td>
-
-
                 <td>
                   <div class="p-2 border rounded bg-light">
                     <%= number_to_currency(detail.amount) %>
                   </div>
                 </td>
-
-
                 <td>
                   <div class="p-2 border rounded bg-light">
                     <% if detail.expense_details_neighbors.any? %>
@@ -50,18 +43,29 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <% detail.expense_details_neighbors.includes(:neighbor).each do |edn| %>
-                            <tr>
-                              <td><%= edn.neighbor.user.name %></td>
-                              <td><%= edn.neighbor.unit %></td>
-                              <td><%= number_to_currency(edn.amount_due) %></td>
-                              <td>
-                                <span class="badge <%= edn.paid ? 'bg-success' : 'bg-secondary' %>">
-                                  <%= edn.paid ? 'Pagado' : 'No pagado' %>
-                                </span>
-                              </td>
-                            </tr>
-                          <% end %>
+                          <tbody>
+                            <% visible_neighbors =
+                    if current_user.neighbor.present?
+                      detail.expense_details_neighbors
+                            .includes(:neighbor)
+                            .where(neighbor_id: current_user.neighbor.id)
+                    else
+                      detail.expense_details_neighbors.includes(:neighbor)
+                    end
+                %>
+                            <% visible_neighbors.each do |edn| %>
+                              <tr>
+                                <td><%= edn.neighbor.user.name %></td>
+                                <td><%= edn.neighbor.unit %></td>
+                                <td><%= number_to_currency(edn.amount_due) %></td>
+                                <td>
+                                  <span class="badge <%= edn.paid ? 'bg-success' : 'bg-secondary' %>">
+                                    <%= edn.paid ? 'Pagado' : 'No pagado' %>
+                                  </span>
+                                </td>
+                              </tr>
+                            <% end %>
+                          </tbody>
                         </tbody>
                       </table>
                     <% else %>
@@ -69,12 +73,12 @@
                     <% end %>
                   </div>
                 </td>
-
-
                 <td class="text-end">
+                  <% if policy(detail).create? %>
                   <%= link_to "Ver",
                       expense_detail_path(detail),
                       class: "btn btn-sm btn-outline-secondary mb-1" %>
+                      <% end %>
                   <% if policy(detail).edit? %>
                     <%= link_to "Editar",
                         edit_expense_detail_path(detail),
@@ -91,14 +95,12 @@
             <% end %>
           </tbody>
         </table>
-
       <% else %>
         <p class="text-muted">No hay detalles cargados.</p>
       <% end %>
-
       <div class="mt-3 d-flex gap-2">
         <% if policy(@common_expense).new? %>
-        <%= link_to "Agregar nuevo detalle",
+          <%= link_to "Agregar nuevo detalle",
             new_common_expense_expense_detail_path(@common_expense),
             class: "btn btn-primary" %>
         <% end %>
