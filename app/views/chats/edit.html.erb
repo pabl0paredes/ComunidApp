@@ -1,9 +1,15 @@
-<h2>Editar categoría del Chat</h2>
+<div class="chat-container mt-4">
+
+<h2 class="mb-3 fw-bold section-title">Editar categoría del Chat</h2>
+
+<div class="chat-edit-title mb-4">
+  <strong>Chat:</strong> <span><%= @chat.name %></span>
+</div>
 
 <%= form_with model: @chat, local: true do |f| %>
 
   <div class="mb-3">
-    <%= f.label :category, "Categoría" %>
+    <%= f.label :category, "Categoría", class: "form-label" %>
     <%= f.select :category, @categories, {}, class: "form-select" %>
   </div>
 
@@ -11,3 +17,5 @@
   <%= link_to "Cancelar", chat_path(@chat), class: "btn btn-secondary ms-2" %>
 
 <% end %>
+
+</div>
