@@ -1,42 +1,238 @@
-/* WRAPPER DE MENSAJES */
+/* =========================================
+  WRAPPER GENERAL DEL CHAT
+========================================= */
+.chat-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.chat-page h1,
+.chat-page h2 {
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #1e3a8a; /* azul corporativo */
+}
+
+/* =========================================
+  CARD DEL CHAT — LOOK CORPORATIVO
+========================================= */
+.chat-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+  border: 1px solid #dbe2ef;
+  transition: background 0.15s;
+}
+
+.chat-card:hover {
+  background: #f7f9fc;
+}
+
+.chat-card-header {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #1e3a8a; /* azul corporativo */
+}
+
+.chat-card-body {
+  color: #4b5563;
+  margin-bottom: 10px;
+  line-height: 1.45;
+}
+
+/* =========================================
+  BADGES — ESTILO AZUL MODERNO
+========================================= */
+.chat-tag {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: white;
+}
+
+.chat-tag.important { background-color: #d32f2f; }
+.chat-tag.event     { background-color: #2563eb; } /* azul */
+.chat-tag.security  { background-color: #1e40af; } /* azul fuerte */
+.chat-tag.default   { background-color: #64748b; }
+
+.chat-icon {
+  font-size: 1.3rem;
+  margin-right: 6px;
+  color: #1e40af;
+}
+
+/* =========================================
+  CONTENEDOR DE MENSAJES
+========================================= */
+.messages-container {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 15px;
+  background: #eef2f7;
+  border-radius: 12px;
+}
+
+/* =========================================
+  MENSAJES
+========================================= */
+
+/* Wrapper */
 .message-wrapper {
   display: flex;
+  align-items: flex-start;
   margin-bottom: 12px;
 }
 
 .message-left {
-  text-align: left;
-  justify-content: flex-start;
+  flex-direction: row;
 }
 
 .message-right {
-  text-align: right;
-  justify-content: flex-end;
+  flex-direction: row-reverse;
 }
 
-/* BURBUJAS */
+/* Avatar */
+.message-avatar {
+  margin: 0 8px;
+  display: flex;
+  align-items: flex-end;
+}
+
+/* Burbuja base */
 .message-bubble {
   max-width: 70%;
-  padding: 10px 12px;
-  border-radius: 12px;
+  padding: 12px 16px;
+  border-radius: 16px;
+  display: inline-block;
+  position: relative;
+  line-height: 1.45;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+  transition: transform 0.1s ease-in-out;
 }
 
-/* Burbuja del usuario actual */
+.message-bubble:hover {
+  transform: scale(1.01);
+}
+
+/* =========================================
+  BURBUJA PROPIA — AZUL PROFESIONAL
+========================================= */
 .my-bubble {
-  background-color: #9b59b6; /* violeta/lila */
+  background-color: #2563eb; /* azul profesional */
   color: #fff;
+  border: 1px solid #1d4ed8;
 }
 
-/* Burbuja de otros usuarios */
+/* =========================================
+  BURBUJA DE OTROS — CELESTE PROLIJO
+========================================= */
 .other-bubble {
-  background-color: #ffffff;
-  border: 1px solid #e0e0e0;
-  color: #333;
+  background-color: #e0f2fe; /* celeste muy suave */
+  border: 1px solid #bae6fd;
+  color: #1e3a5f;
 }
 
-/* Colores para nombres de usuarios */
-.user-name-1 { color: #007bff; }
-.user-name-2 { color: #e67e22; }
-.user-name-3 { color: #2ecc71; }
-.user-name-4 { color: #c0392b; }
-.user-name-5 { color: #16a085; }
+/* Nombre del usuario */
+.message-username {
+  font-size: 0.82rem;
+  margin-bottom: 4px;
+}
+
+/* Colores rotativos coherentes con la nueva paleta */
+.user-name-1 { color: #1e40af; font-weight: 600; }
+.user-name-2 { color: #2563eb; font-weight: 600; }
+.user-name-3 { color: #0ea5e9; font-weight: 600; }
+.user-name-4 { color: #0284c7; font-weight: 600; }
+.user-name-5 { color: #1e3a8a; font-weight: 600; }
+
+/* Texto del mensaje */
+.message-text {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Timestamp — más sutil */
+.timestamp {
+  font-size: 0.68rem;
+  margin-top: 4px;
+  display: block;
+  opacity: 0.6;
+}
+
+/* Forzar que las pestañas ocupen todo el ancho */
+.modern-tabs {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* Cada pestaña ocupa el mismo ancho */
+.modern-tabs .nav-item {
+  flex: 1;
+}
+
+/* Que el texto esté centrado dentro del botón */
+.modern-tabs .nav-link {
+  width: 100%;
+  text-align: center;
+}
+
+/* Fuente exclusiva para la sección de chats */
+.chat-page,
+#messages,
+.message-wrapper,
+.message-bubble {
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+#new_message_form textarea,
+#new_message_form input,
+#new_message_form button {
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* =========================================
+  BOTÓN ELIMINAR MENSAJE (TURQUESA)
+========================================= */
+.delete-message-btn {
+  display: inline-block;
+  background-color: #14b8a6;       /* Turquesa principal */
+  color: #f0fdfa;                  /* Blanco-verde suave */
+  font-size: 0.70rem;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+  border: 1px solid #0d9488;       /* Turquesa más oscuro */
+  text-decoration: none;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.delete-message-btn:hover {
+  background-color: #2dd4bf;       /* Turquesa claro suave */
+  border-color: #14b8a6;
+}
+
+/* =========================================
+  BOTONES OCULTAR / MOSTRAR CHAT (TURQUESA)
+========================================= */
+.chat-toggle-btn {
+  background-color: #14b8a6;       /* Turquesa principal */
+  color: #f0fdfa;                  /* Blanco verdoso suave */
+  font-size: 0.85rem;
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 1px solid #0d9488;       /* Turquesa oscuro */
+  font-weight: 600;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.chat-toggle-btn:hover {
+  background-color: #2dd4bf;       /* Turquesa suave claro */
+  border-color: #14b8a6;
+}
