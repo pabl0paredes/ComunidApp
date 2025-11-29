@@ -1,12 +1,19 @@
 <div class="container mt-4">
-  <h1 class="h4 mb-4">Nuevo Detalle de Gasto</h1>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h4 mb-0">Nuevo Detalle de Gasto</h1>
+
+    <%= link_to "Volver",
+      common_expense_expense_details_path(@common_expense),
+      class: "btn btn-outline-secondary" %>
+  </div>
+
   <div class="card shadow-sm">
     <div class="card-body">
 
       <% if @expense_detail.errors.any? %>
         <div class="alert alert-danger">
-          <h5>Se encontraron errores:</h5>
-          <ul>
+          <h6 class="fw-bold mb-2">Se encontraron errores:</h6>
+          <ul class="mb-0">
             <% @expense_detail.errors.full_messages.each do |msg| %>
               <li><%= msg %></li>
             <% end %>
@@ -15,21 +22,24 @@
       <% end %>
 
       <%= form_with model: [@common_expense, @expense_detail], local: true do |f| %>
+
         <div class="mb-3">
-          <%= f.label :detail, "Detalle", class: "form-label" %>
-          <%= f.text_field :detail, class: "form-control" %>
+          <%= f.label :detail, "Descripción del gasto", class: "form-label fw-semibold" %>
+          <%= f.text_field :detail, class: "form-control", placeholder: "Ej: Reparación de ascensor" %>
         </div>
+
         <div class="mb-3">
-          <%= f.label :amount, "Monto", class: "form-label" %>
-          <%= f.number_field :amount, class: "form-control", step: "0.01" %>
+          <%= f.label :amount, "Monto total", class: "form-label fw-semibold" %>
+          <%= f.number_field :amount, class: "form-control", step: "0.01", placeholder: "Ej: 150000" %>
         </div>
+
         <div class="mb-3">
           <label class="form-label fw-bold">Asignar a vecinos</label>
-          <div class="table-responsive">
-            <table class="table table-bordered table-striped align-middle text-center">
-              <thead class="table-dark">
+          <div class="table-responsive border rounded">
+            <table class="table table-hover mb-0 align-middle">
+              <thead class="table-light">
                 <tr>
-                  <th>Asignar</th>
+                  <th>Seleccionar</th>
                   <th>Nombre</th>
                   <th>Unidad</th>
                   <th>% asignado</th>
@@ -38,35 +48,32 @@
               <tbody>
                 <% @neighbors.each do |neighbor| %>
                   <tr>
-                    <td>
+                    <td class="text-center">
                       <%= check_box_tag "expense_detail[neighbor_ids][]",
-                                        neighbor.id,
-                                        false,
-                                        id: "neighbor_#{neighbor.id}",
-                                        class: "form-check-input" %>
+                        neighbor.id,
+                        false,
+                        id: "neighbor_#{neighbor.id}",
+                        class: "form-check-input" %>
                     </td>
-                    <td class="text-start">
-                      <%= neighbor.user.name %>
-                    </td>
-                    <td>
-                      <%= neighbor.unit %>
-                    </td>
-                    <td>
-                      <%= neighbor.common_expense_fraction %> %
-                    </td>
+                    <td><%= neighbor.user.name %></td>
+                    <td><%= neighbor.unit %></td>
+                    <td><%= neighbor.common_expense_fraction %> %</td>
                   </tr>
                 <% end %>
               </tbody>
             </table>
           </div>
         </div>
-        <div class="d-flex gap-2">
-          <%= f.submit "Crear", class: "btn btn-primary" %>
-          <%= link_to "Volver",
-                      common_expense_expense_details_path(@common_expense),
-                      class: "btn btn-outline-secondary" %>
+
+        <div class="d-flex gap-2 mt-3">
+          <%= f.submit "Crear detalle", class: "btn btn-primary px-4" %>
+          <%= link_to "Cancelar",
+                common_expense_expense_details_path(@common_expense),
+                class: "btn btn-outline-secondary" %>
         </div>
+
       <% end %>
+
     </div>
   </div>
 </div>
