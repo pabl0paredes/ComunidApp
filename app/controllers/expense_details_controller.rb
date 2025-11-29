@@ -4,19 +4,27 @@ class ExpenseDetailsController < ApplicationController
 
 
   def index
-    if current_user.neighbor.present?
-      @expense_details = @common_expense.expense_details
-                                      .joins(:expense_details_neighbors)
-                                      .where(expense_details_neighbors: { neighbor_id: current_user.neighbor.id })
-                                      .order(updated_at: :desc)
-                                      .distinct
-    else
-    
-      @expense_details = @common_expense.expense_details.order(updated_at: :desc)
+  @common_expense = CommonExpense.find(params[:common_expense_id])
+
+
+    if current_user.id == @common_expense.community.administrator_id
+      @expense_details = @common_expense
+                          .expense_details
+                          .order(updated_at: :desc)
+
+
+    elsif current_user.neighbor.present?
+      @expense_details = @common_expense
+                          .expense_details
+                          .joins(:expense_details_neighbors)
+                          .where(expense_details_neighbors: { neighbor_id: current_user.neighbor.id })
+                          .order(updated_at: :desc)
+                          .distinct
     end
 
   authorize @expense_details
-  end
+end
+
 
 
   def new

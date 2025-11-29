@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_11_27_045924) do
+ActiveRecord::Schema[7.1].define(version: 2025_11_28_014954) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -115,6 +115,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_27_045924) do
     t.bigint "neighbor_id", null: false
     t.boolean "paid", default: false, null: false
     t.decimal "amount_due", precision: 10, scale: 2, default: "0.0", null: false
+    t.string "status"
+    t.datetime "paid_at"
     t.index ["expense_detail_id", "neighbor_id"], name: "index_expense_details_neighbors_on_detail_and_neighbor"
     t.index ["neighbor_id", "expense_detail_id"], name: "index_expense_details_neighbors_on_neighbor_and_detail"
   end

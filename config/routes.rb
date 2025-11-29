@@ -52,4 +52,9 @@ Rails.application.routes.draw do
 
   resources :show_chats, only: [:create, :update]
 
+  patch "expense_details_neighbors/:id/pay", to: "expense_details_neighbors#pay", as: :pay_expense
+  patch "expense_details_neighbors/:id/approve", to: "expense_details_neighbors#approve", as: :approve_expense
+  patch "expense_details_neighbors/:id/reject",  to: "expense_details_neighbors#reject",  as: :reject_expense
+
+
 end
