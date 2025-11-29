@@ -1,3 +1,31 @@
-<h1>Esperando autorización del Administrador</h1>
+<div class="container py-5">
+  <!-- Título principal -->
+  <div class="text-center mb-4">
+    <h1 class="fw-bold text-primary mb-3" style="font-size: 2rem; letter-spacing: -0.5px;">
+      Esperando autorización del Administrador
+    </h1>
+    <p class="text-muted" style="font-size: 1.1rem;">
+      Información de Administrador de Comunidad "<%= @community.name %>"
+    </p>
+  </div>
 
-<%= link_to "Contacto Administrador", community_administrator_path(@community, @administrator) %>
+  <!-- Card con la información del administrador -->
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-sm rounded-4 p-4">
+        <div class="card-body">
+          <h5 class="card-title text-primary">Nombre del Administrador</h5>
+          <p><strong>Nombre:</strong> <%= @administrator.user.name %></p>
+          <p><strong>Contacto:</strong> <%= @administrator.user.phone %></p>
+          <p><strong>Mail:</strong> <%= @administrator.user.email %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botón para regresar al inicio -->
+  <div class="text-center mt-4">
+    <%= link_to "Inicio", root_path, class: "btn btn-primary btn-lg" %>
+  </div>
+
+</div>

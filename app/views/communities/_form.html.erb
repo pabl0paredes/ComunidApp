@@ -1,29 +1,39 @@
-<%= simple_form_for community do |f| %>
+<%= simple_form_for community, html: { class: "w-100" } do |f| %>
 
-  <div class="form-group">
-    <%= f.input :name, label: "Nombre de la comunidad" %>
+  <!-- Nombre de la comunidad -->
+  <div class="form-group mb-4">
+    <%= f.input :name, label: "Nombre de la comunidad", input_html: { class: "form-control form-control-lg rounded-3 shadow-sm", placeholder: "Escribe el nombre de tu comunidad" } %>
   </div>
 
-  <div class="form-group">
-    <%= f.input :size, label: "Cantidad de usuarios permitidos", input_html: { min: 1 } %>
+  <!-- Cantidad de usuarios permitidos -->
+  <div class="form-group mb-4">
+    <%= f.input :size, label: "Cantidad de usuarios permitidos", input_html: { min: 1, class: "form-control form-control-lg rounded-3 shadow-sm" } %>
   </div>
 
-  <div class="form-group">
-    <%= f.input :address, label: "Dirección" %>
+  <!-- Dirección -->
+  <div class="form-group mb-4">
+    <%= f.input :address, label: "Dirección", input_html: { class: "form-control form-control-lg rounded-3 shadow-sm", placeholder: "Dirección completa de tu comunidad" } %>
   </div>
 
   <!-- Campos ocultos para lat/lng -->
   <%= f.input :latitude, as: :hidden, input_html: { id: "community_latitude" } %>
   <%= f.input :longitude, as: :hidden, input_html: { id: "community_longitude" } %>
 
-  <h4>Selecciona la ubicación en el mapa:</h4>
-  <div
-    id="map"
-    data-lat="<%= community.latitude %>"
-    data-lng="<%= community.longitude %>"
-    style="height: 400px; border-radius: 8px; margin-bottom: 20px;"
-  ></div>
+  <!-- Mapa para seleccionar la ubicación -->
+  <div class="mb-4">
+    <h4 class="text-center">Selecciona la ubicación en el mapa:</h4>
+    <div
+      id="map"
+      data-lat="<%= community.latitude %>"
+      data-lng="<%= community.longitude %>"
+      style="height: 400px; border-radius: 8px; margin-bottom: 20px;"
+    ></div>
+  </div>
 
-  <%= f.submit community.persisted? ? "Guardar" : "Crear Comunidad", class: "btn btn-primary" %>
+  <!-- Botón de submit -->
+  <div class="form-group mt-4">
+    <%= f.submit community.persisted? ? "Guardar" : "Crear Comunidad", class: "btn btn-primary btn-lg w-100 rounded-3 shadow-sm" %>
+  </div>
 
 <% end %>
+

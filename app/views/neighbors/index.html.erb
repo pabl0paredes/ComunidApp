@@ -1,40 +1,60 @@
-<h1>Vecinos de <%= @community.name %></h1>
-<%= link_to "Volver a Comunidad", @community %>
-<ul>
-  <% @neighbors_accepted.each do |neighbor| %>
-    <li>
-      <%= neighbor.user.name %> |
-      Unidad: <%= neighbor.unit %> |
-      Contacto: <%= neighbor.user.phone %>
-      <% if @community.administrator.user == current_user %> |
-        Fracción GGCC <%= neighbor.common_expense_fraction %> |
-        <%= link_to "Editar", edit_neighbor_path(neighbor) %> |
-        <%= link_to "Eliminar",
-          neighbor_path(neighbor),
-          data: {turbo_method: :delete, turbo_confirm: "Estás seguro?"},
-          class: "btn btn-danger"
-        %>
-      <% end %>
-    </li>
-  <% end %>
-  <% if @community.administrator.user == current_user %>
-    <p>---------- SOLICITUDES ----------</p>
-    <% if @neighbors_waiting.length.positive? %>
-      <% @neighbors_waiting.each do |neighbor| %>
-        <li>
-          <%= neighbor.user.name %> |
-          Unidad: <%= neighbor.unit %> |
-          Fracción GGCC <%= neighbor.common_expense_fraction %> |
-          <%= link_to "Aceptar", edit_neighbor_path(neighbor) %> |
-          <%= link_to "Eliminar",
-            neighbor_path(neighbor),
-            data: {turbo_method: :delete, turbo_confirm: "Estás seguro?"},
-            class: "btn btn-danger"
-          %>
-        </li>
-      <% end %>
-    <% else %>
-      <p>No hay solicitudes pendientes</p>
+<div class="container py-5">
+  <h1 class="fw-bold text-primary mb-4" style="font-size: 2rem;">Vecinos de <%= @community.name %></h1>
+  <%= link_to "Volver a Comunidad", @community, class: "btn btn-secondary mb-4" %>
+
+  <!-- Lista de vecinos aceptados -->
+  <div class="row g-4">
+    <% @neighbors_accepted.each do |neighbor| %>
+      <div class="col-md-4">
+        <div class="card shadow-sm rounded-4 p-3">
+          <div class="card-body">
+            <h5 class="card-title text-primary">
+              Unidad: <%= neighbor.unit %> | <%= neighbor.user.name %>
+            </h5>
+            <p class="card-text text-muted">Contacto: <%= neighbor.user.phone %></p>
+            <% if @community.administrator.user == current_user %>
+              <p class="text-muted">Fracción GGCC: <%= neighbor.common_expense_fraction %></p>
+              <div class="d-flex justify-content-between mt-3">
+                <%= link_to "Editar", edit_neighbor_path(neighbor), class: "btn btn-outline-primary btn-sm" %>
+                <%= link_to "Eliminar", neighbor_path(neighbor),
+                            data: { turbo_method: :delete, turbo_confirm: "¿Estás seguro?" },
+                            class: "btn btn-outline-danger btn-sm" %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
     <% end %>
+  </div>
+
+  <!-- Sección de solicitudes pendientes (solo visible para el administrador) -->
+  <% if @community.administrator.user == current_user %>
+    <div class="mt-5">
+      <h4> SOLICITUDES DE INGRESO </h4>
+      <% if @neighbors_waiting.length.positive? %>
+        <div class="row g-4">
+          <% @neighbors_waiting.each do |neighbor| %>
+            <div class="col-md-4">
+              <div class="card shadow-sm rounded-4 p-3">
+                <div class="card-body">
+                  <h5 class="card-title text-primary">
+                    Unidad: <%= neighbor.unit %> | <%= neighbor.user.name %>
+                  </h5>
+                  <p class="card-text text-muted">Fracción GGCC: <%= neighbor.common_expense_fraction %></p>
+                  <div class="d-flex justify-content-between mt-3">
+                    <%= link_to "Aceptar", edit_neighbor_path(neighbor), class: "btn btn-outline-success btn-sm" %>
+                    <%= link_to "Eliminar", neighbor_path(neighbor),
+                                data: { turbo_method: :delete, turbo_confirm: "¿Estás seguro?" },
+                                class: "btn btn-outline-danger btn-sm" %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p>No hay solicitudes pendientes</p>
+      <% end %>
+    </div>
   <% end %>
-</ul>
+</div>

@@ -16,13 +16,13 @@ Rails.application.routes.draw do
     resources :common_expenses, only: [:new, :create, :index]
     resources :common_spaces, only: [:new, :create, :index]
     resources :neighbors, only: [:index]
-    resources :administrators, only: [:show]
   end
 
   resources :administrators, only: [:new, :create, :destroy]
   resources :neighbors, only: [:new, :create, :show, :edit, :update, :destroy] do
     member do
       get :auth_waiting
+      get :already_neighbor
     end
   end
 

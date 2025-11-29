@@ -1,0 +1,145 @@
+/* Estilos comunes de las cards */
+.card {
+  border-radius: 1.2rem;
+  transition: transform 0.3s ease-in-out;
+  background-color: #ffffff;
+}
+
+// .card:hover {
+//   transform: scale(1.03);
+//   box-shadow: 0 4px 12px rgba(13,110,253,0.2);
+// }
+
+/* Estilo de la tarjeta para Espacios Comunes, Gastos Comunes y Chats */
+.card-hover {
+  background-color: #e3f2fd; /* Azul suave */
+  cursor: pointer;
+}
+
+.card-hover:hover {
+  background-color: #bbdefb; /* Azul más intenso en hover */
+}
+
+/* Estilo de la tarjeta y su contenido */
+.card-body {
+  font-size: 1rem;
+}
+
+.card-body h5 {
+  color: #0743a1;
+}
+
+.card-title {
+  font-size: 1.2rem;
+  color: #0743a1;
+  font-weight: 600;
+}
+
+.card-footer .btn {
+  font-weight: 500;
+  background-color: #0743a1;
+  border-color: #0743a1;
+  box-shadow: 0 4px 12px rgba(13,110,253,0.15);
+}
+
+.card-footer .btn:hover {
+  background-color: #05357c;
+  border-color: #05357c;
+}
+
+/* Estilo para los badges de los íconos */
+.badge {
+  font-size: 1.2rem;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.badge .fa {
+  font-size: 1.5rem;
+}
+
+.badge.bg-danger {
+  background-color: #f44336;
+  color: white;
+}
+
+.badge.bg-info {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.badge .position-absolute {
+  top: -5px;
+  right: -5px;
+}
+
+/* Estilos para los botones */
+.btn-primary {
+  background-color: #0743a1;
+  border-color: #0743a1;
+  font-weight: 500;
+}
+
+.btn-primary:hover {
+  background-color: #05357c;
+  border-color: #05357c;
+}
+
+.btn-secondary {
+  background-color: #f1f1f1;
+  border: 1px solid #ddd;
+  color: #0743a1;
+}
+
+.btn-secondary:hover {
+  background-color: #e0e0e0;
+}
+
+/* Estilo de los enlaces */
+.text-primary {
+  color: #0743a1 !important;
+}
+
+.text-primary:hover {
+  color: #05357c !important;
+}
+
+.text-decoration-none {
+  text-decoration: none;
+}
+
+.text-muted {
+  color: #6c757d;
+}
+
+/* Estilo para el mapa */
+#map {
+  background-color: #f1f1f1;
+  border-radius: 8px;
+}
+
+/* Espaciado y diseño de lista */
+.list-unstyled li {
+  margin-bottom: 10px;
+}
+
+.mb-2 {
+  margin-bottom: 1rem;
+}
+
+.mt-3 {
+  margin-top: 1rem;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-control-lg {
+  font-size: 1rem;
+  border-radius: 0.75rem;
+  background-color: #f9f9f9;
+  border: 1px solid #e0e0e0;
+}

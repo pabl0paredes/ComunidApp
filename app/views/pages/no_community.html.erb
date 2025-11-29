@@ -1,2 +1,22 @@
-<h1>No tienes una comunidad asociada</h1>
-<p>Por favor contacta a un administrador o espera a que te asignen una.</p>
+<div class="container py-5">
+  <!-- Título principal -->
+  <div class="text-center mb-4">
+    <h1 class="fw-bold text-primary mb-3" style="font-size: 2rem; letter-spacing: -0.5px;">
+      No tienes una comunidad asociada
+    </h1>
+  </div>
+
+  <!-- Card de mensaje -->
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-sm rounded-4 p-4">
+        <div class="card-body">
+          <!-- Botón para registrarse como vecino -->
+          <div class="text-center">
+            <%= link_to "Registrarse como vecino", new_neighbor_path, class: "btn btn-primary btn-lg w-100" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
