@@ -1,42 +1,129 @@
-<h1> <%= @community.name %> </h1>
-<ul>
-  <li>
-    Usuarios: <%= @community.neighbors.where(is_accepted: true).count %> / <%= @community.size %>
-    <% if @community.administrator.user == current_user %>
-      (<%= @community.neighbors.where(is_accepted: false).count %> solicitudes)
-    <% end %>
-  </li>
-  <li>Administrador: <%= link_to @community.administrator.user.name, community_administrator_path(@community, @community.administrator) %></li>
-  <% vecinos = @community.administrator.user == current_user ? "Gestionar Vecinos" : "Ver Vecinos" %>
-  <li><%= link_to vecinos, community_neighbors_path(@community) %></li>
-</ul>
-<div
-  id="map-show"
-  data-lat="<%= @community.latitude %>"
-  data-lng="<%= @community.longitude %>"
-  style="height: 400px; border-radius: 8px; margin-bottom: 20px;"
->
+<div class="container py-5">
+  <!-- Título de la comunidad -->
+  <div class="text-center mb-4">
+    <h1 class="fw-bold text-primary mb-3" style="font-size: 2rem; letter-spacing: -0.5px;">
+      <%= @community.name %>
+    </h1>
+  </div>
+
+  <!-- Detalles de la comunidad en formato Card -->
+  <div class="row g-4">
+    <!-- Información de la comunidad -->
+    <div class="col-md-4">
+      <div class="card shadow-sm rounded-4">
+        <div class="card-body">
+          <h5 class="card-title text-primary" style="font-weight: 600;">Información de la Comunidad</h5>
+
+          <ul class="list-unstyled">
+            <!-- Mostrar usuarios -->
+            <li class="mb-2">
+              <strong>Usuarios:</strong>
+              <%= @community.neighbors.where(is_accepted: true).count %> / <%= @community.size %>
+            </li>
+
+             <!-- Mostrar administrador -->
+            <li class="mb-2">
+              <strong>Administrador:</strong>
+              <%= link_to @community.administrator.user.name, "#", data: { target: "#admin-info-modal" }, class: "text-decoration-none text-primary", id: "admin-info-button" %>
+            </li>
+
+            <!-- Enlace a gestionar o ver vecinos -->
+            <li class="mb-2">
+              <%= link_to @community.administrator.user == current_user ? "Gestionar Vecinos" : "Ver Vecinos", community_neighbors_path(@community), class: "text-decoration-none text-primary" %>
+              <!-- Mostrar solicitudes si eres el administrador -->
+              <% if @community.administrator.user == current_user %>
+                  (Solicitudes: <%= @community.neighbors.where(is_accepted: false).count %>)
+              <% end %>
+            </li>
+
+            <!-- Mostrar la dirección de la comunidad -->
+            <li class="mt-3">
+              <strong>Dirección:</strong>
+              <p class="text-muted" style="font-size: 0.9rem;">
+                <%= @community.address %>
+              </p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Mapa de la comunidad -->
+    <div class="col-md-8">
+      <div
+        id="map-show"
+        data-lat="<%= @community.latitude %>"
+        data-lng="<%= @community.longitude %>"
+        style="height: 350px; border-radius: 8px; margin-bottom: 20px;"
+      ></div>
+    </div>
+  </div>
+
+  <!-- Secciones de la comunidad en Cards -->
+  <div class="row g-4">
+    <!-- Espacios Comunes -->
+    <div class="col-md-4">
+      <div class="card shadow-sm rounded-4 card-hover" style="cursor: pointer; background-color: #e3f2fd;" onclick="window.location='<%= community_common_spaces_path(@community) %>';">
+        <div class="card-body text-center py-5">
+          <h5 class="card-title text-primary">Espacios Comunes</h5>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gastos Comunes -->
+    <div class="col-md-4">
+      <div class="card shadow-sm rounded-4 card-hover" style="cursor: pointer; background-color: #e3f2fd;" onclick="window.location='<%= community_common_expenses_path(@community) %>';">
+        <div class="card-body text-center py-5">
+          <h5 class="card-title text-primary">Gastos Comunes</h5>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chats -->
+    <div class="col-md-4">
+      <div class="card shadow-sm rounded-4 card-hover" style="cursor: pointer; background-color: #e3f2fd;" onclick="window.location='<%= community_chats_path(@community) %>';">
+        <div class="card-body text-center py-5">
+          <h5 class="card-title text-primary">Chats</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botones de acción para el administrador -->
+  <% if @community.administrator.user == current_user %>
+    <div class="mt-4">
+      <div class="row g-3">
+        <!-- Botón para Editar Comunidad -->
+        <div class="col-md-4">
+          <%= link_to "Editar Comunidad", edit_community_path(@community), class: "btn btn-primary w-100" %>
+        </div>
+        <!-- Botón para Volver a Mis Comunidades -->
+        <div class="col-md-4">
+          <%= link_to "Volver a Mis Comunidades", communities_path, class: "btn btn-secondary w-100" %>
+        </div>
+        <!-- Botón para Eliminar Comunidad -->
+        <div class="col-md-4">
+          <%= link_to "Eliminar Comunidad", community_path(@community), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "btn btn-danger w-100" %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
 </div>
 
-<div>
-  <%= link_to "Espacios Comunes", community_common_spaces_path(@community) %>
+<!-- Modal de Información del Administrador -->
+<div class="modal fade" id="admin-info-modal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Información del Administrador</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Nombre:</strong> <%= @community.administrator.user.name %></p>
+        <p><strong>Contacto:</strong> <%= @community.administrator.user.phone %></p>
+      </div>
+    </div>
+  </div>
 </div>
-<div>
-  <%= link_to "Gastos Comunes", community_common_expenses_path(@community) %>
-</div>
-<div>
-  <%= link_to "Chats", community_chats_path(@community) %>
-</div>
-
-<% if @community.administrator.user == current_user %>
-  <%= link_to "Editar Comunidad",  edit_community_path(@community), class: "btn btn-primary"%>
-
-  <%= link_to "Volver a Mis Comunidades", communities_path, class: "btn btn-secondary" %>
-
-  <%= link_to "Eliminar",
-    community_path(@community),
-    data: {turbo_method: :delete, turbo_confirm: "Are you sure?"},
-    class: "btn btn-danger"
-  %>
-
-<% end %>

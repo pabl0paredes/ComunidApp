@@ -1,0 +1,45 @@
+/* Estilo para el formulario */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-control-lg {
+  font-size: 1rem;
+  border-radius: 0.75rem;
+  background-color: #f9f9f9;
+  border: 1px solid #e0e0e0;
+}
+
+/* Estilo de los botones */
+.btn-primary {
+  background-color: #0743a1;
+  border-color: #0743a1;
+  font-weight: 500;
+}
+
+.btn-primary:hover {
+  background-color: #05357c;
+  border-color: #05357c;
+}
+
+.btn-secondary {
+  background-color: #f1f1f1;
+  border: 1px solid #ddd;
+  color: #0743a1;
+}
+
+.btn-secondary:hover {
+  background-color: #e0e0e0;
+}
+
+/* Mapa */
+#map-communities {
+  background-color: #f1f1f1;
+  border-radius: 8px;
+}
+
+/* Títulos */
+h4, h1 {
+  font-weight: 600;
+  color: #0743a1;
+}

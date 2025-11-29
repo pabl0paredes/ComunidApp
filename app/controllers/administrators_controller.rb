@@ -1,8 +1,5 @@
 class AdministratorsController < ApplicationController
-  before_action :set_administrator, only: :show
-  def show
-    @community = Community.find(params[:community_id])
-  end
+  before_action :set_administrator, only: :destroy
 
   def new
   end

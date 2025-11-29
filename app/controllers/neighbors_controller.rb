@@ -1,5 +1,5 @@
 class NeighborsController < ApplicationController
-  before_action :set_neighbor, only: [:show, :edit, :update, :destroy, :auth_waiting]
+  before_action :set_neighbor, only: [:show, :edit, :update, :destroy, :auth_waiting, :already_neighbor]
   def index
     @community = Community.find(params[:community_id])
     @neighbors_accepted = Neighbor.where(community: @community, is_accepted: true)
@@ -14,15 +14,26 @@ class NeighborsController < ApplicationController
     @neighbor = Neighbor.new
     @communities = Community.all
     authorize @neighbor
+
+    if current_user.neighbor
+      @neighbor = current_user.neighbor
+      redirect_to already_neighbor_neighbor_path(current_user.neighbor)
+    end
   end
 
   def create
     @neighbor = Neighbor.new(neighbor_params)
     authorize @neighbor
     @neighbor.user = current_user
-    @neighbor.common_expense_fraction = 0
 
-    if @neighbor.save
+    users_count = Neighbor.where(community_id: @neighbor.community.id).size + 1
+
+    @neighbor.common_expense_fraction = 1.0 / users_count
+
+    # Cargar las comunidades para la vista (necesario después de enviar el formulario)
+    @communities = Community.all
+
+    if @neighbor.save!
       redirect_to auth_waiting_neighbor_path(@neighbor)
     else
       render :new, status: :unprocessable_entity
@@ -43,11 +54,21 @@ class NeighborsController < ApplicationController
 
   def destroy
     authorize @neighbor
+    @neighbor.destroy
+
+    redirect_to neighbors_path, status: :see_other
   end
 
   def auth_waiting
     @community = @neighbor.community
     @administrator = @community.administrator
+    authorize @neighbor
+    if @neighbor.is_accepted
+      redirect_to @community
+    end
+  end
+
+  def already_neighbor
     authorize @neighbor
   end
 

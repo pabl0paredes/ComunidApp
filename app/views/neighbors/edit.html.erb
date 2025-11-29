@@ -1,17 +1,37 @@
-<h1>Editar Vecino</h1>
-
-<p>Nombre: <%= @neighbor.user.name %></p>
-<p>Contacto <%= @neighbor.user.phone %></p>
-<%= simple_form_for @neighbor do |f| %>
-
-  <div class="form-group">
-    <%= f.input :unit, label: "Unidad" %>
+<div class="container py-5">
+  <div class="text-center mb-4">
+    <h1 class="fw-bold text-primary mb-3" style="font-size: 2rem;">
+      Editar Vecino
+    </h1>
+    <p class="text-muted">Modificar la información del vecino seleccionado</p>
   </div>
 
-  <div class="form-group">
-    <%= f.input :common_expense_fraction, label: "Fracción de GGCC"%>
+  <%= simple_form_for @neighbor do |f| %>
+    <div class="card shadow-sm rounded-4 p-4">
+      <div class="card-body">
+        <!-- Nombre y contacto del vecino -->
+        <div class="mb-3">
+          <p><strong>Nombre:</strong> <%= @neighbor.user.name %></p>
+          <p><strong>Contacto:</strong> <%= @neighbor.user.phone %></p>
+        </div>
+
+        <!-- Campos del formulario -->
+        <div class="form-group mb-3">
+          <%= f.input :unit, label: "Unidad", input_html: { class: "form-control" } %>
+        </div>
+
+        <div class="form-group mb-3">
+          <%= f.input :common_expense_fraction, label: "Fracción de GGCC", input_html: { class: "form-control" } %>
+        </div>
+
+        <!-- Botón para guardar cambios -->
+        <%= f.submit "Guardar", class: "btn btn-primary w-100" %>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Botón para volver -->
+  <div class="mt-4 text-center">
+    <%= link_to "Volver a Comunidad", @community, class: "btn btn-secondary w-100" %>
   </div>
-
-  <%= f.submit "Guardar", class: "btn btn-primary" %>
-
-<% end %>
+</div>

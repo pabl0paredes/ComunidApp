@@ -10,4 +10,8 @@ class Community < ApplicationRecord
   validates :name, length: { maximum: 100 }
   validates :address, length: { maximum: 200 }
 
+  def pending_requests
+    neighbors.where(is_accepted: false).size
+  end
+
 end

@@ -1,34 +1,46 @@
-<div class="d-flex justify-content-between">
-  <div>
-    <h2>Crear Vecino</h2>
+<div class="container py-5">
+  <!-- Título de la página -->
+  <div class="d-flex justify-content-between mb-4">
+    <div>
+      <h1 class="fw-bold text-primary mb-3" style="font-size: 2rem;">Registro Nuevo Vecino</h1>
+      <p class="text-muted">Ingresa los datos del nuevo vecino</p>
+    </div>
+    <div>
+      <%= link_to "Volver a Inicio", root_path, class: "btn btn-secondary w-100" %>
+    </div>
   </div>
-  <div>
-    <%= link_to "Volver a Inicio", root_path %>
-  </div>
+
+  <!-- Formulario de creación de vecino -->
+  <%= simple_form_for @neighbor do |f| %>
+    <!-- Selección de comunidad -->
+    <div class="form-group mb-4">
+      <%= f.input :community_id,
+                  collection: @communities.map { |c| [c.name, c.id] },
+                  prompt: "Seleccione una comunidad",
+                  label: "Comunidad",
+                  input_html: { class: "form-control form-control-lg rounded-3 shadow-sm", id: "community-selector" } %>
+    </div>
+
+    <!-- Selección de unidad -->
+    <div class="form-group mb-4">
+      <%= f.input :unit,
+                  label: "Unidad",
+                  input_html: { class: "form-control form-control-lg rounded-3 shadow-sm" } %>
+    </div>
+
+    <!-- Mapa de comunidades -->
+    <div class="mb-4">
+      <h4 class="text-center">Ubicación de Comunidades:</h4>
+      <div id="map-communities"
+           data-communities="<%= @communities.to_json(only: [:id, :name, :latitude, :longitude]) %>"
+           style="height: 500px; width: 100%; border-radius: 8px;">
+      </div>
+    </div>
+
+    <!-- Botón de submit -->
+    <div class="form-group mt-4">
+      <%= f.submit @neighbor.persisted? ? "Guardar" : "Crear Vecino",
+                  class: "btn btn-primary btn-lg w-100 rounded-3 shadow-sm" %>
+    </div>
+  <% end %>
 </div>
-
-<%= simple_form_for @neighbor do |f| %>
-
-  <div class="form-group">
-    <%= f.input :community_id,
-      collection: @communities.map { |c| [c.name, c.id] },
-      prompt: "Seleccione una comunidad",
-      label: "Comunidad",
-      input_html: { id: "community-selector" }
-    %>
-  </div>
-
-  <div class="form-group">
-    <%= f.input :unit, label: "Unidad" %>
-  </div>
-
-  <!-- Mapa -->
-  <h4>Ubicación de Comunidades:</h4>
-  <div id="map-communities"
-       data-communities="<%= @communities.to_json(only: [:id, :name, :latitude, :longitude]) %>"
-       style="height: 500px; width: 100%; border-radius: 8px;">
-  </div>
-
-  <%= f.submit @neighbor.persisted? ? "Guardar" : "Crear Vecino", class: "btn btn-primary" %>
-
-<% end %>

@@ -28,6 +28,10 @@ class NeighborPolicy < ApplicationPolicy
     true
   end
 
+  def already_neighbor?
+    true
+  end
+
   def destroy?
     update?
   end
