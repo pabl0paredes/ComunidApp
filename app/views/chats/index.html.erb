@@ -1,19 +1,18 @@
-<div class="chat-page">
+<div class="chat-container chat-page">
 
   <!-- ENCABEZADO SUPERIOR -->
   <div class="chat-header d-flex justify-content-between align-items-center mb-4">
-    <div>
-      <%= link_to "← Volver a Comunidad", @community, class: "text-decoration-none text-secondary small" %>
-      <h2 class="mt-2 fw-bold">Chats de <%= @community.name %></h2>
+    <div class="header-left">
+      <%= link_to "← Volver a Comunidad", @community, class: "back-link text-decoration-none text-secondary small" %>
+      <h2 class="fw-bold section-title">Chats de <%= @community.name %></h2>
     </div>
 
     <%= link_to "➕ Nuevo Chat",
       new_community_chat_path(@community),
-      class: "btn btn-primary shadow-sm" %>
+      class: "btn btn-primary btn-main shadow-sm" %>
   </div>
 
-
-  <!-- TABS DE CATEGORÍAS -->
+  <!-- TABS -->
   <ul class="nav nav-tabs modern-tabs" id="chatTabs" role="tablist">
     <% @categories.each_with_index do |cat, index| %>
       <li class="nav-item" role="presentation">
@@ -22,29 +21,25 @@
           id="tab-<%= cat %>"
           data-bs-toggle="tab"
           data-bs-target="#content-<%= cat %>"
-          type="button"
-          role="tab">
+          type="button">
           <%= cat %>
         </button>
       </li>
     <% end %>
 
-    <!-- Pestaña Ocultos -->
     <li class="nav-item" role="presentation">
       <button
         class="nav-link"
         id="tab-ocultos"
         data-bs-toggle="tab"
         data-bs-target="#content-ocultos"
-        type="button"
-        role="tab">
+        type="button">
         Ocultos
       </button>
     </li>
   </ul>
 
-
-  <!-- CONTENIDOS POR CATEGORÍA -->
+  <!-- CONTENIDO -->
   <div class="tab-content mt-4">
 
     <% @categories.each_with_index do |cat, index| %>
@@ -53,7 +48,6 @@
         id="content-<%= cat %>"
         role="tabpanel">
 
-        <!-- Descripción -->
         <p class="text-secondary small mb-3">
           <%= @category_descriptions[cat] %>
         </p>
@@ -65,24 +59,24 @@
           <div class="chat-cards-container">
 
             <% category_chats.each do |chat| %>
-              <div class="chat-card">
+              <div class="chat-card section-card">
 
                 <div class="chat-card-header">
                   <%= link_to chat.name, chat_path(chat), class: "chat-card-title" %>
                   <span class="chat-tag"><%= chat.category %></span>
                 </div>
 
-                <div class="chat-card-actions">
+                <div class="chat-card-actions mt-3">
                   <% if current_user.administrator.present? %>
                     <%= link_to "Editar categoría",
                       edit_chat_path(chat),
-                      class: "btn btn-sm btn-outline-warning me-2" %>
+                      class: "btn btn-sm btn-outline-primary btn-main-outline me-2" %>
 
                     <%= link_to "Eliminar",
                       chat_path(chat),
                       method: :delete,
                       data: { confirm: "¿Seguro que querés eliminar este chat completo?" },
-                      class: "btn btn-sm btn-outline-danger" %>
+                      class: "btn btn-sm delete-chat-btn" %>
                   <% end %>
                 </div>
 
@@ -98,8 +92,7 @@
       </div>
     <% end %>
 
-
-    <!-- PESTAÑA OCULTOS -->
+    <!-- OCULTOS -->
     <div class="tab-pane fade" id="content-ocultos" role="tabpanel">
 
       <% if @hidden_chats.any? %>
@@ -107,19 +100,19 @@
         <div class="chat-cards-container">
 
           <% @hidden_chats.each do |chat| %>
-            <div class="chat-card">
+            <div class="chat-card section-card">
 
               <div class="chat-card-header">
                 <%= link_to chat.name, chat_path(chat), class: "chat-card-title" %>
                 <span class="chat-tag bg-secondary">Oculto</span>
               </div>
 
-              <div class="chat-card-actions">
+              <div class="chat-card-actions mt-3">
                 <%= button_to "Mostrar",
                   show_chat_path(current_user.show_chats.find_by(chat: chat)),
                   method: :patch,
                   params: { show_chat: { is_hidden: false } },
-                  class: "btn btn-success btn-sm" %>
+                  class: "btn btn-success btn-sm btn-main" %>
               </div>
 
             </div>
@@ -128,7 +121,7 @@
         </div>
 
       <% else %>
-        <p class="text-muted">No tenés chats ocultos.</p>
+        <p class="text-muted">No tienes chats ocultos.</p>
       <% end %>
 
     </div>

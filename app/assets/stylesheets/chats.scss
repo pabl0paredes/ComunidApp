@@ -198,41 +198,335 @@
 }
 
 /* =========================================
-  BOTÓN ELIMINAR MENSAJE (TURQUESA)
+  BOTÓN ELIMINAR MENSAJE (AZUL MODERNO)
 ========================================= */
 .delete-message-btn {
   display: inline-block;
-  background-color: #14b8a6;       /* Turquesa principal */
-  color: #f0fdfa;                  /* Blanco-verde suave */
+  background-color: #3A6EA5;        /* Azul acero moderno */
+  color: #f8fafc;                   /* Blanco suave */
   font-size: 0.70rem;
   padding: 4px 8px;
   border-radius: 6px;
   font-weight: 600;
-  border: 1px solid #0d9488;       /* Turquesa más oscuro */
+  border: 1px solid #2f5a85;        /* Azul más oscuro */
   text-decoration: none;
   transition: background 0.15s, border-color 0.15s;
 }
 
 .delete-message-btn:hover {
-  background-color: #2dd4bf;       /* Turquesa claro suave */
-  border-color: #14b8a6;
+  background-color: #305c88;        /* Azul más intenso */
+  border-color: #3A6EA5;
 }
 
 /* =========================================
-  BOTONES OCULTAR / MOSTRAR CHAT (TURQUESA)
+  BOTONES OCULTAR / MOSTRAR CHAT (AZUL ACERO MODERNO)
 ========================================= */
 .chat-toggle-btn {
-  background-color: #14b8a6;       /* Turquesa principal */
-  color: #f0fdfa;                  /* Blanco verdoso suave */
+  background-color: #3A6EA5;       /* Azul acero moderno */
+  color: #ffffff;                  /* Blanco puro */
   font-size: 0.85rem;
   padding: 6px 14px;
   border-radius: 8px;
-  border: 1px solid #0d9488;       /* Turquesa oscuro */
+  border: 1px solid #305c88;       /* Azul más oscuro */
   font-weight: 600;
   transition: background 0.15s, border-color 0.15s;
 }
 
 .chat-toggle-btn:hover {
-  background-color: #2dd4bf;       /* Turquesa suave claro */
-  border-color: #14b8a6;
+  background-color: #305c88;       /* Azul acero oscuro */
+  border-color: #264a6d;           /* Hover más firme */
+}
+/* ---- ComunidApp Style Kit ---- */
+
+/* Tarjetas modernas */
+.section-card, .chat-card {
+  background: #ffffff;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,0.06);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.chat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.35rem 1rem rgba(0,0,0,0.08);
+}
+
+/* Títulos */
+.section-title, .chat-card-title {
+  font-weight: 700;
+  color: #0743a1;
+  text-decoration: none;
+}
+
+/* Subtítulos */
+.section-subtitle {
+  font-size: 1.1rem;
+  color: #6c757d;
+}
+
+/* Botón principal */
+.btn-main, .btn-primary {
+  border-radius: 0.75rem !important;
+  font-weight: 600 !important;
+  padding: 0.6rem 1.3rem !important;
+  box-shadow: 0 0.15rem 0.7rem rgba(0,0,0,0.1);
+}
+
+/* Botón outline */
+.btn-main-outline, .btn-outline-primary {
+  border-radius: 0.75rem !important;
+  font-weight: 600 !important;
+  box-shadow: 0 0.15rem 0.7rem rgba(0,0,0,0.05);
+}
+
+/* Tab estilo moderno */
+.modern-tabs .nav-link {
+  font-weight: 600;
+  padding: 0.75rem 1.2rem;
+  border-radius: 0.75rem 0.75rem 0 0;
+  color: #0743a1;
+}
+
+.modern-tabs .nav-link.active {
+  background: #e8f2ff;
+  color: #0743a1;
+  border-color: transparent;
+}
+
+/* Contenedor de tarjetas */
+.chat-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+/* Banderita categoría */
+.chat-tag {
+  background: #d4e8ff;
+  color: #0743a1;
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.chat-tag.bg-secondary {
+  background: #e2e2e2 !important;
+  color: #555 !important;
+}
+
+/* Header de cada tarjeta */
+.chat-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 1rem;
+}
+
+.chat-toggle-btn {
+  background-color: #3A6EA5 !important;
+  color: white !important;
+  border: none !important;
+  padding: 8px 14px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #305c88 !important;
+  }
+}
+
+/* ======== ESTILO UNIFICADO PARA SHOW DE CHAT ======== */
+
+/* Contenedor principal */
+.chat-show-container {
+  background: #f7fbff; /* azul muy suave */
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+
+/* Título del chat */
+.chat-title {
+  color: #0b3c5d; /* azul profundo */
+  font-weight: 700;
+}
+
+/* Texto de categoría */
+.chat-category {
+  color: #48759b; /* azul medio suave */
+}
+
+/* Línea */
+.chat-divider {
+  border-color: #dbe8f3;
+}
+
+/* Botón gris Volver */
+.btn-back {
+  background: #e3edf5;
+  color: #0b3c5d;
+  border: 1px solid #aac4d9;
+  border-radius: 6px;
+  padding: 8px 14px;
+
+  &:hover {
+    background: #d3e3ef;
+    color: #072f49;
+  }
+}
+
+/* Mensajes */
+.messages-container {
+  background: white;
+  border: 1px solid #d9e7f2;
+  border-radius: 10px;
+  padding: 15px;
+  height: 420px;
+  overflow-y: auto;
+}
+
+/* Formulario */
+#new_message_form {
+  background: #f1f8ff;
+  border-radius: 10px;
+  padding: 15px;
+  border: 1px solid #d7e8f5;
+}
+
+/* =========================================
+  FORMULARIOS EN TONO AZUL
+========================================= */
+
+/* Títulos */
+h2 {
+  color: #1e3a5f; /* Azul oscuro elegante */
+  font-weight: 700;
+}
+
+/* Label */
+.form-label {
+  color: #1e3a5f;
+  font-weight: 600;
+}
+
+/* Select */
+.form-select {
+  border: 1px solid #3A6EA5;
+  border-radius: 8px;
+  padding: 8px 10px;
+  background-color: #f8fafc;
+  color: #1e293b;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.form-select:focus {
+  border-color: #3A6EA5;
+  box-shadow: 0 0 0 2px rgba(58, 110, 165, 0.2);
+}
+
+/* Botón primario (Guardar cambios) */
+.btn-primary {
+  background-color: #3A6EA5 !important;
+  border-color: #2f5a85 !important;
+  color: #f8fafc !important;
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  background-color: #305c88 !important;
+  border-color: #3A6EA5 !important;
+}
+
+/* Botón secundario (Cancelar) */
+.btn-secondary {
+  background-color: #1e3a5f !important;
+  border-color: #162c44 !important;
+  color: #f8fafc !important;
+  font-weight: 600;
+}
+
+.btn-secondary:hover {
+  background-color: #264870 !important;
+  border-color: #1e3a5f !important;
+}
+
+.avatar-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.message-avatar.user-name-1 .avatar-circle {
+  background-color: #1e40af;
+  color: #fff;
+}
+
+.message-avatar.user-name-2 .avatar-circle {
+  background-color: #2563eb;
+  color: #fff;
+}
+
+.message-avatar.user-name-3 .avatar-circle {
+  background-color: #0ea5e9;
+  color: #fff;
+}
+
+.message-avatar.user-name-4 .avatar-circle {
+  background-color: #0284c7;
+  color: #fff;
+}
+
+.message-avatar.user-name-5 .avatar-circle {
+  background-color: #1e3a8a;
+  color: #fff;
+}
+
+.chat-edit-title {
+  font-size: 1rem;
+  color: #1e3a8a; /* Azul principal */
+  padding: 8px 12px;
+  background: #eff6ff; /* Azul MUY suave */
+  border-left: 4px solid #3b82f6; /* Azul del botón */
+  border-radius: 6px;
+}
+
+.chat-container {
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* =========================================
+  BOTÓN ELIMINAR CHAT (AZUL SUAVE)
+========================================= */
+.delete-chat-btn {
+  color: #0d47a1;
+  border: 1px solid #0d47a1;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  transition: all 0.15s;
+  background-color: transparent;
+}
+
+.delete-chat-btn:hover {
+  background-color: #e3f2fd; /* Azul muy clarito */
+  color: #0d47a1;
+  border-color: #0d47a1;
+}
+
+.header-left .back-link {
+  display: inline-block !important;
+  margin-top: 18px !important;
+  margin-bottom: 12px !important;
 }

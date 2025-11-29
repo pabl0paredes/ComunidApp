@@ -1,33 +1,33 @@
 <% own = message.user_id == current_user.id %>
+<% color_class = user_name_color_class(message.user_id) unless own %>
 
 <div id="<%= dom_id(message) %>"
      class="message-wrapper <%= own ? 'message-right' : 'message-left' %>">
 
   <% unless own %>
-    <div class="message-avatar">
-      <%= image_tag "https://ui-avatars.com/api/?name=#{CGI.escape(message.user.name)}",
-            class: "rounded-circle",
-            style: "width: 36px; height: 36px; object-fit: cover;" %>
+    <div class="message-avatar <%= color_class %>">
+      <div class="avatar-circle">
+        <%= message.user.name[0,2].upcase %>
+      </div>
     </div>
   <% end %>
 
   <div class="message-bubble <%= own ? 'my-bubble' : 'other-bubble' %> shadow-sm">
 
-    <%# ============ NOMBRE DE USUARIO (O TÚ) ================= %>
-    <div class="<%= ['message-username', ( "user-name-#{message.user_id % 5 + 1}" unless own )].compact.join(' ') %>">
+    <!-- NOMBRE -->
+    <div class="message-username <%= color_class unless own %>">
       <strong><%= own ? "Tú" : message.user.name %></strong>
     </div>
 
-    <%# ============ CONTENIDO DEL MENSAJE ==================== %>
+    <!-- CONTENIDO -->
     <% if message.content.present? %>
       <p class="mb-1 message-text"><%= message.content %></p>
     <% end %>
 
-    <%# ============ ARCHIVOS ADJUNTOS ======================== %>
+    <!-- ARCHIVOS -->
     <% if message.files.attached? %>
       <div class="mt-2">
         <% message.files.each do |file| %>
-
           <% if file.image? %>
             <%= link_to url_for(file), target: :_blank do %>
               <%= image_tag file.variant(resize_to_limit: [300, 300]).processed,
@@ -39,17 +39,16 @@
               📎 <%= link_to file.filename.to_s, url_for(file), target: :_blank %>
             </div>
           <% end %>
-
         <% end %>
       </div>
     <% end %>
 
-    <%# ============ TIMESTAMP ================================ %>
+    <!-- TIMESTAMP -->
     <div class="small timestamp <%= own ? 'text-light' : 'text-muted' %>">
       <%= message.created_at.strftime("%d/%m/%Y %H:%M") %>
     </div>
 
-    <%# ============ BOTÓN ELIMINAR =========================== %>
+    <!-- BOTÓN ELIMINAR -->
     <% if current_user.administrator.present? || own %>
       <div class="mt-1">
         <%= link_to "Eliminar",
@@ -65,10 +64,10 @@
   </div>
 
   <% if own %>
-    <div class="message-avatar">
-      <%= image_tag "https://ui-avatars.com/api/?name=Tú",
-            class: "rounded-circle",
-            style: "width: 36px; height: 36px; object-fit: cover;" %>
+    <div class="message-avatar user-name-5">
+      <div class="avatar-circle">
+        TU
+      </div>
     </div>
   <% end %>
 
