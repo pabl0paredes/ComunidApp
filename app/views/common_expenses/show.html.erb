@@ -1,6 +1,8 @@
 <div class="container mt-4">
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="h3">Detalle del Gasto Común</h1>
+    <h1 class="h3">
+      <%= @common_expense.community.name %>
+    </h1>
     <%= link_to "Volver a la comunidad",
         community_path(@common_expense.community),
         class: "btn btn-secondary" %>
@@ -9,8 +11,10 @@
     <div class="card-body">
       <div class="mb-4 p-3 border rounded bg-light">
         <p class="mb-2">
-          <strong>Total:</strong>
-          <span class="ms-2"><%= number_to_currency(@common_expense.total) %></span>
+          <% if policy(@common_expense).create? %>
+            <strong>Total:</strong>
+            <span class="ms-2"><%= number_to_currency(@common_expense.total) %></span>
+          <% end %>
         </p>
         <p class="mb-0">
           <strong>Fecha de Registro:</strong>
@@ -23,8 +27,8 @@
           <thead class="table-light">
             <tr>
               <th>Concepto</th>
-              <th>Monto</th>
-              <th>Distribución por vecino</th>
+              <th>Importe</th>
+              <th>Distribución</th>
               <th class="text-end">Acciones</th>
             </tr>
           </thead>
@@ -49,12 +53,21 @@
                           <tr>
                             <th>Nombre</th>
                             <th>Unidad</th>
-                            <th>Monto</th>
+                            <th>Monto a pagar</th>
                             <th>Estado</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <% detail.expense_details_neighbors.includes(:neighbor).each do |edn| %>
+                          <% neighbors_distribution =
+                if current_user.neighbor.present?
+                  detail.expense_details_neighbors
+                        .includes(:neighbor)
+                        .where(neighbor: current_user.neighbor)
+                else
+                  detail.expense_details_neighbors.includes(:neighbor)
+                end
+            %>
+                          <% neighbors_distribution.each do |edn| %>
                             <tr>
                               <td><%= edn.neighbor.user.name %></td>
                               <td><%= edn.neighbor.unit %></td>
@@ -74,9 +87,11 @@
                   </div>
                 </td>
                 <td class="text-end">
-                  <%= link_to "Ver",
+                  <% if policy(detail).edit? %>
+                    <%= link_to "Ver",
       expense_detail_path(detail),
       class: "btn btn-sm btn-outline-secondary mb-1" %>
+                  <% end %>
                   <% if policy(detail).edit? %>
                     <%= link_to "Editar",
       edit_expense_detail_path(detail),
@@ -99,9 +114,8 @@
       <% else %>
         <p class="text-muted">No hay detalles asociados a este gasto común.</p>
       <% end %>
-
       <% if policy(@common_expense).new? %>
-      <%= link_to "Agregar detalle",
+        <%= link_to "Agregar detalle",
           new_common_expense_expense_detail_path(@common_expense),
           class: "btn btn-primary mt-2" %>
       <% end %>
@@ -109,16 +123,15 @@
   </div>
   <div class="d-flex gap-2 mt-4">
     <% if policy(@common_expense).edit? %>
-    <%= link_to "Editar gasto común",
+      <%= link_to "Editar gasto común",
         edit_common_expense_path(@common_expense),
         class: "btn btn-outline-primary" %>
     <% end %>
     <%= link_to "Volver a la lista",
         community_common_expenses_path(@common_expense.community),
         class: "btn btn-outline-secondary" %>
-
     <% if policy(@common_expense).destroy? %>
-    <%= link_to "Eliminar gasto común",
+      <%= link_to "Eliminar gasto común",
         @common_expense,
         data: { turbo_method: :delete, turbo_confirm: "¿Estás seguro de eliminar este gasto?" },
         class: "btn btn-outline-danger ms-auto" %>

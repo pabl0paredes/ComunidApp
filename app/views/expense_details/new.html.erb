@@ -2,6 +2,18 @@
   <h1 class="h4 mb-4">Nuevo Detalle de Gasto</h1>
   <div class="card shadow-sm">
     <div class="card-body">
+
+      <% if @expense_detail.errors.any? %>
+        <div class="alert alert-danger">
+          <h5>Se encontraron errores:</h5>
+          <ul>
+            <% @expense_detail.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
       <%= form_with model: [@common_expense, @expense_detail], local: true do |f| %>
         <div class="mb-3">
           <%= f.label :detail, "Detalle", class: "form-label" %>
@@ -28,10 +40,10 @@
                   <tr>
                     <td>
                       <%= check_box_tag "expense_detail[neighbor_ids][]",
-                                neighbor.id,
-                                false,
-                                id: "neighbor_#{neighbor.id}",
-                                class: "form-check-input" %>
+                                        neighbor.id,
+                                        false,
+                                        id: "neighbor_#{neighbor.id}",
+                                        class: "form-check-input" %>
                     </td>
                     <td class="text-start">
                       <%= neighbor.user.name %>
