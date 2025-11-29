@@ -30,8 +30,8 @@
         </div>
         <div class="d-flex gap-2">
           <%= f.submit "Actualizar", class: "btn btn-primary" %>
-          <%= link_to "Volver",
-              expense_detail_path(@expense_detail),
+          <%= link_to "Cancelar",
+              common_expense_path(@expense_detail.common_expense),
               class: "btn btn-outline-secondary" %>
         </div>
       <% end %>
