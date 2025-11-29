@@ -27,21 +27,20 @@
             <% @expense_details.each do |detail| %>
               <tr>
 
-                <!-- CONCEPTO -->
+
                 <td>
                   <div class="p-2 border rounded bg-light">
                     <strong><%= detail.detail %></strong>
                   </div>
                 </td>
 
-                <!-- IMPORTE -->
                 <td>
                   <div class="p-2 border rounded bg-light">
                     <%= number_to_currency(detail.amount) %>
                   </div>
                 </td>
 
-                <!-- DISTRIBUCIÓN -->
+
                 <td>
                   <div class="p-2 border rounded bg-light">
                     <% if detail.expense_details_neighbors.any? %>
@@ -53,7 +52,7 @@
                             <th>Unidad</th>
                             <th>Monto</th>
                             <th>Estado</th>
-                            <th>Comprobante</th> <!-- NUEVA COLUMNA -->
+                            <th>Comprobante</th>
                           </tr>
                         </thead>
 
@@ -74,7 +73,7 @@
                               <td><%= edn.neighbor.unit %></td>
                               <td><%= number_to_currency(edn.amount_due) %></td>
 
-                              <!-- ESTADO -->
+
                               <td>
 
                                 <% if edn.paid? %>
@@ -95,7 +94,7 @@
 
                               </td>
 
-                              <!-- COMPROBANTE -->
+
                               <td>
 
                                 <!-- Ver comprobante (si existe) -->
@@ -105,7 +104,7 @@
                                         class: "btn btn-sm btn-info w-100 mb-2" %>
                                 <% end %>
 
-                                <!-- ADMIN: aprobar / rechazar -->
+                                <!-- Aprobar / rechazar -->
                                 <% if edn.receipt.attached? &&
                                       edn.status == "pending_approval" &&
                                       current_user == @common_expense.community.administrator.user %>
@@ -124,7 +123,7 @@
 
                                 <% end %>
 
-                                <!-- VECINO: subir o reenviar comprobante -->
+                                <!-- Sección en la que un vecino puede subir o reenviar comprobante -->
                                 <% if current_user.neighbor == edn.neighbor &&
                                       (edn.status == "unpaid" || edn.status == "rejected") %>
 
