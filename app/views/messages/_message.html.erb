@@ -1,60 +1,74 @@
 <% own = message.user_id == current_user.id %>
+<% color_class = user_name_color_class(message.user_id) unless own %>
 
 <div id="<%= dom_id(message) %>"
-    class="message-wrapper <%= own ? 'message-right' : 'message-left' %>">
+     class="message-wrapper <%= own ? 'message-right' : 'message-left' %>">
+
+  <% unless own %>
+    <div class="message-avatar <%= color_class %>">
+      <div class="avatar-circle">
+        <%= message.user.name[0,2].upcase %>
+      </div>
+    </div>
+  <% end %>
 
   <div class="message-bubble <%= own ? 'my-bubble' : 'other-bubble' %> shadow-sm">
 
-    <strong>
-      <%= own ? "Tú" : message.user.name %>:
-    </strong>
+    <!-- NOMBRE -->
+    <div class="message-username <%= color_class unless own %>">
+      <strong><%= own ? "Tú" : message.user.name %></strong>
+    </div>
 
-    <%# Contenido del mensaje %>
+    <!-- CONTENIDO -->
     <% if message.content.present? %>
-      <p class="mb-1"><%= message.content %></p>
+      <p class="mb-1 message-text"><%= message.content %></p>
     <% end %>
 
-    <%# === ARCHIVOS ADJUNTOS === %>
+    <!-- ARCHIVOS -->
     <% if message.files.attached? %>
       <div class="mt-2">
         <% message.files.each do |file| %>
-
           <% if file.image? %>
-            <%# Miniatura para imágenes %>
             <%= link_to url_for(file), target: :_blank do %>
               <%= image_tag file.variant(resize_to_limit: [300, 300]).processed,
                     class: "img-thumbnail mb-2",
-                    style: "max-width: 150px; height: auto;" %>
+                    style: "max-width: 150px; height: auto; border-radius: 8px;" %>
             <% end %>
-
           <% else %>
-            <%# Link a PDF, Excel, Word, etc %>
             <div class="mb-1">
               📎 <%= link_to file.filename.to_s, url_for(file), target: :_blank %>
             </div>
           <% end %>
-
         <% end %>
       </div>
     <% end %>
-    <%# === FIN ARCHIVOS === %>
 
-    <span class="small <%= own ? 'text-light' : 'text-muted' %>">
+    <!-- TIMESTAMP -->
+    <div class="small timestamp <%= own ? 'text-light' : 'text-muted' %>">
       <%= message.created_at.strftime("%d/%m/%Y %H:%M") %>
-    </span>
+    </div>
 
+    <!-- BOTÓN ELIMINAR -->
     <% if current_user.administrator.present? || own %>
       <div class="mt-1">
         <%= link_to "Eliminar",
-            chat_message_path(message.chat, message),
-            data: {
-              turbo_method: :delete,
-              turbo_confirm: "¿Seguro que querés eliminar este mensaje?"
-            },
-            class: "delete-message text-danger small" %>
+          chat_message_path(message.chat, message),
+          data: {
+            turbo_method: :delete,
+            turbo_confirm: "¿Seguro que querés eliminar este mensaje?"
+          },
+          class: "delete-message-btn" %>
       </div>
     <% end %>
 
   </div>
+
+  <% if own %>
+    <div class="message-avatar user-name-5">
+      <div class="avatar-circle">
+        TU
+      </div>
+    </div>
+  <% end %>
 
 </div>

@@ -1,24 +1,35 @@
-<%= form_with model: [@community, @chat] do |f| %>
+<div class="chat-container mt-4">
 
-  <% if @chat.errors.any? %>
-    <div class="alert alert-danger">
-      <ul>
-        <% @chat.errors.full_messages.each do |error| %>
-          <li><%= error %></li>
-        <% end %>
-      </ul>
+  <h2 class="mb-3 fw-bold section-title">Crear nuevo Chat</h2>
+
+  <%= form_with model: [@community, @chat], local: true do |f| %>
+
+    <% if @chat.errors.any? %>
+      <div class="alert alert-danger">
+        <ul class="mb-0">
+          <% @chat.errors.full_messages.each do |error| %>
+            <li><%= error %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="mb-3">
+      <%= f.label :name, "Nombre del Chat", class: "form-label" %>
+      <%= f.text_field :name, maxlength: 25, class: "form-control" %>
     </div>
+
+    <div class="mb-3">
+      <%= f.label :category, "Categoría", class: "form-label" %>
+      <%= f.select :category,
+          ['General','Mantenimiento','Eventos','Seguridad','Otros'],
+          {},
+          class: "form-select" %>
+    </div>
+
+    <%= f.submit "Guardar", class: "btn btn-primary" %>
+    <%= link_to "Cancelar", community_chats_path(@community), class: "btn btn-secondary ms-2" %>
+
   <% end %>
 
-  <div class="form-group">
-    <%= f.label :name, "Nombre del chat" %>
-    <%= f.text_field :name, maxlength: 25, class: "form-control" %>
-  </div>
-
-  <div class="form-group">
-    <%= f.label :category %>
-    <%= f.select :category, ['General','Mantenimiento','Eventos','Seguridad','Otros'], {}, class: "form-control" %>
-  </div>
-
-  <%= f.submit "Guardar", class: "btn btn-primary mt-2" %>
-<% end %>
+</div>

@@ -1,28 +1,103 @@
+$navbar-bg: #3b82f6;         // azul principal
+$navbar-bg-hover: #2563eb;   // azul un poco más fuerte
+$navbar-text: white;
+
 .navbar-lewagon {
+  background-color: $navbar-bg !important;
+  padding: 0 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+  display: flex;
   justify-content: space-between;
-  background: #7360f2;
-}
+  align-items: center;
+  height: 60px; // altura fija de la navbar
 
-.navbar-lewagon .navbar-collapse {
-  flex-grow: 0;
-}
+  .container-fluid {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+  }
 
-.navbar-lewagon .navbar-brand img {
-  width: 40px;
-}
+  // Contenedor del logo para controlar su tamaño sin estirar la navbar
+  .navbar-logo-container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
 
-#navbarSupportedContent {
-  color: white;
+  .navbar-logo {
+    max-height: 55px; // ajustá este valor según el tamaño deseado
+    width: auto;
+    object-fit: contain;
+    display: block;
+  }
+
+  .navbar-brand {
+    color: $navbar-text !important;
+    font-weight: 600;
+
+    i {
+      font-size: 1.8rem;
+    }
+
+    &:hover {
+      color: lighten($navbar-text, 10%) !important;
+    }
+  }
 
   .nav-link {
-    color: white !important;
+    color: $navbar-text !important;
+    font-weight: 500;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: lighten($navbar-text, 15%) !important;
+      text-decoration: underline;
+    }
+  }
+
+  .navbar-toggler {
+    border-color: rgba(255,255,255,0.4);
+
+    .navbar-toggler-icon {
+      filter: brightness(0) invert(1); // icono hamburguesa blanco
+    }
+  }
+
+  .dropdown-menu {
+    border-radius: 8px;
+    padding: 0.5rem 0;
+    overflow: hidden;
   }
 
   .dropdown-item {
-    color: black !important; // Si quieres que el dropdown siga siendo negro
+    padding: 10px 14px;
+    color: #333 !important;
+    transition: 0.15s;
+
+    &:hover {
+      background: #f1f5ff;
+      color: $navbar-bg !important;
+      font-weight: 500;
+    }
   }
 
+  // Estilo del icono de usuario/avatar
   .avatar {
-    color: white;
+    color: white !important;
+    font-size: 1.3rem;
+    padding: 6px 10px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    transition: background 0.2s;
+
+    &:hover {
+      background: rgba(255,255,255,0.25);
+    }
+
+    .avatar-icon {
+      font-size: 1.2rem;
+    }
   }
 }
