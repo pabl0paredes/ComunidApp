@@ -33,7 +33,7 @@ class CommonExpensesController < ApplicationController
       .where(expense_details_neighbors: { neighbor_id: current_user.neighbor.id })
       .order(created_at: :desc)
   else
-    
+
     @expense_details = @common_expense.expense_details.order(created_at: :desc)
   end
 end
@@ -63,7 +63,7 @@ end
   def update
     authorize @common_expense
     if @common_expense.update(common_expense_params)
-      redirect_to common_expense_path(@common_expense), notice: "Gasto común actualizado correctamente."
+      redirect_to community_common_expenses_path(@common_expense.community), notice: "Gasto común actualizado correctamente."
     else
       render :edit, status: :unprocessable_entity
     end

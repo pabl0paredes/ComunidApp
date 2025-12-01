@@ -4,7 +4,7 @@ class ExpenseDetail < ApplicationRecord
   has_many :expense_details_neighbors,
            class_name: "ExpenseDetailsNeighbor",
            dependent: :destroy
-  
+
   has_many :neighbors, through: :expense_details_neighbors
 
   accepts_nested_attributes_for :expense_details_neighbors, allow_destroy: true
@@ -16,13 +16,24 @@ class ExpenseDetail < ApplicationRecord
   validates :detail, length: { maximum: 200 }
   validates :amount, numericality: { greater_than: 0 }
 
-  def assign_amounts_to_neighbors
+   def assign_amounts_to_neighbors
+
+    total_percentage = expense_details_neighbors.sum do |edn|
+      edn.neighbor.common_expense_fraction.to_f
+    end
+
+    return if total_percentage.zero?
+
     expense_details_neighbors.each do |edn|
-      percentage = edn.neighbor.common_expense_fraction.to_f / 100.0
-      edn.amount_due = (amount * percentage).round(2)
+      neighbor_percentage = edn.neighbor.common_expense_fraction.to_f
+
+      proportion = neighbor_percentage / total_percentage
+      edn.amount_due = (amount * proportion).round(2)
+
       edn.save!
     end
   end
+
 
   private
 
