@@ -1,7 +1,8 @@
-<div class="container mt-4">
+<div class="container mt-4"
+     data-controller="neighbor-selector">
+
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h1 class="h4 mb-0">Nuevo Detalle de Gasto</h1>
-
     <%= link_to "Volver",
       common_expense_expense_details_path(@common_expense),
       class: "btn btn-outline-secondary" %>
@@ -23,6 +24,7 @@
 
       <%= form_with model: [@common_expense, @expense_detail], local: true do |f| %>
 
+        <!-- CAMPOS BÁSICOS -->
         <div class="mb-3">
           <%= f.label :detail, "Descripción del gasto", class: "form-label fw-semibold" %>
           <%= f.text_field :detail, class: "form-control", placeholder: "Ej: Reparación de ascensor" %>
@@ -33,38 +35,69 @@
           <%= f.number_field :amount, class: "form-control", step: "0.01", placeholder: "Ej: 150000" %>
         </div>
 
+        <!-- SECCIÓN ASIGNACIÓN -->
         <div class="mb-3">
           <label class="form-label fw-bold">Asignar a vecinos</label>
-          <div class="table-responsive border rounded">
-            <table class="table table-hover mb-0 align-middle">
-              <thead class="table-light">
-                <tr>
-                  <th>Seleccionar</th>
-                  <th>Nombre</th>
-                  <th>Unidad</th>
-                  <th>% asignado</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% @neighbors.each do |neighbor| %>
-                  <tr>
-                    <td class="text-center">
-                      <%= check_box_tag "expense_detail[neighbor_ids][]",
+
+          <div class="mb-2">
+            <div class="form-check">
+              <%= radio_button_tag :assign_mode, "all", true,
+                    id: "assign_mode_all",
+                    class: "form-check-input",
+                    data: { action: "neighbor-selector#toggle" } %>
+              <%= label_tag :assign_mode_all,
+                    "Asignar a todos los vecinos de la comunidad",
+                    class: "form-check-label" %>
+            </div>
+
+            <div class="form-check">
+              <%= radio_button_tag :assign_mode, "manual", false,
+                    id: "assign_mode_manual",
+                    class: "form-check-input",
+                    data: { action: "neighbor-selector#toggle" } %>
+              <%= label_tag :assign_mode_manual,
+                    "Seleccionar vecinos manualmente",
+                    class: "form-check-label" %>
+            </div>
+          </div>
+
+          <p class="small text-muted mt-1">
+            Si seleccionás “Asignar a todos los vecinos”, la lista manual se ignorará.
+          </p>
+
+          <!-- LISTA DE CARDS (Stimulus controla visibilidad) -->
+          <div class="mt-3 d-none"
+               data-neighbor-selector-target="manualList">
+
+            <div class="neighbor-grid">
+              <% @neighbors.each do |neighbor| %>
+
+                <label class="neighbor-card shadow-sm" for="neighbor_<%= neighbor.id %>">
+
+                  <div class="neighbor-info">
+                    <h6 class="mb-1 fw-bold"><%= neighbor.user.name %></h6>
+
+                    <p class="mb-0 small text-muted">
+                      Unidad: <strong><%= neighbor.unit %></strong><br>
+                      Porcentaje: <strong><%= neighbor.common_expense_fraction %> %</strong>
+                    </p>
+                  </div>
+
+                  <%= check_box_tag "expense_detail[neighbor_ids][]",
                         neighbor.id,
                         false,
                         id: "neighbor_#{neighbor.id}",
-                        class: "form-check-input" %>
-                    </td>
-                    <td><%= neighbor.user.name %></td>
-                    <td><%= neighbor.unit %></td>
-                    <td><%= neighbor.common_expense_fraction %> %</td>
-                  </tr>
-                <% end %>
-              </tbody>
-            </table>
+                        class: "neighbor-checkbox" %>
+
+                </label>
+
+              <% end %>
+            </div>
+
           </div>
         </div>
 
+        <!-- BOTONES -->
         <div class="d-flex gap-2 mt-3">
           <%= f.submit "Crear detalle", class: "btn btn-primary px-4" %>
           <%= link_to "Cancelar",
