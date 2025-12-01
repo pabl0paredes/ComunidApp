@@ -1,0 +1,167 @@
+/* ==========================================================================
+   EXPENSE DETAILS — Estilos para index y show
+   Consistente con pallet azul-violeta y estilo del proyecto
+   ========================================================================== */
+
+.expense-details-page,
+.expense-details-show-page {
+  background-color: #f8fafc; /* gris muy suave */
+}
+
+/* ----------------------------------------------
+   TITULOS & BREADCRUMB
+   ---------------------------------------------- */
+
+.expense-details-page h1,
+.expense-details-show-page h1 {
+  color: #1e3a8a; /* azul fuerte */
+  font-weight: 700;
+}
+
+.text-primary.fw-semibold,
+.breadcrumb-link {
+  color: #1e40af !important;
+  font-weight: 600 !important;
+
+  &:hover {
+    color: #1e3a8a !important;
+  }
+}
+
+/* ----------------------------------------------
+   CARDS
+   ---------------------------------------------- */
+
+.expense-details-page .card,
+.expense-details-show-page .card {
+  border-radius: 16px !important;
+  border: 1px solid #e5e7eb !important;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08) !important;
+}
+
+.card-body {
+  padding: 1.3rem 1.6rem !important;
+}
+
+/* ----------------------------------------------
+   TABLAS
+   ---------------------------------------------- */
+
+.table {
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.table thead {
+  background-color: #f1f5f9 !important; /* gris/azul claro */
+  font-weight: 600;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #f8fafc !important;
+}
+
+.table-sm {
+  font-size: 0.82rem;
+}
+
+.table-sm th {
+  background-color: #f8fafc !important;
+}
+
+/* ----------------------------------------------
+   BOTONES PERSONALIZADOS
+   ---------------------------------------------- */
+
+.btn-primary {
+  background-color: #1e40af !important;
+  border: none !important;
+  border-radius: 10px !important;
+  padding: 0.6rem 1.1rem;
+}
+
+.btn-secondary,
+.btn-outline-secondary {
+  background-color: #e2e8f0 !important;
+  color: #1e293b !important;
+  border-radius: 10px !important;
+}
+
+.btn-outline-primary {
+  color: #1e40af !important;
+  border: 1px solid #1e40af !important;
+
+  &:hover {
+    background-color: #1e40af !important;
+    color: white !important;
+  }
+}
+
+.btn-outline-danger {
+  border-radius: 10px !important;
+}
+
+.btn-success,
+.btn-warning,
+.btn-danger,
+.btn-info {
+  border-radius: 10px !important;
+}
+
+/* ----------------------------------------------
+   BADGES (Estados)
+   ---------------------------------------------- */
+
+.badge {
+  padding: 0.4rem 0.6rem !important;
+  font-size: 0.78rem !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+}
+
+/* ----------------------------------------------
+   RESUMEN DEL VECINO – SHOW
+   ---------------------------------------------- */
+
+.expense-details-show-page .card .fw-bold.text-primary {
+  color: #1e3a8a !important;
+  font-size: 1.1rem;
+}
+
+.expense-details-show-page strong {
+  color: #334155; /* gris oscuro suave */
+}
+
+/* ----------------------------------------------
+   FORMULARIOS (Subida de comprobante)
+   ---------------------------------------------- */
+
+.form-control,
+.form-control-sm {
+  border-radius: 10px !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
+.form-control:focus {
+  border-color: #1e40af !important;
+  box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.2) !important;
+}
+
+/* ----------------------------------------------
+   TEXTOS Y DETALLES
+   ---------------------------------------------- */
+
+.text-muted {
+  color: #6b7280 !important;
+}
+
+.expense-details-page p,
+.expense-details-show-page p {
+  margin-bottom: 0.4rem;
+}
+
+.expense-details-show-page .mb-4 {
+  margin-bottom: 1.6rem !important;
+}

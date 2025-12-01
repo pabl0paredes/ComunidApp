@@ -1,0 +1,203 @@
+/* ==========================================================================
+   COMMON EXPENSES — Estilos de index y show
+   Adaptado a la paleta azul/violeta que usa tu equipo
+   ========================================================================== */
+
+.common-expenses-page,
+.common-expenses-show-page {
+  background-color: #f8fafc; /* gris MUY suave */
+}
+
+/* ----------------------------------------------
+   TITULOS & BREADCRUMB
+   ---------------------------------------------- */
+
+.common-expenses-page h1,
+.common-expenses-show-page h1 {
+  color: #1e3a8a; /* azul corporativo */
+  font-weight: 700;
+}
+
+.breadcrumb-link,
+.text-primary.fw-semibold {
+  color: #1e40af;
+  font-weight: 600;
+
+  &:hover {
+    color: #1e3a8a;
+  }
+}
+
+/* ----------------------------------------------
+   TARJETAS Y CARDS
+   ---------------------------------------------- */
+
+.card {
+  border-radius: 16px !important;
+  border: 1px solid #e5e7eb !important;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08) !important;
+}
+
+.card-body {
+  padding: 1.3rem 1.6rem !important;
+}
+
+/* ----------------------------------------------
+   TABLAS
+   ---------------------------------------------- */
+
+.table {
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.table thead {
+  background-color: #f1f5f9 !important; /* gris/azul claro */
+  font-weight: 600;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+/* ----------------------------------------------
+   BOTONES
+   ---------------------------------------------- */
+
+.btn-primary {
+  background-color: #1e40af !important;
+  border: none;
+  border-radius: 10px !important;
+  padding: 0.6rem 1.1rem;
+}
+
+.btn-secondary {
+  background-color: #e2e8f0 !important;
+  border: none;
+  color: #1e293b !important;
+  border-radius: 10px !important;
+}
+
+.btn-outline-primary {
+  color: #1e40af !important;
+  border: 1px solid #1e40af !important;
+
+  &:hover {
+    background-color: #1e40af !important;
+    color: white !important;
+  }
+}
+
+.btn-outline-danger {
+  border-radius: 10px !important;
+}
+
+/* Verde para aprobar */
+.btn-success {
+  border-radius: 10px !important;
+}
+
+/* Naranja para pendientes */
+.btn-warning {
+  border-radius: 10px !important;
+}
+
+/* ----------------------------------------------
+   ALERTAS
+   ---------------------------------------------- */
+
+.alert-info {
+  border-radius: 12px;
+  background-color: #e0f2fe;
+  color: #075985;
+  border: none;
+}
+
+/* ----------------------------------------------
+   RESUMEN DEL VECINO (INDEX)
+   ---------------------------------------------- */
+
+.neighbor-summary {
+  margin-bottom: 1.5rem;
+
+  .summary-card {
+    border-radius: 16px;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, #eff6ff, #ffffff);
+    border: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .summary-card p {
+    margin: 0;
+  }
+
+  .summary-card .text-primary {
+    color: #1e3a8a !important;
+  }
+}
+
+/* ----------------------------------------------
+   PANEL RESUMEN DEL VECINO (SHOW)
+   ---------------------------------------------- */
+
+.common-expenses-show-page .card .fw-bold.text-primary {
+  color: #1e3a8a !important;
+  font-size: 1.1rem;
+}
+
+.common-expenses-show-page .badge {
+  font-size: 0.8rem;
+  padding: 0.4rem 0.6rem;
+}
+
+/* ----------------------------------------------
+   DISTRIBUCIONES — Tablas internas
+   ---------------------------------------------- */
+
+.table-sm {
+  font-size: 0.82rem;
+}
+
+.table-sm th {
+  background-color: #f8fafc !important;
+}
+
+/* ----------------------------------------------
+   FORMULARIOS (comprobantes)
+   ---------------------------------------------- */
+
+.form-control,
+.form-control-sm {
+  border-radius: 10px !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
+.form-control:focus {
+  border-color: #1e40af !important;
+  box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.2) !important;
+}
+
+/* ----------------------------------------------
+   TEXTOS Y DETALLES GENERALES
+   ---------------------------------------------- */
+
+.text-muted {
+  color: #6b7280 !important;
+}
+
+.text-success {
+  color: #15803d !important;
+}
+
+.text-danger {
+  color: #dc2626 !important;
+}
+
+.text-warning {
+  color: #d97706 !important;
+}
