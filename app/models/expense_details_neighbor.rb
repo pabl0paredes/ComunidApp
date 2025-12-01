@@ -25,4 +25,6 @@ class ExpenseDetailsNeighbor < ApplicationRecord
   def rejected?
     status == "rejected"
   end
+
+
 end

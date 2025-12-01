@@ -1,3 +1,4 @@
+
 <div class="container mt-4 expense-details-page">
 
   <!-- VOLVER -->
@@ -7,257 +8,209 @@
         class: "text-decoration-none text-primary fw-semibold" %>
   </div>
 
-  <!-- TITULO -->
-  <h1 class="h3 mb-4">Detalles del Gasto Común</h1>
+  <!-- TÍTULO -->
+  <h1 class="h4 mb-2">Detalles del Gasto Común</h1>
 
+  <!-- INFO GENERAL DEL GASTO -->
+  <div class="small text-muted mb-4">
+    <strong>Comunidad:</strong> <%= @common_expense.community.name %> ·
+    <strong>Fecha:</strong> <%= @common_expense.date.strftime("%d/%m/%Y") %> ·
+    <strong>Total:</strong> <%= number_to_currency(@common_expense.total) %>
+  </div>
 
-  <% if current_user == @common_expense.community.administrator.user %>
+  <% if @expense_details.any? %>
 
-    <!-- ===========================================================
-         BLOQUE ADMIN
-         =========================================================== -->
+    <% @expense_details.each do |detail| %>
 
-    <div class="card shadow-sm">
-      <div class="card-body p-0">
+      <div class="card detail-card mb-4 shadow-sm">
+        <div class="card-body">
 
-        <% if @expense_details.any? %>
+          <!-- ===========================
+               HEADER DEL DETALLE
+               =========================== -->
+          <div class="d-flex justify-content-between align-items-start mb-3">
 
-          <table class="table table-hover align-middle mb-0">
-            <thead class="table-light">
-              <tr>
-                <th>Concepto</th>
-                <th>Importe total</th>
-                <th>Distribución</th>
-                <th class="text-end">Acciones</th>
-              </tr>
-            </thead>
+            <!-- TITULO + INFO -->
+            <div>
+              <p class="text-muted small mb-1">Concepto</p>
+              <h2 class="h6 mb-1"><%= detail.detail %></h2>
 
-            <tbody>
-              <% @expense_details.each do |detail| %>
-                <tr>
-                  <!-- CONCEPTO -->
-                  <td>
-                    <div class="p-2 bg-light border rounded">
-                      <strong><%= detail.detail %></strong>
-                    </div>
-                  </td>
+              <p class="mb-0 small">
+                <span class="text-muted">Importe total:</span>
+                <strong><%= number_to_currency(detail.amount) %></strong>
+              </p>
 
-                  <!-- IMPORTE -->
-                  <td>
-                    <div class="p-2 bg-light border rounded">
-                      <%= number_to_currency(detail.amount) %>
-                    </div>
-                  </td>
+              <p class="text-muted small mt-1 mb-0">
+                <%= detail.expense_details_neighbors.count %> vecinos asignados
+              </p>
+            </div>
 
-                  <!-- DISTRIBUCION COMPLETA -->
-                  <td>
-                    <div class="p-2 bg-light border rounded">
+            <!-- ACCIONES PARA ADMIN -->
+            <% if current_user == @common_expense.community.administrator.user %>
+              <div class="btn-group btn-group-sm">
+                <%= link_to "Ver",
+                    expense_detail_path(detail),
+                    class: "btn btn-outline-secondary" %>
 
-                      <% if detail.expense_details_neighbors.any? %>
+                <%= link_to "Editar",
+                    edit_expense_detail_path(detail),
+                    class: "btn btn-outline-primary" %>
 
-                        <table class="table table-sm table-bordered mb-0">
-                          <thead class="table-light">
-                            <tr>
-                              <th>Nombre</th>
-                              <th>Unidad</th>
-                              <th>Monto</th>
-                              <th>Estado</th>
-                              <th>Comprobante</th>
-                            </tr>
-                          </thead>
+                <%= link_to "Eliminar",
+                    expense_detail_path(detail),
+                    data: {
+                      turbo_method: :delete,
+                      turbo_confirm: "¿Seguro que deseas eliminar este detalle?"
+                    },
+                    class: "btn btn-outline-danger" %>
+              </div>
+            <% end %>
 
-                          <tbody>
-                            <% detail.expense_details_neighbors.includes(neighbor: :user).each do |edn| %>
-                              <tr>
-                                <td><%= edn.neighbor.user.name %></td>
-                                <td><%= edn.neighbor.unit %></td>
-                                <td><%= number_to_currency(edn.amount_due) %></td>
+          </div>
 
-                                <!-- ESTADO -->
-                                <td>
-                                  <% if edn.approved? %>
-                                    <span class="badge bg-success">Aprobado</span>
-                                  <% elsif edn.rejected? %>
-                                    <span class="badge bg-danger">Rechazado</span>
-                                  <% elsif edn.pending? %>
-                                    <span class="badge bg-warning text-dark">Pendiente</span>
-                                  <% else %>
-                                    <span class="badge bg-secondary">No pagado</span>
-                                  <% end %>
-                                </td>
+          <!-- ===========================
+               TABLA DE DISTRIBUCIÓN
+               =========================== -->
 
-                                <!-- COMPROBANTE + BOTONES -->
-                                <td style="min-width: 150px;">
+          <div class="table-responsive">
 
-                                  <!-- Ver comprobante -->
-                                  <% if edn.receipt.attached? %>
-                                    <%= link_to "Ver",
-                                        url_for(edn.receipt),
-                                        target: "_blank",
-                                        class: "btn btn-sm btn-info w-100 mb-2" %>
-                                  <% end %>
+            <% visible_neighbors =
+                if current_user.neighbor.present?
+                  detail.expense_details_neighbors
+                    .includes(neighbor: :user)
+                    .where(neighbor_id: current_user.neighbor.id)
+                else
+                  detail.expense_details_neighbors.includes(neighbor: :user)
+                end %>
 
-                                  <!-- Aprobar / Rechazar -->
-                                  <% if edn.receipt.attached? && edn.pending? %>
-                                    <div class="d-flex gap-1">
-                                      <%= button_to "Aprobar",
-                                          approve_expense_path(edn),
-                                          method: :patch,
-                                          class: "btn btn-sm btn-success w-50" %>
+            <% if visible_neighbors.any? %>
 
-                                      <%= button_to "Rechazar",
-                                          reject_expense_path(edn),
-                                          method: :patch,
-                                          class: "btn btn-sm btn-danger w-50" %>
-                                    </div>
-                                  <% end %>
+              <table class="table table-sm table-hover align-middle mb-0 distribution-table">
+                <thead class="table-light">
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Unidad</th>
+                    <th>Monto</th>
+                    <th>Estado</th>
+                    <th style="width: 220px;">Comprobante</th>
+                  </tr>
+                </thead>
 
-                                </td>
-                              </tr>
+                <tbody>
+                  <% visible_neighbors.each do |edn| %>
+                    <tr>
+                      <td><%= edn.neighbor.user.name %></td>
+                      <td><%= edn.neighbor.unit %></td>
+                      <td><%= number_to_currency(edn.amount_due) %></td>
+
+                      <!-- ESTADO -->
+                      <td>
+                        <% if edn.approved? %>
+                          <span class="badge bg-success">Aprobado</span>
+                        <% elsif edn.rejected? %>
+                          <span class="badge bg-danger">Rechazado</span>
+                        <% elsif edn.pending? %>
+                          <span class="badge bg-warning text-dark">Pendiente</span>
+                        <% else %>
+                          <span class="badge bg-secondary">Sin comprobante</span>
+                        <% end %>
+                      </td>
+
+                      <!-- COMPROBANTES + BOTONES -->
+                      <td>
+
+                        <div class="d-flex flex-column flex-sm-row gap-1">
+
+                          <!-- Ver comprobante -->
+                          <% if edn.receipt.attached? %>
+                            <%= link_to "Ver",
+                                url_for(edn.receipt),
+                                target: "_blank",
+                                class: "btn btn-sm btn-info flex-fill" %>
+                          <% end %>
+
+                          <!-- ADMIN: aprobar / rechazar -->
+                          <% if edn.receipt.attached? &&
+                                edn.pending? &&
+                                current_user == @common_expense.community.administrator.user %>
+
+                            <%= button_to "Aprobar",
+                                approve_expense_path(edn),
+                                method: :patch,
+                                class: "btn btn-sm btn-success flex-fill" %>
+
+                            <%= button_to "Rechazar",
+                                reject_expense_path(edn),
+                                method: :patch,
+                                class: "btn btn-sm btn-danger flex-fill" %>
+
+                          <% end %>
+
+                        </div>
+
+                        <!-- FORMULARIO (VECINO ASIGNADO) -->
+                        <% if current_user.neighbor == edn.neighbor &&
+                              (!edn.receipt.attached? || edn.rejected? ) %>
+
+                          <div class="mt-2">
+                            <%= form_with model: edn,
+                                  url: pay_expense_path(edn),
+                                  method: :patch,
+                                  local: true,
+                                  html: { multipart: true } do |f| %>
+
+                              <%= f.file_field :receipt,
+                                    accept: "image/*,application/pdf",
+                                    class: "form-control form-control-sm mb-2",
+                                    required: true %>
+
+                              <%= f.submit (edn.rejected? ? "Reenviar comprobante" : "Subir comprobante"),
+                                    class: "btn btn-sm btn-primary w-100" %>
+
                             <% end %>
-                          </tbody>
-                        </table>
+                          </div>
 
-                      <% else %>
-                        <span class="text-muted">Sin vecinos asignados</span>
-                      <% end %>
+                        <% end %>
 
-                    </div>
-                  </td>
+                      </td>
 
-                  <!-- ACCIONES ADMIN -->
-                  <td class="text-end">
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
 
-                    <%= link_to "Ver",
-                        expense_detail_path(detail),
-                        class: "btn btn-sm btn-outline-secondary mb-1" %>
+            <% else %>
 
-                    <%= link_to "Editar",
-                        edit_expense_detail_path(detail),
-                        class: "btn btn-sm btn-outline-primary mb-1" %>
+              <p class="text-muted mb-0">No hay datos asignados para este vecino.</p>
 
-                    <%= link_to "Eliminar",
-                        expense_detail_path(detail),
-                        data: {
-                          turbo_method: :delete,
-                          turbo_confirm: "¿Seguro?"
-                        },
-                        class: "btn btn-sm btn-outline-danger" %>
+            <% end %>
 
-                  </td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
+          </div>
 
-        <% else %>
-          <p class="p-4 text-muted">No hay detalles cargados.</p>
-        <% end %>
-
+        </div>
       </div>
-    </div>
 
-    <!-- BOTÓN NUEVO DETALLE -->
-    <div class="mt-4">
-      <%= link_to "Agregar nuevo detalle",
-          new_common_expense_expense_detail_path(@common_expense),
-          class: "btn btn-primary" %>
-    </div>
-
+    <% end %>
 
   <% else %>
 
-    <!-- ===========================================================
-         BLOQUE VECINO
-         =========================================================== -->
-
-    <p class="text-muted mb-3">
-      Sólo estás viendo los gastos que te corresponden.
-    </p>
-
-    <div class="card shadow-sm">
-      <div class="card-body p-0">
-
-        <% if @expense_details.any? %>
-
-          <table class="table table-hover align-middle mb-0">
-            <thead class="table-light">
-              <tr>
-                <th>Concepto</th>
-                <th>Monto total</th>
-                <th>Tu parte</th>
-                <th>Estado</th>
-                <th class="text-end">Comprobante</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              <% @expense_details.each do |detail| %>
-
-                <% edn = detail.expense_details_neighbors.find_by(neighbor: current_user.neighbor) %>
-
-                <tr>
-                  <td><%= detail.detail %></td>
-                  <td><%= number_to_currency(detail.amount) %></td>
-                  <td><%= number_to_currency(edn.amount_due) %></td>
-
-                  <!-- ESTADO -->
-                  <td>
-                    <% if edn.approved? %>
-                      <span class="badge bg-success">Aprobado</span>
-                    <% elsif edn.rejected? %>
-                      <span class="badge bg-danger">Rechazado</span>
-                    <% elsif edn.pending? %>
-                      <span class="badge bg-warning text-dark">Pendiente</span>
-                    <% else %>
-                      <span class="badge bg-secondary">No pagado</span>
-                    <% end %>
-                  </td>
-
-                  <!-- COMPROBANTE -->
-                  <td class="text-end" style="min-width: 140px;">
-
-                    <!-- Ver comprobante si existe -->
-                    <% if edn.receipt.attached? %>
-                      <%= link_to "Ver",
-                          url_for(edn.receipt),
-                          target: "_blank",
-                          class: "btn btn-sm btn-info mb-2" %>
-                    <% end %>
-
-                    <!-- Subir/reenviar comprobante -->
-                    <% if !edn.approved? %>
-                      <%= form_with model: edn,
-                            url: pay_expense_path(edn),
-                            method: :patch,
-                            local: true,
-                            html: { multipart: true } do |f| %>
-
-                        <%= f.file_field :receipt,
-                            class: "form-control form-control-sm mb-2",
-                            accept: "image/*,application/pdf",
-                            required: true %>
-
-                        <%= f.submit (edn.rejected? ? "Reenviar" : "Pagar"),
-                            class: "btn btn-sm #{edn.rejected? ? 'btn-warning' : 'btn-success'}" %>
-
-                      <% end %>
-                    <% end %>
-
-                  </td>
-                </tr>
-
-              <% end %>
-            </tbody>
-          </table>
-
-        <% else %>
-          <p class="p-4 text-muted">No tenés detalles asignados.</p>
-        <% end %>
-
-      </div>
+    <div class="alert alert-info text-center">
+      No hay detalles cargados para este gasto común.
     </div>
 
   <% end %>
+
+  <!-- BOTONES FINALES -->
+  <div class="mt-3 d-flex justify-content-between">
+    <%= link_to "Volver a gastos comunes",
+        community_common_expenses_path(@common_expense.community),
+        class: "btn btn-outline-secondary" %>
+
+    <% if policy(@common_expense).new? %>
+      <%= link_to "Agregar nuevo detalle",
+            new_common_expense_expense_detail_path(@common_expense),
+            class: "btn btn-primary" %>
+    <% end %>
+  </div>
 
 </div>

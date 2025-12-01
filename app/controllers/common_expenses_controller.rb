@@ -48,7 +48,7 @@ class CommonExpensesController < ApplicationController
       @community = @common_expense.community
       authorize @common_expense
 
-     
+
       if current_user.neighbor
 
 

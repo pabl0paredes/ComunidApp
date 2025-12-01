@@ -1,79 +1,95 @@
 <div class="container mt-4 common-expenses-page">
+
   <!-- Breadcrumb / volver -->
   <div class="mb-3">
     <%= link_to "← Volver a Comunidad", @community, class: "text-decoration-none text-primary fw-semibold" %>
   </div>
+
   <!-- Título -->
   <h1 class="h3 mb-4">Gastos Comunes – <%= @community.name %></h1>
-  <% if@community.administrator.user == current_user %>
-    <!-- ======================================================
-         BLOQUE ADMIN
-         ====================================================== -->
-    <!-- Botón crear -->
+
+  <% if @community.administrator.user == current_user %>
+
+    <!-- =============================== ADMIN =============================== -->
+
     <div class="d-flex justify-content-end mb-3">
       <%= link_to "Nuevo Gasto Común",
           new_community_common_expense_path(@community),
           class: "btn btn-primary" %>
     </div>
-    <!-- Tabla -->
+
     <% if @common_expenses.any? %>
-      <div class="card shadow-sm">
-        <div class="card-body p-0">
-          <table class="table table-hover mb-0">
-            <thead class="table-light">
-              <tr>
-                <th>Fecha</th>
-                <th>Total</th>
-                <th class="text-end">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @common_expenses.each do |common_expense| %>
-                <tr>
-                  <td><%= common_expense.date.strftime("%d/%m/%Y") %></td>
-                  <td><%= number_to_currency(common_expense.total) %></td>
-                  <td class="text-end">
-                    <%= link_to "Detalles",
-                        common_expense_expense_details_path(common_expense),
-                        class: "btn btn-sm btn-outline-success" %>
-                    <% if policy(common_expense).edit? %>
-                      <%= link_to "Editar",
-                          edit_common_expense_path(common_expense),
-                          class: "btn btn-sm btn-outline-primary" %>
-                    <% end %>
-                    <% if policy(common_expense).destroy? %>
-                      <%= link_to "Eliminar",
-                          common_expense_path(common_expense),
-                          data: {
-                            turbo_method: :delete,
-                            turbo_confirm: "¿Seguro que deseas eliminar este gasto común?"
-                          },
-                          class: "btn btn-sm btn-outline-danger" %>
-                    <% end %>
-                  </td>
-                </tr>
+
+      <% @common_expenses.each do |common_expense| %>
+
+        <% all_edns = common_expense.expense_details_neighbors %>
+        <% approved = all_edns.count { |e| e.approved? } %>
+        <% total = all_edns.count %>
+        <% progress = total > 0 ? ((approved.to_f / total) * 100).round : 0 %>
+
+        <!-- CARD ADMIN -->
+        <div class="admin-expense-card shadow-sm">
+
+          <div class="aec-header">
+            <div>
+              <div class="aec-date"><%= common_expense.date.strftime("%d/%m/%Y") %></div>
+              <div class="aec-total">Total: <%= number_to_currency(common_expense.total) %></div>
+            </div>
+
+            <div class="aec-actions">
+              <%= link_to "Detalles",
+                common_expense_expense_details_path(common_expense),
+                class: "btn btn-sm btn-outline-success" %>
+
+              <% if policy(common_expense).edit? %>
+                <%= link_to "Editar",
+                    edit_common_expense_path(common_expense),
+                    class: "btn btn-sm btn-outline-primary" %>
               <% end %>
-            </tbody>
-          </table>
+
+              <% if policy(common_expense).destroy? %>
+                <%= link_to "Eliminar",
+                    common_expense_path(common_expense),
+                    data: {
+                      turbo_method: :delete,
+                      turbo_confirm: "¿Seguro que deseas eliminar este gasto común?"
+                    },
+                    class: "btn btn-sm btn-outline-danger" %>
+              <% end %>
+            </div>
+          </div>
+
+          <!-- Barra de progreso -->
+          <div class="aec-progress-wrapper">
+            <div class="aec-progress-bar" style="width: <%= progress %>%"></div>
+          </div>
+
+          <div class="aec-progress-label">
+            <%= progress %>% aprobado
+          </div>
         </div>
-      </div>
+
+      <% end %>
+
     <% else %>
+
       <div class="alert alert-info text-center">
         Todavía no se registraron gastos comunes en esta comunidad.
       </div>
+
     <% end %>
+
   <% else %>
-    <!-- ======================================================
-         BLOQUE VECINO
-         ====================================================== -->
-    <!-- Panel Resumen del Vecino -->
+
+    <!-- =============================== VECINO =============================== -->
+
+    <!-- Resumen -->
     <div class="neighbor-summary mb-4">
-      <div class="summary-card">
+      <div class="summary-card shadow-sm">
         <div>
-          <p class="mb-1 fw-semibold text-primary">Tu resumen mensual</p>
+          <p class="mb-1 fw-semibold text-primary">📊 Tu resumen mensual</p>
           <p class="mb-0 small text-muted">Gastos asignados en este mes</p>
         </div>
-        <!-- Ejemplo: estos valores los calculás vos en el controller -->
         <div class="text-end">
           <div class="fw-bold text-primary">Total asignado: <%= number_to_currency(@total_assigned) %></div>
           <div class="small text-success">Pagado: <%= number_to_currency(@total_paid) %></div>
@@ -81,44 +97,54 @@
         </div>
       </div>
     </div>
+
     <% if @common_expenses.any? %>
-      <div class="card shadow-sm">
-        <div class="card-body p-0">
-          <table class="table table-hover mb-0">
-            <thead class="table-light">
-              <tr>
-                <th>Fecha</th>
-                <th>Tu parte</th>
-                <th class="text-end">Ver</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @common_expenses.each do |common_expense| %>
-                <% amount_for_user = @neighbor_amounts[common_expense.id] %>
-                <tr>
-                  <td><%= common_expense.date.strftime("%d/%m/%Y") %></td>
-                  <td>
-                    <% if amount_for_user.present? %>
-                      <strong><%= number_to_currency(amount_for_user) %></strong>
-                    <% else %>
-                      <span class="text-muted">—</span>
-                    <% end %>
-                  </td>
-                  <td class="text-end">
-                    <%= link_to "Ver",
-                        common_expense_expense_details_path(common_expense),
-                        class: "btn btn-sm btn-outline-primary" %>
-                  </td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        </div>
+
+      <div class="expense-cards">
+
+        <% @common_expenses.each do |ce| %>
+
+          <% amount_for_user = @neighbor_amounts[ce.id] || 0 %>
+          <% edns = ce.expense_details_neighbors.where(neighbor: current_user.neighbor) %>
+
+          <% approved_count = edns.count { |e| e.approved? } %>
+          <% total_count = edns.count %>
+          <% progress = total_count > 0 ? ((approved_count.to_f / total_count) * 100).round : 0 %>
+
+          <!-- CARD CLICKEABLE (Vecino) -->
+          <div
+            class="expense-card shadow-sm"
+            data-controller="click-card"
+            data-click-card-url-value="<%= common_expense_expense_details_path(ce) %>"
+            data-action="click->click-card#go"
+          >
+            <div class="card-header-line">
+              <span class="date"><%= ce.date.strftime("%d/%m/%Y") %></span>
+              <span class="progress-pill"><%= progress %>% completado</span>
+            </div>
+
+            <div class="amount mb-2">
+              <strong>Tu parte:</strong> <%= number_to_currency(amount_for_user) %>
+            </div>
+
+            <!-- BARRA -->
+            <div class="progress-container">
+              <div class="progress-bar" style="width: <%= progress %>%"></div>
+            </div>
+
+          </div>
+
+        <% end %>
       </div>
+
     <% else %>
+
       <div class="alert alert-info text-center mx-auto" style="max-width: 400px;">
         Todavía no tenés gastos comunes asignados.
       </div>
+
     <% end %>
+
   <% end %>
+
 </div>

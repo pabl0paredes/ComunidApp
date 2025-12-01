@@ -1,35 +1,39 @@
 /* ==========================================================================
-   COMMON EXPENSES — Estilos de index y show
-   Adaptado a la paleta azul/violeta que usa tu equipo
+   COMMON EXPENSES — Estilos globales para index y show
+   Integrado a la paleta corporativa azul/violeta del proyecto
    ========================================================================== */
+
+/* ----------------------------------------------
+   CONTENEDORES GENERALES
+   ---------------------------------------------- */
 
 .common-expenses-page,
 .common-expenses-show-page {
-  background-color: #f8fafc; /* gris MUY suave */
+  background-color: #f8fafc;
 }
 
 /* ----------------------------------------------
-   TITULOS & BREADCRUMB
+   TÍTULOS & BREADCRUMB
    ---------------------------------------------- */
 
 .common-expenses-page h1,
 .common-expenses-show-page h1 {
-  color: #1e3a8a; /* azul corporativo */
+  color: #1e3a8a;
   font-weight: 700;
 }
 
-.breadcrumb-link,
-.text-primary.fw-semibold {
-  color: #1e40af;
-  font-weight: 600;
+.text-primary.fw-semibold,
+.breadcrumb-link {
+  color: #1e40af !important;
+  font-weight: 600 !important;
 
   &:hover {
-    color: #1e3a8a;
+    color: #1e3a8a !important;
   }
 }
 
 /* ----------------------------------------------
-   TARJETAS Y CARDS
+   CARDS GENERALES (Bootstrap override)
    ---------------------------------------------- */
 
 .card {
@@ -54,12 +58,20 @@
 }
 
 .table thead {
-  background-color: #f1f5f9 !important; /* gris/azul claro */
+  background-color: #f1f5f9 !important;
   font-weight: 600;
 }
 
 .table-hover tbody tr:hover {
   background-color: #f8fafc;
+}
+
+.table-sm {
+  font-size: 0.82rem;
+}
+
+.table-sm th {
+  background-color: #f8fafc !important;
 }
 
 /* ----------------------------------------------
@@ -68,16 +80,16 @@
 
 .btn-primary {
   background-color: #1e40af !important;
-  border: none;
+  border: none !important;
   border-radius: 10px !important;
-  padding: 0.6rem 1.1rem;
 }
 
-.btn-secondary {
+.btn-secondary,
+.btn-outline-secondary {
   background-color: #e2e8f0 !important;
-  border: none;
   color: #1e293b !important;
   border-radius: 10px !important;
+  border: none !important;
 }
 
 .btn-outline-primary {
@@ -90,16 +102,8 @@
   }
 }
 
-.btn-outline-danger {
-  border-radius: 10px !important;
-}
-
-/* Verde para aprobar */
-.btn-success {
-  border-radius: 10px !important;
-}
-
-/* Naranja para pendientes */
+.btn-outline-danger,
+.btn-success,
 .btn-warning {
   border-radius: 10px !important;
 }
@@ -115,9 +119,9 @@
   border: none;
 }
 
-/* ----------------------------------------------
-   RESUMEN DEL VECINO (INDEX)
-   ---------------------------------------------- */
+/* ==========================================================================
+   🟦 RESUMEN DEL VECINO (INDEX)
+   ========================================================================== */
 
 .neighbor-summary {
   margin-bottom: 1.5rem;
@@ -132,23 +136,98 @@
     align-items: center;
   }
 
-  .summary-card p {
+  p {
     margin: 0;
   }
 
-  .summary-card .text-primary {
+  .text-primary {
     color: #1e3a8a !important;
   }
 }
 
-/* ----------------------------------------------
-   PANEL RESUMEN DEL VECINO (SHOW)
-   ---------------------------------------------- */
+/* ==========================================================================
+   🟪 CARDS DEL VECINO (INDEX) — CLICKEABLES
+   ========================================================================== */
 
-.common-expenses-show-page .card .fw-bold.text-primary {
-  color: #1e3a8a !important;
-  font-size: 1.1rem;
+.expense-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
+
+.expense-card {
+  background: white;
+  border-radius: 14px;
+  padding: 1rem 1.2rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    background: #eef2ff;
+    border-color: #3b82f6;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+  }
+}
+
+/* ESTADOS */
+.expense-card.approved {
+  border-left: 5px solid #16a34a;
+  background: #f0fdf4;
+}
+
+.expense-card.pending {
+  border-left: 5px solid #facc15;
+  background: #fefce8;
+}
+
+.expense-card.rejected {
+  border-left: 5px solid #dc2626;
+  background: #fef2f2;
+}
+
+.expense-card.unpaid {
+  border-left: 5px solid #9ca3af;
+  background: #f3f4f6;
+}
+
+/* HEADER */
+.card-header-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.35rem;
+}
+
+.date {
+  font-weight: 600;
+  color: #1e3a8a;
+  font-size: 0.92rem;
+}
+
+/* BADGES DE ESTADO */
+.badge-status {
+  padding: 0.15rem 0.45rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  border-radius: 6px;
+}
+
+.badge-status.approved { background: #bbf7d0; color: #166534; }
+.badge-status.pending  { background: #fef9c3; color: #92400e; }
+.badge-status.rejected { background: #fecaca; color: #b91c1c; }
+.badge-status.unpaid   { background: #e5e7eb; color: #374151; }
+
+/* MONTO */
+.amount {
+  font-size: 0.9rem;
+  color: #111827;
+}
+
+/* ==========================================================================
+   SHOW PAGE (admin + vecino)
+   ========================================================================== */
 
 .common-expenses-show-page .badge {
   font-size: 0.8rem;
@@ -156,19 +235,7 @@
 }
 
 /* ----------------------------------------------
-   DISTRIBUCIONES — Tablas internas
-   ---------------------------------------------- */
-
-.table-sm {
-  font-size: 0.82rem;
-}
-
-.table-sm th {
-  background-color: #f8fafc !important;
-}
-
-/* ----------------------------------------------
-   FORMULARIOS (comprobantes)
+   FORMULARIOS
    ---------------------------------------------- */
 
 .form-control,
@@ -182,22 +249,97 @@
   box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.2) !important;
 }
 
-/* ----------------------------------------------
-   TEXTOS Y DETALLES GENERALES
-   ---------------------------------------------- */
+.progress-status {
+  background: #e0f2fe;
+  color: #075985;
+  padding: 0.25rem 0.55rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid #bae6fd;
+}
+/* ============================================================
+   PROGRESO DEL VECINO — Barra + pill
+   ============================================================ */
 
-.text-muted {
-  color: #6b7280 !important;
+.progress-pill {
+  background: #e0f2fe;
+  color: #075985;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid #bae6fd;
 }
 
-.text-success {
-  color: #15803d !important;
+.progress-container {
+  width: 100%;
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 6px;
+  overflow: hidden;
 }
 
-.text-danger {
-  color: #dc2626 !important;
+.progress-bar {
+  height: 100%;
+  background: #1e3a8a;
+  border-radius: 6px;
+  transition: width 0.35s ease;
+}
+/* ============================================================
+   BARRA DE PROGRESO — ADMIN
+   ============================================================ */
+
+.admin-expense-card {
+  background: white;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  padding: 1.2rem 1.4rem;
+  margin-bottom: 1rem;
 }
 
-.text-warning {
-  color: #d97706 !important;
+.aec-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
 }
+
+.aec-date {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1e3a8a;
+  margin-bottom: 0.2rem;
+}
+
+.aec-total {
+  color: #475569;
+  font-size: 0.85rem;
+}
+
+.aec-actions .btn-sm {
+  margin-left: 0.3rem;
+}
+
+.aec-progress-wrapper {
+  background: #f1f5f9;
+  border-radius: 8px;
+  height: 8px;
+  width: 100%;
+  overflow: hidden;
+  margin-top: 0.4rem;
+}
+
+.aec-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #1e40af, #2563eb);
+  border-radius: 8px;
+  transition: width 0.4s ease;
+}
+
+.aec-progress-label {
+  font-size: 0.8rem;
+  color: #334155;
+  margin-top: 0.3rem;
+}
+

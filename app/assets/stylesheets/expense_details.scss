@@ -1,20 +1,24 @@
 /* ==========================================================================
-   EXPENSE DETAILS — Estilos para index y show
-   Consistente con pallet azul-violeta y estilo del proyecto
+   EXPENSE DETAILS — Estilos para index, show, new y edit
+   Paleta azul-violeta del proyecto
+   ========================================================================== */
+
+/* ==========================================================================
+   1) BACKGROUND GENERAL
    ========================================================================== */
 
 .expense-details-page,
 .expense-details-show-page {
-  background-color: #f8fafc; /* gris muy suave */
+  background-color: #f8fafc;
 }
 
-/* ----------------------------------------------
-   TITULOS & BREADCRUMB
-   ---------------------------------------------- */
+/* ==========================================================================
+   2) TITULOS & BREADCRUMB
+   ========================================================================== */
 
 .expense-details-page h1,
 .expense-details-show-page h1 {
-  color: #1e3a8a; /* azul fuerte */
+  color: #1e3a8a;
   font-weight: 700;
 }
 
@@ -28,9 +32,9 @@
   }
 }
 
-/* ----------------------------------------------
-   CARDS
-   ---------------------------------------------- */
+/* ==========================================================================
+   3) CARDS GENERALES
+   ========================================================================== */
 
 .expense-details-page .card,
 .expense-details-show-page .card {
@@ -43,9 +47,9 @@
   padding: 1.3rem 1.6rem !important;
 }
 
-/* ----------------------------------------------
-   TABLAS
-   ---------------------------------------------- */
+/* ==========================================================================
+   4) TABLAS
+   ========================================================================== */
 
 .table {
   border-radius: 12px;
@@ -55,7 +59,7 @@
 }
 
 .table thead {
-  background-color: #f1f5f9 !important; /* gris/azul claro */
+  background-color: #f1f5f9 !important;
   font-weight: 600;
 }
 
@@ -63,6 +67,7 @@
   background-color: #f8fafc !important;
 }
 
+/* Tablas internas (distribución) */
 .table-sm {
   font-size: 0.82rem;
 }
@@ -71,22 +76,24 @@
   background-color: #f8fafc !important;
 }
 
-/* ----------------------------------------------
-   BOTONES PERSONALIZADOS
-   ---------------------------------------------- */
+/* ==========================================================================
+   5) BOTONES
+   ========================================================================== */
+
+.btn {
+  border-radius: 10px !important;
+}
 
 .btn-primary {
   background-color: #1e40af !important;
   border: none !important;
-  border-radius: 10px !important;
-  padding: 0.6rem 1.1rem;
 }
 
 .btn-secondary,
 .btn-outline-secondary {
   background-color: #e2e8f0 !important;
   color: #1e293b !important;
-  border-radius: 10px !important;
+  border: none !important;
 }
 
 .btn-outline-primary {
@@ -99,20 +106,16 @@
   }
 }
 
-.btn-outline-danger {
-  border-radius: 10px !important;
-}
-
+.btn-info,
 .btn-success,
 .btn-warning,
-.btn-danger,
-.btn-info {
+.btn-danger {
   border-radius: 10px !important;
 }
 
-/* ----------------------------------------------
-   BADGES (Estados)
-   ---------------------------------------------- */
+/* ==========================================================================
+   6) BADGES (Estados)
+   ========================================================================== */
 
 .badge {
   padding: 0.4rem 0.6rem !important;
@@ -121,22 +124,9 @@
   border-radius: 8px !important;
 }
 
-/* ----------------------------------------------
-   RESUMEN DEL VECINO – SHOW
-   ---------------------------------------------- */
-
-.expense-details-show-page .card .fw-bold.text-primary {
-  color: #1e3a8a !important;
-  font-size: 1.1rem;
-}
-
-.expense-details-show-page strong {
-  color: #334155; /* gris oscuro suave */
-}
-
-/* ----------------------------------------------
-   FORMULARIOS (Subida de comprobante)
-   ---------------------------------------------- */
+/* ==========================================================================
+   7) FORMULARIOS (Subida de comprobante)
+   ========================================================================== */
 
 .form-control,
 .form-control-sm {
@@ -146,12 +136,12 @@
 
 .form-control:focus {
   border-color: #1e40af !important;
-  box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.2) !important;
+  box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.25) !important;
 }
 
-/* ----------------------------------------------
-   TEXTOS Y DETALLES
-   ---------------------------------------------- */
+/* ==========================================================================
+   8) TEXTOS
+   ========================================================================== */
 
 .text-muted {
   color: #6b7280 !important;
@@ -164,4 +154,106 @@
 
 .expense-details-show-page .mb-4 {
   margin-bottom: 1.6rem !important;
+}
+
+/* ==========================================================================
+   9) CARDS DE ADMIN — Detalle del gasto
+   ========================================================================== */
+
+.detail-card {
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  padding: 1.1rem 1.4rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  margin-bottom: 1rem;
+}
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h5 {
+    margin: 0;
+    color: #1e3a8a;
+    font-weight: 600;
+  }
+}
+
+.detail-amount {
+  color: #334155;
+  font-weight: 600;
+}
+
+/* Tabla interna */
+.detail-distribution-table {
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 0.5rem;
+}
+
+/* ==========================================================================
+   10) VISTA DEL VECINO — Estados
+   ========================================================================== */
+
+.status-badge {
+  font-size: 0.75rem;
+  padding: 0.3rem 0.55rem;
+  border-radius: 8px;
+}
+
+.status-approved { background: #bbf7d0; color: #166534; }
+.status-pending  { background: #fef9c3; color: #92400e; }
+.status-rejected { background: #fecaca; color: #b91c1c; }
+.status-unpaid   { background: #e5e7eb; color: #374151; }
+
+/* ==========================================================================
+   11) SELECCIÓN DE VECINOS (NEW + EDIT)
+   ========================================================================== */
+
+/* GRID — 4 columnas responsive */
+.neighbor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+/* CARD BASE */
+.neighbor-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  border: 1px solid #e2e8f0;
+  background: #fff;
+
+  border-radius: 12px;
+  padding: 1rem;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  position: relative;
+}
+
+/* Hover */
+.neighbor-card:hover {
+  background: #f9fafb;
+}
+
+/* Checkbox dentro de la card */
+.neighbor-checkbox {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  transform: scale(1.3);
+}
+
+/* CARD SELECCIONADA */
+.neighbor-card.selected {
+  border-color: #2563eb;
+  background: #eff6ff;
+  box-shadow: 0 0 0 2px #bfdbfe;
 }
