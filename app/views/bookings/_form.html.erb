@@ -1,27 +1,27 @@
-<div class="row">
-  <div class="col-md-6">
-    <%= f.input :start,
-        as: :string,
-        label: "Inicio",
-        input_html: {
-          class: "form-control rounded-pill datetime-picker",
-          type: "text",
-          value: f.object.start&.strftime("%Y-%m-%d %H:%M"),
-          placeholder: "Selecciona fecha y hora"
-        } %>
+<div class="container mt-4">
+  <h2 class="fw-bold">Nueva reserva para <%= @common_space.name %></h2>
+
+  <div class="mt-3">
+    <%= simple_form_for [@common_space, @booking] do |f| %>
+
+        <div class="row">
+          <div class="col-md-6">
+            <%= f.input :start, as: :string, label:"Inicio", input_html: { data: { controller: "flatpickr" } }, class: "form-control rounded-pill datetime-picker", placeholder: "Selecciona fecha y hora" %>
+          </div>
+
+          <div class="col-md-6">
+            <%= f.input :end, as: :string, label:"Fin", input_html: { data: { controller: "flatpickr" } }, class: "form-control rounded-pill datetime-picker", placeholder: "Selecciona fecha y hora" %>
+          </div>
+        </div>
+
+        <%= f.submit "Crear reserva", class: "btn btn-primary mt-3 rounded-pill" %>
+
+      <% if @booking.errors.any? %>
+        <p class="text-danger">La fecha ya esta ocupada por otro vecino</p>
+      <% end %>
+    <% end %>
   </div>
 
-  <div class="col-md-6">
-    <%= f.input :end,
-        as: :string,
-        label: "Fin",
-        input_html: {
-          class: "form-control rounded-pill datetime-picker",
-          type: "text",
-          value: f.object.end&.strftime("%Y-%m-%d %H:%M"),
-          placeholder: "Selecciona fecha y hora"
-        } %>
-  </div>
+  <%= link_to "Volver", common_space_path(@common_space),
+      class: "btn btn-secondary mt-3 rounded-pill" %>
 </div>
-
-<%= f.button :submit, class: "btn btn-primary mt-3 rounded-pill" %>
