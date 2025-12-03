@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_11_29_151839) do
+ActiveRecord::Schema[7.1].define(version: 2025_12_03_014709) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -133,6 +133,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_29_151839) do
     t.bigint "common_space_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date "date"
+    t.boolean "is_available"
     t.index ["common_space_id"], name: "index_usable_hours_on_common_space_id"
   end
 
@@ -157,7 +159,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_29_151839) do
   add_foreign_key "chats", "communities"
   add_foreign_key "common_expenses", "communities"
   add_foreign_key "common_spaces", "communities"
-  add_foreign_key "commnities", "administrators"
+  add_foreign_key "communities", "administrators"
   add_foreign_key "expense_details", "common_expenses"
   add_foreign_key "messages", "chats"
   add_foreign_key "messages", "users"
