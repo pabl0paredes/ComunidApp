@@ -11,6 +11,7 @@ class CommonSpacesController < ApplicationController
     authorize @common_space 
     @bookings = @common_space.bookings.order(start: :desc)
     @usable_hours = @common_space.usable_hours.order(:weekday, :start)
+    @usable_weekdays = UsableHour.where(common_space_id: @common_space.id).pluck(:weekday)
   end
 
   def new

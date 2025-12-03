@@ -9,7 +9,6 @@
     <p><strong>Reservado por:</strong> 
       <%= @booking.neighbor.user.name if @booking.neighbor&.user %>
     </p>
-
     <p><strong>Inicio:</strong> 
       <%= @booking.start.strftime("%d/%m/%Y %H:%M") %>
     </p>

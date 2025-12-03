@@ -19,7 +19,9 @@
 
   <%= link_to "Mis reservas aquí",
       common_space_bookings_path(@common_space, neighbor_id: current_user.neighbor.id),
+      data: { turbo_frame: "new_booking" },
       class: "btn btn-success mb-3 rounded-pill" %>
+  <%= turbo_frame_tag "new_booking"%>
 
   <h3>Reservas</h3>
 
