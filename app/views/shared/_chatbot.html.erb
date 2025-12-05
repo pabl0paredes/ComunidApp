@@ -1,0 +1,244 @@
+<!-- ✅ BOTÓN FLOTANTE DRAGGABLE -->
+<button id="chatbot-btn" class="btn btn-primary shadow rounded-circle border-0"
+  data-user-id="<%= current_user&.id || 'guest' %>"
+  style="
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 56px;
+    height: 56px;
+    z-index: 1050;
+    cursor: grab;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+  ">
+  <i class="fa-regular fa-comments"></i>
+</button>
+
+<!-- ✅ MINI VENTANA DE CHAT (puedes reemplazar contenido luego) -->
+<div id="chat-window" class="card shadow border-0"
+  style="
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 300px;
+    height: 380px;
+    z-index: 1040;
+    display: none;
+    border-radius: 16px;
+    overflow: hidden;
+  ">
+
+  <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center border-0">
+    <span class="fw-semibold">Asistente</span>
+    <button type="button" id="minimize-chat" class="btn btn-sm btn-light rounded-circle">
+      <i class="fa-solid fa-minus"></i>
+    </button>
+  </div>
+
+  <div class="card-body d-flex flex-column p-3 bg-light">
+    <div id="chat-messages" class="flex-grow-1 overflow-auto bg-white p-2 rounded-3"
+         style="font-size: 15px; color: #555;">
+      <small class="text-muted">Aquí aparecerán los mensajes…</small>
+    </div>
+
+    <div class="input-group mt-2 shadow-sm rounded-3 overflow-hidden">
+      <input type="text" class="form-control border-0" placeholder="Escribe algo…" disabled>
+      <button class="btn btn-primary border-0" disabled>
+        <i class="fa-solid fa-paper-plane"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<script>
+function initChatbot() {
+  const btn = document.getElementById("chatbot-btn")
+  if (!btn) return
+
+  if (btn.dataset.chatbotInitialized === "true") return
+  btn.dataset.chatbotInitialized = "true"
+
+  const userId = btn.dataset.userId || "guest"
+  const storageKey = `chatbot_position_user_${userId}`
+
+  // Restaurar posición
+  const saved = localStorage.getItem(storageKey)
+  if (saved) {
+    const { x, y } = JSON.parse(saved)
+    btn.style.right = "auto"
+    btn.style.bottom = "auto"
+    btn.style.left = `${x}px`
+    btn.style.top  = `${y}px`
+  }
+
+  // Drag state
+  let drag = false
+  let moved = false
+  let offX = 0
+  let offY = 0
+
+  btn.addEventListener("mousedown", (e) => {
+    drag = true
+    moved = false
+    const rect = btn.getBoundingClientRect()
+    offX = e.clientX - rect.left
+    offY = e.clientY - rect.top
+  })
+
+  document.addEventListener("mousemove", () => {
+    if (!drag) return
+    moved = true
+  })
+
+  document.addEventListener("mousemove", (e) => {
+    if (!drag) return
+    const x = e.clientX - offX
+    const y = e.clientY - offY
+    btn.style.left = `${x}px`
+    btn.style.top  = `${y}px`
+  })
+
+  document.addEventListener("mouseup", () => {
+    if (!drag) return
+    drag = false
+    const rect = btn.getBoundingClientRect()
+
+    // 🛑 Clampeo al viewport
+    const maxX = window.innerWidth - btn.offsetWidth
+    const maxY = window.innerHeight - btn.offsetHeight
+
+    let x = rect.left
+    let y = rect.top
+    if (x < 0) x = 0
+    if (y < 0) y = 0
+    if (x > maxX) x = maxX
+    if (y > maxY) y = maxY
+
+    btn.style.left = `${x}px`
+    btn.style.top  = `${y}px`
+
+    if (moved) {
+
+      const rectFinal = btn.getBoundingClientRect()
+
+      const distLeft   = rectFinal.left
+      const distRight  = window.innerWidth - (rectFinal.left + btn.offsetWidth)
+      const distTop    = rectFinal.top
+      const distBottom = window.innerHeight - (rectFinal.top + btn.offsetHeight)
+
+      // Determinar el borde más cercano (horizontal vs vertical)
+      let finalX = rectFinal.left
+      let finalY = rectFinal.top
+
+      if (distLeft < distRight && distLeft < distTop && distLeft < distBottom && distLeft < distRight) {
+        finalX = 0
+        finalY = rectFinal.top
+      } else if (distRight < distLeft && distRight < distTop && distRight < distBottom) {
+        finalX = window.innerWidth - btn.offsetWidth
+      } else if (distTop < distLeft && distTop < distRight && distTop < distBottom) {
+        finalY = 0
+      } else if (distBottom < distLeft && distBottom < distRight && distBottom < distTop) {
+        finalY = window.innerHeight - btn.offsetHeight
+      }
+
+      btn.style.transition = "0.2s ease-out"
+      btn.style.left = `${finalX}px`
+      btn.style.top  = `${finalY}px`
+
+      localStorage.setItem(storageKey, JSON.stringify({ x: finalX, y: finalY }))
+
+      btn.dataset.preventClick = "true"
+      setTimeout(() => btn.style.transition = "", 200)
+    }
+  })
+
+  btn.addEventListener("click", (e) => {
+    if (btn.dataset.preventClick === "true") {
+      btn.dataset.preventClick = "false"
+      return
+    }
+    const win = document.getElementById("chat-window")
+    if (!win) return
+
+    // Ventana adaptativa: decidir arriba o abajo según espacio real
+    const r = btn.getBoundingClientRect()
+    const w = win.offsetWidth
+    const h = win.offsetHeight
+
+    const spaceAbove = r.top
+    const spaceBelow = window.innerHeight - (r.top + r.height)
+
+    let top = 0
+    if (spaceAbove > spaceBelow && spaceAbove > h + 10) {
+      top = r.top - h - 10
+    } else {
+      top = r.top + r.height + 10
+    }
+
+    let left = r.left
+    const maxX = window.innerWidth - w - 10
+    const maxY = window.innerHeight - h - 10
+
+    if (left < 10) left = 10
+    if (left > maxX) left = maxX
+    if (top < 10) top = 10
+    if (top > maxY) top = maxY
+
+    win.style.right = "auto"
+    win.style.bottom = "auto"
+    win.style.left = `${left}px`
+    win.style.top  = `${top}px`
+
+    // Toggle normal de apertura
+    win.style.display = win.style.display === "block" ? "none" : "block"
+  })
+
+
+  // 🧠 Reaplicar cuando se achica la pantalla
+  window.addEventListener("resize", () => {
+    const win = document.getElementById("chat-window")
+    if (!win) return
+
+    const r = btn.getBoundingClientRect()
+    const w = win.offsetWidth
+    const h = win.offsetHeight
+
+    const maxX = window.innerWidth - w - 10
+    const maxY = window.innerHeight - h - 10
+
+    const spaceAbove = r.top
+    const spaceBelow = window.innerHeight - (r.top + r.height)
+
+    let x = r.left
+    let y = 0
+
+    // Si no cabe arriba, abrir abajo
+    if (spaceAbove > spaceBelow && spaceAbove > h + 10) {
+      y = r.top - h - 10
+    } else {
+      y = r.top + r.height + 10
+    }
+
+    // Clamp
+    if (x < 10) x = 10
+    if (x > maxX) x = maxX
+    if (y < 10) y = 10
+    if (y > maxY) y = maxY
+
+    win.style.right = "auto"
+    win.style.bottom = "auto"
+    win.style.left = `${x}px`
+    win.style.top  = `${y}px`
+  })
+
+}
+
+// Turbo hooks para montar siempre
+document.addEventListener("turbo:load", initChatbot)
+document.addEventListener("turbo:render", initChatbot)
+document.addEventListener("DOMContentLoaded", initChatbot)
+</script>
