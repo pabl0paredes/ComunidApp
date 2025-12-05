@@ -55,190 +55,150 @@
 
 
 <script>
-function initChatbot() {
-  const btn = document.getElementById("chatbot-btn")
-  if (!btn) return
+  function initChatbot() {
+    const btn = document.getElementById("chatbot-btn");
+    const win = document.getElementById("chat-window");
+    if (!btn || !win) return;
 
-  if (btn.dataset.chatbotInitialized === "true") return
-  btn.dataset.chatbotInitialized = "true"
+    // Evitar inicializar dos veces con Turbo
+    if (btn.dataset.chatbotInitialized === "true") return;
+    btn.dataset.chatbotInitialized = "true";
 
-  const userId = btn.dataset.userId || "guest"
-  const storageKey = `chatbot_position_user_${userId}`
+    // --- Drag horizontal del botón ---
+    let dragging = false;
+    let offsetX = 0;
+    let moved = false;
 
-  // Restaurar posición
-  const saved = localStorage.getItem(storageKey)
-  if (saved) {
-    const { x, y } = JSON.parse(saved)
-    btn.style.right = "auto"
-    btn.style.bottom = "auto"
-    btn.style.left = `${x}px`
-    btn.style.top  = `${y}px`
-  }
+    btn.addEventListener("mousedown", (e) => {
+      dragging = true;
+      moved = false;
+      const rect = btn.getBoundingClientRect();
+      offsetX = e.clientX - rect.left;
+      btn.style.cursor = "grabbing";
+    });
 
-  // Drag state
-  let drag = false
-  let moved = false
-  let offX = 0
-  let offY = 0
+    document.addEventListener("mousemove", (e) => {
+      if (!dragging) return;
+      moved = true;
 
-  btn.addEventListener("mousedown", (e) => {
-    drag = true
-    moved = false
-    const rect = btn.getBoundingClientRect()
-    offX = e.clientX - rect.left
-    offY = e.clientY - rect.top
-  })
+      let x = e.clientX - offsetX;
+      const maxX = window.innerWidth - btn.offsetWidth;
+      if (x < 0) x = 0;
+      if (x > maxX) x = maxX;
 
-  document.addEventListener("mousemove", () => {
-    if (!drag) return
-    moved = true
-  })
+      btn.style.left = `${x}px`;
+      btn.style.right = "auto";      // dejamos de usar right una vez que se mueve
 
-  document.addEventListener("mousemove", (e) => {
-    if (!drag) return
-    const x = e.clientX - offX
-    const y = e.clientY - offY
-    btn.style.left = `${x}px`
-    btn.style.top  = `${y}px`
-  })
+      // Si el chat está abierto, moverlo junto al botón
+      if (win.style.display === "block") {
+        const btnRect = btn.getBoundingClientRect();
+        const panelRect = win.getBoundingClientRect();
 
-  document.addEventListener("mouseup", () => {
-    if (!drag) return
-    drag = false
-    const rect = btn.getBoundingClientRect()
+        // borde derecho del botón alineado con borde derecho de ventana
+        let left = btnRect.right - panelRect.width;
 
-    // 🛑 Clampeo al viewport
-    const maxX = window.innerWidth - btn.offsetWidth
-    const maxY = window.innerHeight - btn.offsetHeight
+        // clamp horizontal
+        if (left < 0) left = 0;
+        const maxLeft = window.innerWidth - panelRect.width;
+        if (left > maxLeft) left = maxLeft;
 
-    let x = rect.left
-    let y = rect.top
-    if (x < 0) x = 0
-    if (y < 0) y = 0
-    if (x > maxX) x = maxX
-    if (y > maxY) y = maxY
+        // mantener ventana sobre el botón
+        let bottom = window.innerHeight - btnRect.top + 10;
+        const maxBottom = window.innerHeight - panelRect.height;
+        if (bottom > maxBottom) bottom = maxBottom;
+        if (bottom < 0) bottom = 0;
 
-    btn.style.left = `${x}px`
-    btn.style.top  = `${y}px`
-
-    if (moved) {
-
-      const rectFinal = btn.getBoundingClientRect()
-
-      const distLeft   = rectFinal.left
-      const distRight  = window.innerWidth - (rectFinal.left + btn.offsetWidth)
-      const distTop    = rectFinal.top
-      const distBottom = window.innerHeight - (rectFinal.top + btn.offsetHeight)
-
-      // Determinar el borde más cercano (horizontal vs vertical)
-      let finalX = rectFinal.left
-      let finalY = rectFinal.top
-
-      if (distLeft < distRight && distLeft < distTop && distLeft < distBottom && distLeft < distRight) {
-        finalX = 0
-        finalY = rectFinal.top
-      } else if (distRight < distLeft && distRight < distTop && distRight < distBottom) {
-        finalX = window.innerWidth - btn.offsetWidth
-      } else if (distTop < distLeft && distTop < distRight && distTop < distBottom) {
-        finalY = 0
-      } else if (distBottom < distLeft && distBottom < distRight && distBottom < distTop) {
-        finalY = window.innerHeight - btn.offsetHeight
+        win.style.left = `${left}px`;
+        win.style.bottom = `${bottom}px`;
       }
 
-      btn.style.transition = "0.2s ease-out"
-      btn.style.left = `${finalX}px`
-      btn.style.top  = `${finalY}px`
+    });
 
-      localStorage.setItem(storageKey, JSON.stringify({ x: finalX, y: finalY }))
+    document.addEventListener("mouseup", () => {
+      if (!dragging) return;
+      dragging = false;
+      btn.style.cursor = "grab";
 
-      btn.dataset.preventClick = "true"
-      setTimeout(() => btn.style.transition = "", 200)
-    }
-  })
+      // Si se arrastró, evitamos que el mouseup dispare el click del botón
+      if (moved) {
+        btn.dataset.preventClick = "true";
+        setTimeout(() => {
+          btn.dataset.preventClick = "false";
+        }, 50);
+      }
+    });
 
-  btn.addEventListener("click", (e) => {
-    if (btn.dataset.preventClick === "true") {
-      btn.dataset.preventClick = "false"
-      return
-    }
-    const win = document.getElementById("chat-window")
-    if (!win) return
+    // --- Click: toggle ventana arriba del botón ---
+    btn.addEventListener("click", () => {
+      if (btn.dataset.preventClick === "true") return;
 
-    // Ventana adaptativa: decidir arriba o abajo según espacio real
-    const r = btn.getBoundingClientRect()
-    const w = win.offsetWidth
-    const h = win.offsetHeight
+      const isOpen = win.style.display === "block";
 
-    const spaceAbove = r.top
-    const spaceBelow = window.innerHeight - (r.top + r.height)
+      // Si está abierta → la cerramos
+      if (isOpen) {
+        win.style.display = "none";
+        return;
+      }
 
-    let top = 0
-    if (spaceAbove > spaceBelow && spaceAbove > h + 10) {
-      top = r.top - h - 10
-    } else {
-      top = r.top + r.height + 10
-    }
+      // Mostrar primero para poder medir tamaño real
+      win.style.display = "block";
+      win.style.right = "auto";
+      win.style.top = "auto";
 
-    let left = r.left
-    const maxX = window.innerWidth - w - 10
-    const maxY = window.innerHeight - h - 10
+      const btnRect = btn.getBoundingClientRect();
+      const panelRect = win.getBoundingClientRect();
 
-    if (left < 10) left = 10
-    if (left > maxX) left = maxX
-    if (top < 10) top = 10
-    if (top > maxY) top = maxY
+      let left = btnRect.right - panelRect.width;
+      let bottom = window.innerHeight - btnRect.top + 10; // 10px sobre el botón
 
-    win.style.right = "auto"
-    win.style.bottom = "auto"
-    win.style.left = `${left}px`
-    win.style.top  = `${top}px`
+      // Clamp horizontal (no salir del viewport)
+      if (left < 0) left = 0;
+      const maxLeft = window.innerWidth - panelRect.width;
+      if (left > maxLeft) left = maxLeft;
 
-    // Toggle normal de apertura
-    win.style.display = win.style.display === "block" ? "none" : "block"
-  })
+      // Clamp vertical desde abajo (por si es muy alto)
+      const maxBottom = window.innerHeight - panelRect.height;
+      if (bottom > maxBottom) bottom = maxBottom;
+      if (bottom < 0) bottom = 0;
 
+      win.style.left = `${left}px`;
+      win.style.bottom = `${bottom}px`;
+    });
 
-  // 🧠 Reaplicar cuando se achica la pantalla
-  window.addEventListener("resize", () => {
-    const win = document.getElementById("chat-window")
-    if (!win) return
-
-    const r = btn.getBoundingClientRect()
-    const w = win.offsetWidth
-    const h = win.offsetHeight
-
-    const maxX = window.innerWidth - w - 10
-    const maxY = window.innerHeight - h - 10
-
-    const spaceAbove = r.top
-    const spaceBelow = window.innerHeight - (r.top + r.height)
-
-    let x = r.left
-    let y = 0
-
-    // Si no cabe arriba, abrir abajo
-    if (spaceAbove > spaceBelow && spaceAbove > h + 10) {
-      y = r.top - h - 10
-    } else {
-      y = r.top + r.height + 10
+    // --- Botón minimizar dentro del panel ---
+    const minimizeBtn = document.getElementById("minimize-chat");
+    if (minimizeBtn) {
+      minimizeBtn.addEventListener("click", () => {
+        win.style.display = "none";
+      });
     }
 
-    // Clamp
-    if (x < 10) x = 10
-    if (x > maxX) x = maxX
-    if (y < 10) y = 10
-    if (y > maxY) y = maxY
+    // --- Reposicionar en resize manteniendo lógica "encima del botón" ---
+    window.addEventListener("resize", () => {
+      if (win.style.display !== "block") return;
 
-    win.style.right = "auto"
-    win.style.bottom = "auto"
-    win.style.left = `${x}px`
-    win.style.top  = `${y}px`
-  })
+      const btnRect = btn.getBoundingClientRect();
+      const panelRect = win.getBoundingClientRect();
 
-}
+      let left   = btnRect.left + (btnRect.width / 2) - (panelRect.width / 2);
+      let bottom = window.innerHeight - btnRect.top + 10;
 
-// Turbo hooks para montar siempre
-document.addEventListener("turbo:load", initChatbot)
-document.addEventListener("turbo:render", initChatbot)
-document.addEventListener("DOMContentLoaded", initChatbot)
+      if (left < 0) left = 0;
+      const maxLeft = window.innerWidth - panelRect.width;
+      if (left > maxLeft) left = maxLeft;
+
+      const maxBottom = window.innerHeight - panelRect.height;
+      if (bottom > maxBottom) bottom = maxBottom;
+      if (bottom < 0) bottom = 0;
+
+      win.style.left = `${left}px`;
+      win.style.bottom = `${bottom}px`;
+    });
+  }
+
+  // Hooks Turbo
+  document.addEventListener("turbo:load", initChatbot);
+  document.addEventListener("turbo:render", initChatbot);
+  document.addEventListener("DOMContentLoaded", initChatbot);
+
 </script>
