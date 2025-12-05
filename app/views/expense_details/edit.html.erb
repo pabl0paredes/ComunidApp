@@ -1,4 +1,4 @@
-<div class="container mt-4" data-controller="neighbor-selector">
+<div class="container mt-4" data-controller="resident-selector">
 
   <h1 class="h4 mb-4">Editar Detalle</h1>
 
@@ -29,9 +29,9 @@
              MODO DE ASIGNACIÓN
         ============================================================ -->
 
-        <% all_neighbors_ids = @expense_detail.common_expense.community.neighbors.pluck(:id) %>
-        <% selected_ids = @expense_detail.neighbor_ids %>
-        <% all_selected = (selected_ids.sort == all_neighbors_ids.sort) %>
+        <% all_residents_ids = @expense_detail.common_expense.community.residents.pluck(:id) %>
+        <% selected_ids = @expense_detail.resident_ids %>
+        <% all_selected = (selected_ids.sort == all_residents_ids.sort) %>
 
         <div class="mb-3">
           <label class="form-label fw-bold mb-2">Asignar a vecinos</label>
@@ -45,7 +45,7 @@
                     all_selected,
                     id: "assign_mode_all",
                     class: "form-check-input",
-                    data: { action: "neighbor-selector#toggle" } %>
+                    data: { action: "resident-selector#toggle" } %>
 
               <%= label_tag :assign_mode_all,
                     "Asignar a todos los vecinos",
@@ -59,7 +59,7 @@
                     !all_selected,
                     id: "assign_mode_manual",
                     class: "form-check-input",
-                    data: { action: "neighbor-selector#toggle" } %>
+                    data: { action: "resident-selector#toggle" } %>
 
               <%= label_tag :assign_mode_manual,
                     "Seleccionar vecinos manualmente",
@@ -75,29 +75,29 @@
                LISTA DE CARDS (OCULTA SI "ALL" ESTÁ SELECCIONADO)
           ============================================================ -->
           <div class="mt-3 <%= all_selected ? 'd-none' : '' %>"
-               data-neighbor-selector-target="manualList">
+               data-resident-selector-target="manualList">
 
-            <div class="neighbor-grid">
+            <div class="resident-grid">
 
-              <% @expense_detail.common_expense.community.neighbors.each do |neighbor| %>
-                <% is_selected = selected_ids.include?(neighbor.id) %>
+              <% @expense_detail.common_expense.community.residents.each do |resident| %>
+                <% is_selected = selected_ids.include?(resident.id) %>
 
-                <label class="neighbor-card shadow-sm <%= 'selected' if is_selected %>"
-                       for="neighbor_<%= neighbor.id %>">
+                <label class="resident-card shadow-sm <%= 'selected' if is_selected %>"
+                       for="resident_<%= resident.id %>">
 
-                  <div class="neighbor-info">
-                    <h6 class="mb-1 fw-bold"><%= neighbor.user.name %></h6>
+                  <div class="resident-info">
+                    <h6 class="mb-1 fw-bold"><%= resident.user.name %></h6>
                     <p class="mb-0 small text-muted">
-                      Unidad: <strong><%= neighbor.unit %></strong><br>
-                      % asignado: <strong><%= neighbor.common_expense_fraction %>%</strong>
+                      Unidad: <strong><%= resident.unit %></strong><br>
+                      % asignado: <strong><%= resident.common_expense_fraction %>%</strong>
                     </p>
                   </div>
 
-                  <%= check_box_tag "expense_detail[neighbor_ids][]",
-                        neighbor.id,
+                  <%= check_box_tag "expense_detail[resident_ids][]",
+                        resident.id,
                         is_selected,
-                        id: "neighbor_#{neighbor.id}",
-                        class: "neighbor-checkbox" %>
+                        id: "resident_#{resident.id}",
+                        class: "resident-checkbox" %>
                 </label>
 
               <% end %>

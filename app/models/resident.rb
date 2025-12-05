@@ -1,10 +1,10 @@
-class Neighbor < ApplicationRecord
+class Resident < ApplicationRecord
   belongs_to :user
   belongs_to :community
   has_many :bookings, dependent: :destroy
 
-  has_many :expense_details_neighbors, dependent: :destroy
-  has_many :expense_details, through: :expense_details_neighbors
+  has_many :expense_details_residents, dependent: :destroy
+  has_many :expense_details, through: :expense_details_residents
 
   validates :unit, presence: true, length: { maximum: 10 }
   validates :unit, uniqueness: { scope: :community_id }

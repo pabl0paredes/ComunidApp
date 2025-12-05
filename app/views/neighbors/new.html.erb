@@ -11,7 +11,7 @@
   </div>
 
   <!-- Formulario de creación de vecino -->
-  <%= simple_form_for @neighbor do |f| %>
+  <%= simple_form_for @resident do |f| %>
     <!-- Selección de comunidad -->
     <div class="form-group mb-4">
       <%= f.input :community_id,
@@ -39,7 +39,7 @@
 
     <!-- Botón de submit -->
     <div class="form-group mt-4">
-      <%= f.submit @neighbor.persisted? ? "Guardar" : "Crear Vecino",
+      <%= f.submit @resident.persisted? ? "Guardar" : "Crear Vecino",
                   class: "btn btn-primary btn-lg w-100 rounded-3 shadow-sm" %>
     </div>
   <% end %>

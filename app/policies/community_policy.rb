@@ -26,7 +26,7 @@ class CommunityPolicy < ApplicationPolicy
   end
 
   def show?
-    record.administrator.user == user || record.neighbors.exists?(user: user)
+    record.administrator.user == user || record.residents.exists?(user: user)
   end
 
   def update?

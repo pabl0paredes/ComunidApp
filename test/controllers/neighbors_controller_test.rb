@@ -1,6 +1,6 @@
 require "test_helper"
 
-class NeighborsControllerTest < ActionDispatch::IntegrationTest
+class ResidentsControllerTest < ActionDispatch::IntegrationTest
   # test "the truth" do
   #   assert true
   # end

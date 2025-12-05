@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_11_29_151839) do
+ActiveRecord::Schema[7.1].define(version: 2025_12_05_003858) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -50,14 +50,14 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_29_151839) do
   end
 
   create_table "bookings", force: :cascade do |t|
-    t.bigint "neighbor_id", null: false
+    t.bigint "resident_id", null: false
     t.bigint "common_space_id", null: false
     t.datetime "start"
     t.datetime "end"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["common_space_id"], name: "index_bookings_on_common_space_id"
-    t.index ["neighbor_id"], name: "index_bookings_on_neighbor_id"
+    t.index ["resident_id"], name: "index_bookings_on_resident_id"
   end
 
   create_table "chats", force: :cascade do |t|
@@ -111,15 +111,15 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_29_151839) do
     t.index ["common_expense_id"], name: "index_expense_details_on_common_expense_id"
   end
 
-  create_table "expense_details_neighbors", force: :cascade do |t|
+  create_table "expense_details_residents", force: :cascade do |t|
     t.bigint "expense_detail_id", null: false
-    t.bigint "neighbor_id", null: false
+    t.bigint "resident_id", null: false
     t.boolean "paid", default: false, null: false
     t.decimal "amount_due", precision: 10, scale: 2, default: "0.0", null: false
     t.string "status"
     t.datetime "paid_at"
-    t.index ["expense_detail_id", "neighbor_id"], name: "index_expense_details_neighbors_on_detail_and_neighbor"
-    t.index ["neighbor_id", "expense_detail_id"], name: "index_expense_details_neighbors_on_neighbor_and_detail"
+    t.index ["expense_detail_id", "resident_id"], name: "index_expense_details_residents_on_detail_and_resident"
+    t.index ["resident_id", "expense_detail_id"], name: "index_expense_details_residents_on_resident_and_detail"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -132,7 +132,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_29_151839) do
     t.index ["user_id"], name: "index_messages_on_user_id"
   end
 
-  create_table "neighbors", force: :cascade do |t|
+  create_table "residents", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "community_id", null: false
     t.float "common_expense_fraction"
@@ -140,8 +140,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_29_151839) do
     t.datetime "updated_at", null: false
     t.string "unit"
     t.boolean "is_accepted", default: false
-    t.index ["community_id"], name: "index_neighbors_on_community_id"
-    t.index ["user_id"], name: "index_neighbors_on_user_id"
+    t.index ["community_id"], name: "index_residents_on_community_id"
+    t.index ["user_id"], name: "index_residents_on_user_id"
   end
 
   create_table "show_chats", force: :cascade do |t|
@@ -183,7 +183,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_29_151839) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "administrators", "users"
   add_foreign_key "bookings", "common_spaces"
-  add_foreign_key "bookings", "neighbors"
+  add_foreign_key "bookings", "residents"
   add_foreign_key "chats", "communities"
   add_foreign_key "common_expenses", "communities"
   add_foreign_key "common_spaces", "communities"
@@ -191,8 +191,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_29_151839) do
   add_foreign_key "expense_details", "common_expenses"
   add_foreign_key "messages", "chats"
   add_foreign_key "messages", "users"
-  add_foreign_key "neighbors", "communities"
-  add_foreign_key "neighbors", "users"
+  add_foreign_key "residents", "communities"
+  add_foreign_key "residents", "users"
   add_foreign_key "show_chats", "chats"
   add_foreign_key "show_chats", "users"
   add_foreign_key "usable_hours", "common_spaces"

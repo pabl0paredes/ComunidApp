@@ -41,7 +41,7 @@
               </p>
 
               <p class="text-muted small mt-1 mb-0">
-                <%= detail.expense_details_neighbors.count %> vecinos asignados
+                <%= detail.expense_details_residents.count %> vecinos asignados
               </p>
             </div>
 
@@ -74,16 +74,16 @@
 
           <div class="table-responsive">
 
-            <% visible_neighbors =
-                if current_user.neighbor.present?
-                  detail.expense_details_neighbors
-                    .includes(neighbor: :user)
-                    .where(neighbor_id: current_user.neighbor.id)
+            <% visible_residents =
+                if current_user.resident.present?
+                  detail.expense_details_residents
+                    .includes(resident: :user)
+                    .where(resident_id: current_user.resident.id)
                 else
-                  detail.expense_details_neighbors.includes(neighbor: :user)
+                  detail.expense_details_residents.includes(resident: :user)
                 end %>
 
-            <% if visible_neighbors.any? %>
+            <% if visible_residents.any? %>
 
               <table class="table table-sm table-hover align-middle mb-0 distribution-table">
                 <thead class="table-light">
@@ -97,10 +97,10 @@
                 </thead>
 
                 <tbody>
-                  <% visible_neighbors.each do |edn| %>
+                  <% visible_residents.each do |edn| %>
                     <tr>
-                      <td><%= edn.neighbor.user.name %></td>
-                      <td><%= edn.neighbor.unit %></td>
+                      <td><%= edn.resident.user.name %></td>
+                      <td><%= edn.resident.unit %></td>
                       <td><%= number_to_currency(edn.amount_due) %></td>
 
                       <!-- ESTADO -->
@@ -149,7 +149,7 @@
                         </div>
 
                         <!-- FORMULARIO (VECINO ASIGNADO) -->
-                        <% if current_user.neighbor == edn.neighbor &&
+                        <% if current_user.resident == edn.resident &&
                               (!edn.receipt.attached? || edn.rejected? ) %>
 
                           <div class="mt-2">
