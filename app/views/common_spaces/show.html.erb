@@ -10,7 +10,7 @@
 
   <% @usable_hours.each do |hour| %>
     <p>
-      <strong><%= Date::DAYNAMES[hour.weekday] %>:</strong>
+      <strong><%= Date::DAYNAMES[hour.start.wday] %>:</strong>
       <%= hour.start.strftime("%H:%M") %> - <%= hour.end.strftime("%H:%M") %>
     </p>
   <% end %>
@@ -18,7 +18,7 @@
   <hr>
 
   <%= link_to "Mis reservas aquí",
-      common_space_bookings_path(@common_space, neighbor_id: current_user.neighbor.id),
+      common_space_bookings_path(@common_space, resident_id: current_user.resident.id),
       data: { turbo_frame: "new_booking" },
       class: "btn btn-success mb-3 rounded-pill" %>
   <%= turbo_frame_tag "new_booking"%>

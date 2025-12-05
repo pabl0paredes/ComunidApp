@@ -18,7 +18,7 @@ UsableHour.delete_all
 CommonSpace.delete_all
 ExpenseDetail.delete_all
 CommonExpense.delete_all
-Neighbor.delete_all
+Resident.delete_all
 Community.delete_all
 Administrator.delete_all
 User.delete_all
@@ -47,7 +47,7 @@ comunidad = Community.create!(
 
 puts "Creando vecinos…"
 
-neighbors = []
+residents = []
 15.times do |i|
   user = User.create!(
     email: "vecino#{i+1}@gmail.com",
@@ -57,7 +57,7 @@ neighbors = []
     picture: "https://example.com/profile#{i+1}.jpg"
   )
 
-  neighbors << Neighbor.create!(
+  residents << Resident.create!(
     user: user,
     community: comunidad,
     unit: "A#{i+1}",
@@ -115,16 +115,14 @@ espacio3 = CommonSpace.create!(
 )
 
 puts "Creando horarios para los espacios…"
-date = Date.today
 [espacio1, espacio2, espacio3].each do |esp|
-  (0..15).each do |i|
+  (1..15).each do |i|
     (0..5).each do |j|
       UsableHour.create!(
         common_space: esp,
-        weekday: Date.today + 1, # lunes-miercoles
-        start: Time.new(2025,12,i,15),
-        end: Time.new("18:00"),
-        date: date + i
+        start: Time.new(2025,12,i,15+j,0,0),
+        end: Time.new(2025,12,i,15+j+1,0,0),
+        is_available: [true, true, false].sample
       )
     end
   end
@@ -162,11 +160,11 @@ puts "Creando mensajes en chats…"
 
 10.times do
   chat = chats.sample
-  neighbor = neighbors.sample
+  resident = residents.sample
 
   Message.create!(
     chat: chat,
-    user: neighbor.user,
+    user: resident.user,
     content: [
       "Hola a todos, ¿cómo están?",
       "¿Alguien tiene información de esto?",
@@ -181,10 +179,10 @@ end
 
 puts "Asignando show_chats a todos los vecinos…"
 
-neighbors.each do |neighbor|
+residents.each do |resident|
   chats.each do |chat|
     ShowChat.create!(
-      user: neighbor.user,
+      user: resident.user,
       chat: chat,
       is_hidden: [true, false, false].sample  # baja probabilidad de oculto
     )
@@ -195,13 +193,13 @@ puts "Creando reservas (bookings)…"
 
 days = rand(1..10).days
 7.times do
-  neighbor = neighbors.sample
+  resident = residents.sample
   espacio = [espacio1, espacio2, espacio3].sample
 
   days += 1.days
 
   Booking.create!(
-    neighbor: neighbor,
+    resident: resident,
     common_space: espacio,
     start: DateTime.now + days,
     end: DateTime.now + days + 2.hours

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_12_03_014709) do
+ActiveRecord::Schema[7.1].define(version: 2025_12_04_231201) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -129,11 +129,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_03_014709) do
   create_table "usable_hours", force: :cascade do |t|
     t.datetime "start"
     t.datetime "end"
-    t.integer "weekday"
     t.bigint "common_space_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.date "date"
     t.boolean "is_available"
     t.index ["common_space_id"], name: "index_usable_hours_on_common_space_id"
   end

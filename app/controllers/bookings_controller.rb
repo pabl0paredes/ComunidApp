@@ -11,13 +11,13 @@ class BookingsController < ApplicationController
   end
   def new
     @booking = Booking.new
-    @usable_weekdays = UsableHour.where(common_space_id: @common_space.id).pluck(:weekday)
+    # @usable_weekdays = UsableHour.where(common_space_id: @common_space.id).pluck(:weekday)
     authorize @booking
   end
   def create
     @booking = Booking.new(booking_params)
     @booking.common_space = @common_space
-    @booking.neighbor = current_user.neighbor
+    @booking.resident = current_user.resident
     authorize @booking
     
     if @booking.save
