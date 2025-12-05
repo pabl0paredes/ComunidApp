@@ -115,15 +115,16 @@ espacio3 = CommonSpace.create!(
 )
 
 puts "Creando horarios para los espacios…"
-
 [espacio1, espacio2, espacio3].each do |esp|
-  3.times do |i|
-    UsableHour.create!(
-      common_space: esp,
-      weekday: i + 1, # lunes-miercoles
-      start: Time.parse("10:00"),
-      end: Time.parse("18:00")
-    )
+  (1..15).each do |i|
+    (0..5).each do |j|
+      UsableHour.create!(
+        common_space: esp,
+        start: Time.new(2025,12,i,15+j,0,0),
+        end: Time.new(2025,12,i,15+j+1,0,0),
+        is_available: [true, true, false].sample
+      )
+    end
   end
 end
 

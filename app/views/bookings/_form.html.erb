@@ -6,12 +6,10 @@
 
         <div class="row">
           <div class="col-md-6">
-            <%= f.input :start, as: :string, label:"Inicio", input_html: { data: { controller: "flatpickr" } }, class: "form-control rounded-pill datetime-picker", placeholder: "Selecciona fecha y hora" %>
+            <%= f.input :start, as: :string, label:"Inicio", input_html: { data: { controller: "flatpickr", flatpickr_weekdays_value: @usable_weekdays.to_json } }, class: "form-control rounded-pill datetime-picker", placeholder: "Selecciona fecha y hora" %>
           </div>
 
-          <div class="col-md-6">
-            <%= f.input :end, as: :string, label:"Fin", input_html: { data: { controller: "flatpickr" } }, class: "form-control rounded-pill datetime-picker", placeholder: "Selecciona fecha y hora" %>
-          </div>
+         
         </div>
 
         <%= f.submit "Crear reserva", class: "btn btn-primary mt-3 rounded-pill" %>
