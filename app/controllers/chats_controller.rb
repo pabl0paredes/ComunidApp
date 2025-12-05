@@ -88,7 +88,7 @@ class ChatsController < ApplicationController
   end
 
   def chat_params
-    params.require(:chat).permit(:category)
+    params.require(:chat).permit(:name, :category)
   end
 
   def require_admin
