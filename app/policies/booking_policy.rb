@@ -5,11 +5,11 @@ class BookingPolicy < ApplicationPolicy
   # code, beware of possible changes to the ancestors:
   # https://gist.github.com/Burgestrand/4b4bc22f31c8a95c425fc0e30d7ef1f5
   class Scope < ApplicationPolicy::Scope
-    def resolve  
+    def resolve
       if user.administrator
         scope.all
       else
-        scope.where(neighbor: user.neighbor)
+        scope.where(resident: user.resident)
       end
     end
   end
@@ -26,11 +26,11 @@ class BookingPolicy < ApplicationPolicy
   end
 
   def destroy?
-    record.neighbor == user.neighbor || user.administrator.present?
+    record.resident == user.resident || user.administrator.present?
   end
 
   def update?
     # boking.user == current_user
-    record.neighbor == user.neighbor
+    record.resident == user.resident
   end
 end

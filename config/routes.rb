@@ -15,14 +15,14 @@ Rails.application.routes.draw do
     resources :chats, only: [:index, :new, :create]
     resources :common_expenses, only: [:new, :create, :index]
     resources :common_spaces, only: [:new, :create, :index]
-    resources :neighbors, only: [:index]
+    resources :residents, only: [:index]
   end
 
   resources :administrators, only: [:new, :create, :destroy]
-  resources :neighbors, only: [:new, :create, :show, :edit, :update, :destroy] do
+  resources :residents, only: [:new, :create, :show, :edit, :update, :destroy] do
     member do
       get :auth_waiting
-      get :already_neighbor
+      get :already_resident
     end
   end
 
@@ -52,9 +52,9 @@ Rails.application.routes.draw do
 
   resources :show_chats, only: [:create, :update]
 
-  patch "expense_details_neighbors/:id/pay", to: "expense_details_neighbors#pay", as: :pay_expense
-  patch "expense_details_neighbors/:id/approve", to: "expense_details_neighbors#approve", as: :approve_expense
-  patch "expense_details_neighbors/:id/reject",  to: "expense_details_neighbors#reject",  as: :reject_expense
+  patch "expense_details_residents/:id/pay", to: "expense_details_residents#pay", as: :pay_expense
+  patch "expense_details_residents/:id/approve", to: "expense_details_residents#approve", as: :approve_expense
+  patch "expense_details_residents/:id/reject",  to: "expense_details_residents#reject",  as: :reject_expense
 
 
 end

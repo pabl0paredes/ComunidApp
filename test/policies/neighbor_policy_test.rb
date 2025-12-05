@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class NeighborPolicyTest < ActiveSupport::TestCase
+class ResidentPolicyTest < ActiveSupport::TestCase
   def test_scope
   end
 

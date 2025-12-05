@@ -29,14 +29,14 @@
 
       <% if current_user %>
         <!-- Verificamos si el usuario tiene una comunidad asociada -->
-        <% if current_user.neighbor %>
-          <%= link_to "Ir a mi comunidad", community_path(current_user.neighbor.community), class: "btn btn-outline-light btn-lg px-5 fw-semibold shadow rounded-3 border-2" %>
+        <% if current_user.resident %>
+          <%= link_to "Ir a mi comunidad", community_path(current_user.resident.community), class: "btn btn-outline-light btn-lg px-5 fw-semibold shadow rounded-3 border-2" %>
         <% else %>
-          <%= link_to "Registrarse como vecino", new_neighbor_path, class: "btn btn-outline-light btn-lg px-5 fw-semibold shadow rounded-3 border-2" %>
+          <%= link_to "Registrarse como vecino", new_resident_path, class: "btn btn-outline-light btn-lg px-5 fw-semibold shadow rounded-3 border-2" %>
         <% end %>
       <% else %>
         <!-- Si no hay current_user, mostramos solo "Registrarse como vecino" -->
-        <%= link_to "Registrarse como vecino", new_neighbor_path, class: "btn btn-outline-light btn-lg px-5 fw-semibold shadow rounded-3 border-2" %>
+        <%= link_to "Registrarse como vecino", new_resident_path, class: "btn btn-outline-light btn-lg px-5 fw-semibold shadow rounded-3 border-2" %>
       <% end %>
     </div>
 

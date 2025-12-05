@@ -12,30 +12,30 @@ class CommonExpensesController < ApplicationController
         .order(date: :desc)
     else
       @common_expenses = CommonExpense
-        .joins(expense_details: :expense_details_neighbors)
-        .where(expense_details_neighbors: { neighbor_id: current_user.neighbor.id })
+        .joins(expense_details: :expense_details_residents)
+        .where(expense_details_residents: { resident_id: current_user.resident.id })
         .where(community: @community)
         .order(date: :desc)
         .distinct
 
 
-      @neighbor_amounts = {}
+      @resident_amounts = {}
 
-      ExpenseDetailsNeighbor
+      ExpenseDetailsResident
         .joins(:expense_detail)
-        .where(neighbor: current_user.neighbor)
+        .where(resident: current_user.resident)
         .each do |edn|
 
         ce = edn.expense_detail.common_expense
-        @neighbor_amounts[ce.id] ||= 0
-        @neighbor_amounts[ce.id] += edn.amount_due
+        @resident_amounts[ce.id] ||= 0
+        @resident_amounts[ce.id] += edn.amount_due
       end
 
 
-      @total_assigned = @neighbor_amounts.values.sum
+      @total_assigned = @resident_amounts.values.sum
 
-      @total_paid = ExpenseDetailsNeighbor
-        .where(neighbor: current_user.neighbor, status: "approved")
+      @total_paid = ExpenseDetailsResident
+        .where(resident: current_user.resident, status: "approved")
         .sum(:amount_due)
 
       @total_pending = @total_assigned - @total_paid
@@ -49,34 +49,34 @@ class CommonExpensesController < ApplicationController
       authorize @common_expense
 
 
-      if current_user.neighbor
+      if current_user.resident
 
 
         @expense_details = @common_expense.expense_details
-          .joins(:expense_details_neighbors)
-          .where(expense_details_neighbors: { neighbor_id: current_user.neighbor.id })
+          .joins(:expense_details_residents)
+          .where(expense_details_residents: { resident_id: current_user.resident.id })
           .order(created_at: :desc)
 
 
-        neighbors_edns = ExpenseDetailsNeighbor
+        residents_edns = ExpenseDetailsResident
           .joins(:expense_detail)
           .where(
-            neighbor: current_user.neighbor,
+            resident: current_user.resident,
             expense_details: { common_expense_id: @common_expense.id }
           )
 
 
-        @neighbor_total = neighbors_edns.sum(:amount_due)
+        @resident_total = residents_edns.sum(:amount_due)
 
 
-        if neighbors_edns.all?(&:approved?)
-          @neighbor_status = "approved"
-        elsif neighbors_edns.any?(&:rejected?)
-          @neighbor_status = "rejected"
-        elsif neighbors_edns.any?(&:pending?)
-          @neighbor_status = "pending_approval"
+        if residents_edns.all?(&:approved?)
+          @resident_status = "approved"
+        elsif residents_edns.any?(&:rejected?)
+          @resident_status = "rejected"
+        elsif residents_edns.any?(&:pending?)
+          @resident_status = "pending_approval"
         else
-          @neighbor_status = "unpaid"
+          @resident_status = "unpaid"
         end
 
 

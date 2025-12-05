@@ -6,13 +6,13 @@
     <p class="text-muted">Modificar la información del vecino seleccionado</p>
   </div>
 
-  <%= simple_form_for @neighbor do |f| %>
+  <%= simple_form_for @resident do |f| %>
     <div class="card shadow-sm rounded-4 p-4">
       <div class="card-body">
         <!-- Nombre y contacto del vecino -->
         <div class="mb-3">
-          <p><strong>Nombre:</strong> <%= @neighbor.user.name %></p>
-          <p><strong>Contacto:</strong> <%= @neighbor.user.phone %></p>
+          <p><strong>Nombre:</strong> <%= @resident.user.name %></p>
+          <p><strong>Contacto:</strong> <%= @resident.user.phone %></p>
         </div>
 
         <!-- Campos del formulario -->

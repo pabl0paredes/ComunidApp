@@ -4,19 +4,19 @@
 
   <!-- Lista de vecinos aceptados -->
   <div class="row g-4">
-    <% @neighbors_accepted.each do |neighbor| %>
+    <% @residents_accepted.each do |resident| %>
       <div class="col-md-4">
         <div class="card shadow-sm rounded-4 p-3">
           <div class="card-body">
             <h5 class="card-title text-primary">
-              Unidad: <%= neighbor.unit %> | <%= neighbor.user.name %>
+              Unidad: <%= resident.unit %> | <%= resident.user.name %>
             </h5>
-            <p class="card-text text-muted">Contacto: <%= neighbor.user.phone %></p>
+            <p class="card-text text-muted">Contacto: <%= resident.user.phone %></p>
             <% if @community.administrator.user == current_user %>
-              <p class="text-muted">Fracción GGCC: <%= neighbor.common_expense_fraction %></p>
+              <p class="text-muted">Fracción GGCC: <%= resident.common_expense_fraction %></p>
               <div class="d-flex justify-content-between mt-3">
-                <%= link_to "Editar", edit_neighbor_path(neighbor), class: "btn btn-outline-primary btn-sm" %>
-                <%= link_to "Eliminar", neighbor_path(neighbor),
+                <%= link_to "Editar", edit_resident_path(resident), class: "btn btn-outline-primary btn-sm" %>
+                <%= link_to "Eliminar", resident_path(resident),
                             data: { turbo_method: :delete, turbo_confirm: "¿Estás seguro?" },
                             class: "btn btn-outline-danger btn-sm" %>
               </div>
@@ -31,19 +31,19 @@
   <% if @community.administrator.user == current_user %>
     <div class="mt-5">
       <h4> SOLICITUDES DE INGRESO </h4>
-      <% if @neighbors_waiting.length.positive? %>
+      <% if @residents_waiting.length.positive? %>
         <div class="row g-4">
-          <% @neighbors_waiting.each do |neighbor| %>
+          <% @residents_waiting.each do |resident| %>
             <div class="col-md-4">
               <div class="card shadow-sm rounded-4 p-3">
                 <div class="card-body">
                   <h5 class="card-title text-primary">
-                    Unidad: <%= neighbor.unit %> | <%= neighbor.user.name %>
+                    Unidad: <%= resident.unit %> | <%= resident.user.name %>
                   </h5>
-                  <p class="card-text text-muted">Fracción GGCC: <%= neighbor.common_expense_fraction %></p>
+                  <p class="card-text text-muted">Fracción GGCC: <%= resident.common_expense_fraction %></p>
                   <div class="d-flex justify-content-between mt-3">
-                    <%= link_to "Aceptar", edit_neighbor_path(neighbor), class: "btn btn-outline-success btn-sm" %>
-                    <%= link_to "Eliminar", neighbor_path(neighbor),
+                    <%= link_to "Aceptar", edit_resident_path(resident), class: "btn btn-outline-success btn-sm" %>
+                    <%= link_to "Eliminar", resident_path(resident),
                                 data: { turbo_method: :delete, turbo_confirm: "¿Estás seguro?" },
                                 class: "btn btn-outline-danger btn-sm" %>
                   </div>

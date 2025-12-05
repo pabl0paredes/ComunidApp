@@ -22,7 +22,7 @@
 
       <% @common_expenses.each do |common_expense| %>
 
-        <% all_edns = common_expense.expense_details_neighbors %>
+        <% all_edns = common_expense.expense_details_residents %>
         <% approved = all_edns.count { |e| e.approved? } %>
         <% total = all_edns.count %>
         <% progress = total > 0 ? ((approved.to_f / total) * 100).round : 0 %>
@@ -84,7 +84,7 @@
     <!-- =============================== VECINO =============================== -->
 
     <!-- Resumen -->
-    <div class="neighbor-summary mb-4">
+    <div class="resident-summary mb-4">
       <div class="summary-card shadow-sm">
         <div>
           <p class="mb-1 fw-semibold text-primary">📊 Tu resumen mensual</p>
@@ -104,8 +104,8 @@
 
         <% @common_expenses.each do |ce| %>
 
-          <% amount_for_user = @neighbor_amounts[ce.id] || 0 %>
-          <% edns = ce.expense_details_neighbors.where(neighbor: current_user.neighbor) %>
+          <% amount_for_user = @resident_amounts[ce.id] || 0 %>
+          <% edns = ce.expense_details_residents.where(resident: current_user.resident) %>
 
           <% approved_count = edns.count { |e| e.approved? } %>
           <% total_count = edns.count %>
