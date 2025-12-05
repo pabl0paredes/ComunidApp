@@ -76,3 +76,7 @@ end
 
 gem "pundit"
 gem "mini_magick"
+gem "ruby-openai"
+gem "solid_queue"
+gem "actioncable-enhanced-postgresql-adapter"
+gem "neighbor"
