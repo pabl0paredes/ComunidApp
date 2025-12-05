@@ -18,7 +18,7 @@
             <!-- Mostrar usuarios -->
             <li class="mb-2">
               <strong>Usuarios:</strong>
-              <%= @community.neighbors.where(is_accepted: true).count %> / <%= @community.size %>
+              <%= @community.residents.where(is_accepted: true).count %> / <%= @community.size %>
             </li>
 
              <!-- Mostrar administrador -->
@@ -29,10 +29,10 @@
 
             <!-- Enlace a gestionar o ver vecinos -->
             <li class="mb-2">
-              <%= link_to @community.administrator.user == current_user ? "Gestionar Vecinos" : "Ver Vecinos", community_neighbors_path(@community), class: "text-decoration-none text-primary" %>
+              <%= link_to @community.administrator.user == current_user ? "Gestionar Vecinos" : "Ver Vecinos", community_residents_path(@community), class: "text-decoration-none text-primary" %>
               <!-- Mostrar solicitudes si eres el administrador -->
               <% if @community.administrator.user == current_user %>
-                  (Solicitudes: <%= @community.neighbors.where(is_accepted: false).count %>)
+                  (Solicitudes: <%= @community.residents.where(is_accepted: false).count %>)
               <% end %>
             </li>
 

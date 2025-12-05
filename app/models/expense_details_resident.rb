@@ -1,6 +1,6 @@
-class ExpenseDetailsNeighbor < ApplicationRecord
+class ExpenseDetailsResident < ApplicationRecord
   belongs_to :expense_detail
-  belongs_to :neighbor
+  belongs_to :resident
 
   has_one_attached :receipt
 

@@ -18,7 +18,7 @@
   <hr>
 
   <%= link_to "Mis reservas aquí",
-      common_space_bookings_path(@common_space, neighbor_id: current_user.neighbor.id),
+      common_space_bookings_path(@common_space, resident_id: current_user.resident.id),
       class: "btn btn-success mb-3 rounded-pill" %>
 
   <h3>Reservas</h3>

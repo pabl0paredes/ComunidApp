@@ -14,7 +14,7 @@
       <% @bookings.each do |booking| %>
         <li class="list-group-item d-flex justify-content-between align-items-center">
           <div>
-            <strong><%= booking.neighbor.user.name %></strong><br>
+            <strong><%= booking.resident.user.name %></strong><br>
             <small>
               <%= l booking.start, format: :long %> →
               <%= l booking.end, format: :long %>
@@ -40,4 +40,3 @@
 
   <%= link_to "Volver al espacio", common_space_path(@common_space), class: "btn btn-secondary mt-3 mb-3" %>
 </div>
-

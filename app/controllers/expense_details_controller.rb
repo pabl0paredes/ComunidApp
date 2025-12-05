@@ -9,11 +9,11 @@ class ExpenseDetailsController < ApplicationController
       @expense_details = @common_expense
                           .expense_details
                           .order(updated_at: :desc)
-    elsif current_user.neighbor.present?
+    elsif current_user.resident.present?
       @expense_details = @common_expense
                           .expense_details
-                          .joins(:expense_details_neighbors)
-                          .where(expense_details_neighbors: { neighbor_id: current_user.neighbor.id })
+                          .joins(:expense_details_residents)
+                          .where(expense_details_residents: { resident_id: current_user.resident.id })
                           .order(updated_at: :desc)
                           .distinct
     end
@@ -24,18 +24,18 @@ class ExpenseDetailsController < ApplicationController
   def new
     @expense_detail = ExpenseDetail.new
     @expense_detail.common_expense = @common_expense
-    @neighbors = @common_expense.community.neighbors
+    @residents = @common_expense.community.residents
     authorize @expense_detail
   end
 
   def create
-    @neighbors = @common_expense.community.neighbors
+    @residents = @common_expense.community.residents
 
     detail_params = expense_detail_params.dup
 
-    # Si el admin eligió "Asignar a todos", forzamos neighbor_ids
+    # Si el admin eligió "Asignar a todos", forzamos resident_ids
     if params[:assign_mode] == "all"
-      detail_params[:neighbor_ids] = @neighbors.pluck(:id)
+      detail_params[:resident_ids] = @residents.pluck(:id)
     end
 
     @expense_detail = ExpenseDetail.new(detail_params)
@@ -44,7 +44,7 @@ class ExpenseDetailsController < ApplicationController
     authorize @expense_detail
 
     if @expense_detail.save
-      @expense_detail.assign_amounts_to_neighbors
+      @expense_detail.assign_amounts_to_residents
       redirect_to common_expense_expense_details_path(@common_expense),
                   notice: "Detalle creado correctamente."
     else
@@ -57,7 +57,7 @@ class ExpenseDetailsController < ApplicationController
   end
 
   def edit
-    @neighbors = @expense_detail.common_expense.community.neighbors
+    @residents = @expense_detail.common_expense.community.residents
     authorize @expense_detail
   end
 
@@ -67,16 +67,16 @@ class ExpenseDetailsController < ApplicationController
     base_params = expense_detail_params.dup
 
     if params[:assign_mode] == "all"
-      base_params[:neighbor_ids] =
-        @expense_detail.common_expense.community.neighbors.pluck(:id)
+      base_params[:resident_ids] =
+        @expense_detail.common_expense.community.residents.pluck(:id)
     end
 
     if @expense_detail.update(base_params)
-      @expense_detail.assign_amounts_to_neighbors
+      @expense_detail.assign_amounts_to_residents
       redirect_to @expense_detail.common_expense,
                   notice: "Detalle actualizado correctamente."
     else
-      @neighbors = @expense_detail.common_expense.community.neighbors
+      @residents = @expense_detail.common_expense.community.residents
       render :edit, status: :unprocessable_entity
     end
   end
@@ -101,9 +101,9 @@ class ExpenseDetailsController < ApplicationController
 
   def expense_detail_params
     params.require(:expense_detail)
-          .permit(:detail, :amount, neighbor_ids: [])
+          .permit(:detail, :amount, resident_ids: [])
           .tap do |whitelisted|
-            whitelisted[:neighbor_ids]&.reject!(&:blank?)
+            whitelisted[:resident_ids]&.reject!(&:blank?)
           end
   end
 end

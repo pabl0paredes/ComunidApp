@@ -43,10 +43,10 @@
         </thead>
 
         <tbody>
-          <% @expense_detail.expense_details_neighbors.includes(neighbor: :user).each do |edn| %>
+          <% @expense_detail.expense_details_residents.includes(resident: :user).each do |edn| %>
             <tr>
-              <td><%= edn.neighbor.user.name %></td>
-              <td><%= edn.neighbor.unit %></td>
+              <td><%= edn.resident.user.name %></td>
+              <td><%= edn.resident.unit %></td>
               <td><%= number_to_currency(edn.amount_due) %></td>
 
               <!-- ESTADO -->
@@ -91,7 +91,7 @@
                 <% end %>
 
                 <!-- SUBIR O REENVIAR COMPROBANTE (vecino asignado) -->
-                <% if current_user.neighbor == edn.neighbor &&
+                <% if current_user.resident == edn.resident &&
                       (!edn.receipt.attached? || edn.rejected?) %>
 
                   <%= form_with model: edn,

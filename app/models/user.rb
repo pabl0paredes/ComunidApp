@@ -4,8 +4,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   has_one :administrator
-  has_one :neighbor
-  has_one :community, through: :neighbor
+  has_one :resident
+  has_one :community, through: :resident
   has_many :show_chats
   has_many :messages
 

@@ -12,10 +12,10 @@ class CommunitiesController < ApplicationController
   def show
     authorize @community
     unless @community.administrator.user == current_user
-      neighbor = Neighbor.find_by(user: current_user, community: @community)
-      if neighbor
-        unless neighbor.is_accepted
-          redirect_to auth_waiting_neighbor_path(neighbor)
+      resident = Resident.find_by(user: current_user, community: @community)
+      if resident
+        unless resident.is_accepted
+          redirect_to auth_waiting_resident_path(resident)
         end
       end
     end

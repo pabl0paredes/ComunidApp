@@ -6,19 +6,19 @@
 
     <p><strong>Espacio común:</strong> <%= @booking.common_space.name %></p>
 
-    <p><strong>Reservado por:</strong> 
-      <%= @booking.neighbor.user.name if @booking.neighbor&.user %>
+    <p><strong>Reservado por:</strong>
+      <%= @booking.resident.user.name if @booking.resident&.user %>
     </p>
 
-    <p><strong>Inicio:</strong> 
+    <p><strong>Inicio:</strong>
       <%= @booking.start.strftime("%d/%m/%Y %H:%M") %>
     </p>
 
-    <p><strong>Fin:</strong> 
+    <p><strong>Fin:</strong>
       <%= @booking.end.strftime("%d/%m/%Y %H:%M") %>
     </p>
 
-    <p><strong>Precio:</strong> 
+    <p><strong>Precio:</strong>
       <%= number_to_currency(@booking.common_space.price, unit: "S/ ") %>
     </p>
 
