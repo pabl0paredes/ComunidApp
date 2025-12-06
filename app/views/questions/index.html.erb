@@ -1,0 +1,13 @@
+<% if current_user %>
+  <%= turbo_stream_from "questions_user_#{current_user.id}" %>
+<% end %>
+
+<div class="container chatbot mt-4">
+  <h1 class="h3 mb-4">Chat con ComunidApp</h1>
+
+  <div id="questions">
+    <%= render @questions %>
+  </div>
+
+  <%= render "form", question: @question %>
+</div>

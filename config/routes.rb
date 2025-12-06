@@ -56,5 +56,10 @@ Rails.application.routes.draw do
   patch "expense_details_residents/:id/approve", to: "expense_details_residents#approve", as: :approve_expense
   patch "expense_details_residents/:id/reject",  to: "expense_details_residents#reject",  as: :reject_expense
 
+  resources :questions, only: [:index, :create]
+
+  resource :chat_session, only: [] do
+    post :reset
+  end
 
 end
