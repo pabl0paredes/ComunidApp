@@ -1,10 +1,12 @@
 <div class="container mt-4">
-
+  <div class="mb-3">
+    <%= link_to "← Volver a espacios comunes",
+        community_common_spaces_path(@common_space.community),
+        class: "text-decoration-none text-primary fw-semibold" %>
+  </div>
   <h1 class="h4 text-primary mb-4">Editar Espacio Común</h1>
-
   <div class="card shadow-sm mb-4">
     <div class="card-body">
-
       <p><strong>Nombre:</strong> <%= @common_space.name %></p>
       <p><strong>Descripción:</strong> <%= @common_space.description %></p>
       <p><strong>Precio:</strong> <%= @common_space.price %></p>
@@ -12,21 +14,15 @@
         <strong>Disponible:</strong>
         <%= @common_space.is_available ? "Sí" : "No" %>
       </p>
-
     </div>
   </div>
-
   <h2 class="h5 text-primary mb-3">Agregar horarios disponibles</h2>
-
   <div class="card shadow-sm mb-4">
     <div class="card-body">
-
       <%= form_with url: common_space_usable_hours_path(@common_space), method: :post, local: true do %>
-
         <!-- Días de la semana -->
         <div class="mb-3">
           <label class="form-label fw-semibold">Días disponibles</label><br>
-
           <% [["Lunes",1],["Martes",2],["Miércoles",3],["Jueves",4],["Viernes",5],["Sábado",6],["Domingo",7]].each do |day_name, day_value| %>
             <div class="form-check form-check-inline">
               <%= check_box_tag "days_of_week[]", day_value, false, class: "form-check-input", id: "day_#{day_value}" %>
@@ -34,7 +30,6 @@
             </div>
           <% end %>
         </div>
-
         <!-- Inicio -->
         <div class="mb-3">
           <%= label_tag :start_time, "Hora inicio", class: "form-label fw-semibold" %>
@@ -42,7 +37,6 @@
                 options_for_select((0..23).map { |h| ["#{h}:00", h] }),
                 class: "form-select" %>
         </div>
-
         <!-- Fin -->
         <div class="mb-3">
           <%= label_tag :end_time, "Hora fin", class: "form-label fw-semibold" %>
@@ -50,19 +44,16 @@
                 options_for_select((1..24).map { |h| ["#{h}:00", h] }),
                 class: "form-select" %>
         </div>
-
         <%= submit_tag "Generar Horarios", class: "btn btn-primary" %>
-
+        <%= link_to "Cancelar",
+            community_common_spaces_path(@common_space.community),
+            class: "btn btn-secondary ms-2" %>
       <% end %>
-
     </div>
   </div>
-
   <h3 class="h5 text-primary mb-3">Horarios ya cargados</h3>
-
   <div class="card shadow-sm">
     <div class="card-body">
-
       <% if @common_space.usable_hours.any? %>
         <ul class="list-group">
           <% @common_space.usable_hours.order(:start).each do |hour| %>
@@ -79,8 +70,6 @@
       <% else %>
         <p class="text-muted mb-0">No hay horarios registrados.</p>
       <% end %>
-
     </div>
   </div>
-
 </div>

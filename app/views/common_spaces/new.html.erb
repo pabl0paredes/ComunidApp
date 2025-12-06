@@ -28,6 +28,9 @@
 
         <%= f.submit "Crear Espacio Común", class: "btn btn-primary" %>
 
+        <%= link_to "Cancelar",
+            community_common_spaces_path(@community),
+            class: "btn btn-secondary ms-2" %>
       <% end %>
 
     </div>

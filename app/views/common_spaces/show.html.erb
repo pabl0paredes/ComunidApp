@@ -17,11 +17,14 @@
 
   <hr>
 
-  <%= link_to "Mis reservas aquí",
-      common_space_bookings_path(@common_space, resident_id: current_user.resident.id),
-      data: { turbo_frame: "new_booking" },
-      class: "btn btn-success mb-3 rounded-pill" %>
-  <%= turbo_frame_tag "new_booking"%>
+  <% if current_user.resident.present? %>
+    <%= link_to "Mis reservas aquí",
+        common_space_bookings_path(@common_space, resident_id: current_user.resident.id),
+        data: { turbo_frame: "new_booking" },
+        class: "btn btn-success mb-3 rounded-pill" %>
+
+    <%= turbo_frame_tag "new_booking" %>
+  <% end %>
 
   <h3>Reservas</h3>
 
@@ -30,17 +33,17 @@
       data: { turbo_frame: "new_booking" },
       class: "btn btn-success mb-3 rounded-pill" %>
 
-  <%= turbo_frame_tag "new_booking"%>
+  <%= turbo_frame_tag "new_booking" %>
 
   <ul class="list-group">
     <% @bookings.each do |booking| %>
-    <div id="bookings">
-      <%= render "booking", booking: booking %>
-    </div>
+      <div id="bookings">
+        <%= render "booking", booking: booking %>
+      </div>
     <% end %>
   </ul>
 
   <%= link_to "← Volver a espacios comunes",
-    community_common_spaces_path(@common_space.community),
-    class: "btn btn-secondary mt-3 mb-3 rounded-pill" %>
+      community_common_spaces_path(@common_space.community),
+      class: "btn btn-secondary mt-3 mb-3 rounded-pill" %>
 </div>
