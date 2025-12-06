@@ -58,4 +58,8 @@ Rails.application.routes.draw do
 
   resources :questions, only: [:index, :create]
 
+  resource :chat_session, only: [] do
+    post :reset
+  end
+
 end

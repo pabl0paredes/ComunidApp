@@ -1,15 +1,27 @@
-<%= simple_form_for question,
-    html: { class: "mt-4", id: "new_question_form" } do |f| %>
-  <div class="input-group mb-3 w-100">
-    <div class="form-floating flex-grow-1">
-      <%= f.input :user_question,
-                  label: false,
-                  wrapper: false,
-                  input_html: { class: "form-control", placeholder: "Escribí tu pregunta..." } %>
-      <%= f.label :user_question, "Tu pregunta" %>
+<div data-controller="clear-form">
+  <%= simple_form_for question,
+      html: { class: "mt-4", id: "new_question_form" },
+      data: { action: "turbo:submit-end->clear-form#clear" } do |f| %>
+
+    <div class="input-group mb-3 w-100">
+      <div class="form-floating flex-grow-1">
+
+        <%= f.input :user_question,
+                    label: false,
+                    wrapper: false,
+                    input_html: {
+                      class: "form-control",
+                      placeholder: "Escribí tu pregunta...",
+                      data: { "clear-form-target": "input" }
+                    } %>
+
+        <%= f.label :user_question, "Tu pregunta" %>
+      </div>
+
+      <button class="btn btn-primary" id="new-question-button" type="submit">
+        Preguntar
+      </button>
     </div>
-    <button class="btn btn-primary" id="new-question-button" type="submit">
-      Preguntar
-    </button>
-  </div>
-<% end %>
+
+  <% end %>
+</div>

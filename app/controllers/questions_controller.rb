@@ -1,20 +1,27 @@
 # app/controllers/questions_controller.rb
 class QuestionsController < ApplicationController
   def index
-    # 1. Obtener o crear la única sesión del usuario
-    @chat_session = current_chat_session
+    # 1. Buscar si existe una sesión previa
+    old_session = ChatSession.find_by(user: current_user)
 
-    # 2. Cargar solo las preguntas de esa sesión
-    @questions = @chat_session.questions.order(:created_at)
+    # 2. Si existe, borrar todo y eliminarla
+    if old_session
+      old_session.questions.delete_all
+      old_session.destroy
+    end
 
-    # 3. Pregunta nueva ya asociada a esa sesión
-    @question = Question.new(
-      chat_session: @chat_session,
-      user: current_user
-    )
+    # 3. Crear una sesión nueva y limpia
+    @chat_session = ChatSession.create!(user: current_user)
+
+    # 4. Sin preguntas (acaba de generarse)
+    @questions = []
+
+    # 5. Crear pregunta nueva asociada a esta sesión
+    @question = Question.new(chat_session: @chat_session, user: current_user)
 
     authorize @question
   end
+
 
   def create
     @question = current_user.questions.build(question_params)
