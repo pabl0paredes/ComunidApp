@@ -55,150 +55,196 @@
 
 
 <script>
-  function initChatbot() {
-    const btn = document.getElementById("chatbot-btn");
-    const win = document.getElementById("chat-window");
-    if (!btn || !win) return;
+function initChatbot() {
+  const btn = document.getElementById("chatbot-btn");
+  const win = document.getElementById("chat-window");
+  if (!btn || !win) return;
 
-    // Evitar inicializar dos veces con Turbo
-    if (btn.dataset.chatbotInitialized === "true") return;
-    btn.dataset.chatbotInitialized = "true";
+  if (btn.dataset.chatbotInitialized === "true") return;
+  btn.dataset.chatbotInitialized = "true";
 
-    // --- Drag horizontal del botón ---
-    let dragging = false;
-    let offsetX = 0;
-    let moved = false;
+  const userId = btn.dataset.userId || "guest";
+  const posKeyBtn = `chatbot_position_btn_${userId}`;
+  const posKeyWin = `chatbot_position_win_${userId}`;
+  const stateKey  = `chatbot_open_${userId}`;
 
-    btn.addEventListener("mousedown", (e) => {
-      dragging = true;
-      moved = false;
-      const rect = btn.getBoundingClientRect();
-      offsetX = e.clientX - rect.left;
-      btn.style.cursor = "grabbing";
-    });
+  /* -------------------------
+     RESTAURAR ESTADO AL CARGAR
+     ------------------------- */
+  const savedBtn = localStorage.getItem(posKeyBtn);
+  if (savedBtn) {
+    const { left } = JSON.parse(savedBtn);
+    btn.style.left = `${left}px`;
+    btn.style.right = "auto";
+  }
 
-    document.addEventListener("mousemove", (e) => {
-      if (!dragging) return;
-      moved = true;
+  const savedWin = localStorage.getItem(posKeyWin);
+  if (savedWin) {
+    const { left, bottom, open } = JSON.parse(savedWin);
+    win.style.left = `${left}px`;
+    win.style.bottom = `${bottom}px`;
+    if (open) win.style.display = "block";
+  } else {
+    // si nunca se guardó, normal
+    win.style.display = "none";
+  }
 
-      let x = e.clientX - offsetX;
-      const maxX = window.innerWidth - btn.offsetWidth;
-      if (x < 0) x = 0;
-      if (x > maxX) x = maxX;
+  /* ---------------------------------
+     DRAG DEL BOTÓN + GUARDAR POSICIÓN
+     --------------------------------- */
+  let dragging = false;
+  let moved = false;
+  let offsetX = 0;
 
-      btn.style.left = `${x}px`;
-      btn.style.right = "auto";      // dejamos de usar right una vez que se mueve
+  btn.addEventListener("mousedown", (e) => {
+    dragging = true;
+    moved = false;
+    const rect = btn.getBoundingClientRect();
+    offsetX = e.clientX - rect.left;
+    btn.style.cursor = "grabbing";
+  });
 
-      // Si el chat está abierto, moverlo junto al botón
-      if (win.style.display === "block") {
-        const btnRect = btn.getBoundingClientRect();
-        const panelRect = win.getBoundingClientRect();
+  document.addEventListener("mousemove", (e) => {
+    if (!dragging) return;
+    moved = true;
 
-        // borde derecho del botón alineado con borde derecho de ventana
-        let left = btnRect.right - panelRect.width;
+    let x = e.clientX - offsetX;
+    const maxX = window.innerWidth - btn.offsetWidth;
 
-        // clamp horizontal
-        if (left < 0) left = 0;
-        const maxLeft = window.innerWidth - panelRect.width;
-        if (left > maxLeft) left = maxLeft;
+    if (x < 0) x = 0;
+    if (x > maxX) x = maxX;
 
-        // mantener ventana sobre el botón
-        let bottom = window.innerHeight - btnRect.top + 10;
-        const maxBottom = window.innerHeight - panelRect.height;
-        if (bottom > maxBottom) bottom = maxBottom;
-        if (bottom < 0) bottom = 0;
+    btn.style.left = `${x}px`;
+    btn.style.right = "auto";
 
-        win.style.left = `${left}px`;
-        win.style.bottom = `${bottom}px`;
-      }
+    // Guardar posición del botón mientras se mueve
+    localStorage.setItem(posKeyBtn, JSON.stringify({ left: x }));
 
-    });
-
-    document.addEventListener("mouseup", () => {
-      if (!dragging) return;
-      dragging = false;
-      btn.style.cursor = "grab";
-
-      // Si se arrastró, evitamos que el mouseup dispare el click del botón
-      if (moved) {
-        btn.dataset.preventClick = "true";
-        setTimeout(() => {
-          btn.dataset.preventClick = "false";
-        }, 50);
-      }
-    });
-
-    // --- Click: toggle ventana arriba del botón ---
-    btn.addEventListener("click", () => {
-      if (btn.dataset.preventClick === "true") return;
-
-      const isOpen = win.style.display === "block";
-
-      // Si está abierta → la cerramos
-      if (isOpen) {
-        win.style.display = "none";
-        return;
-      }
-
-      // Mostrar primero para poder medir tamaño real
-      win.style.display = "block";
-      win.style.right = "auto";
-      win.style.top = "auto";
-
+    // Si el chat está abierto, lo movemos relativo y guardamos
+    if (win.style.display === "block") {
       const btnRect = btn.getBoundingClientRect();
       const panelRect = win.getBoundingClientRect();
 
       let left = btnRect.right - panelRect.width;
-      let bottom = window.innerHeight - btnRect.top + 10; // 10px sobre el botón
-
-      // Clamp horizontal (no salir del viewport)
       if (left < 0) left = 0;
-      const maxLeft = window.innerWidth - panelRect.width;
-      if (left > maxLeft) left = maxLeft;
+      if (left > window.innerWidth - panelRect.width) left = window.innerWidth - panelRect.width;
 
-      // Clamp vertical desde abajo (por si es muy alto)
-      const maxBottom = window.innerHeight - panelRect.height;
-      if (bottom > maxBottom) bottom = maxBottom;
+      let bottom = window.innerHeight - btnRect.top + 10;
       if (bottom < 0) bottom = 0;
+      if (bottom > window.innerHeight - panelRect.height) bottom = window.innerHeight - panelRect.height;
 
       win.style.left = `${left}px`;
       win.style.bottom = `${bottom}px`;
-    });
 
-    // --- Botón minimizar dentro del panel ---
-    const minimizeBtn = document.getElementById("minimize-chat");
-    if (minimizeBtn) {
-      minimizeBtn.addEventListener("click", () => {
-        win.style.display = "none";
-      });
+      // Guardar posición de ventana
+      localStorage.setItem(
+        posKeyWin,
+        JSON.stringify({ left, bottom, open: true })
+      );
+    }
+  });
+
+  document.addEventListener("mouseup", () => {
+    if (!dragging) return;
+    dragging = false;
+    btn.style.cursor = "grab";
+
+    if (moved) {
+      btn.dataset.preventClick = "true";
+      setTimeout(() => (btn.dataset.preventClick = "false"), 50);
+    }
+  });
+
+  /* -------------------------
+     CLICK: ABRIR / CERRAR CHAT
+     ------------------------- */
+  btn.addEventListener("click", () => {
+    if (btn.dataset.preventClick === "true") return;
+
+    const isOpen = win.style.display === "block";
+
+    if (isOpen) {
+      win.style.display = "none";
+      localStorage.setItem(stateKey, "closed");
+
+      const saved = localStorage.getItem(posKeyWin);
+      if (saved) {
+        let pos = JSON.parse(saved);
+        pos.open = false;
+        localStorage.setItem(posKeyWin, JSON.stringify(pos));
+      }
+      return;
     }
 
-    // --- Reposicionar en resize manteniendo lógica "encima del botón" ---
-    window.addEventListener("resize", () => {
-      if (win.style.display !== "block") return;
+    // Abrir
+    win.style.display = "block";
+    localStorage.setItem(stateKey, "open");
 
-      const btnRect = btn.getBoundingClientRect();
-      const panelRect = win.getBoundingClientRect();
+    const btnRect = btn.getBoundingClientRect();
+    const panelRect = win.getBoundingClientRect();
 
-      let left   = btnRect.left + (btnRect.width / 2) - (panelRect.width / 2);
-      let bottom = window.innerHeight - btnRect.top + 10;
+    let left = btnRect.right - panelRect.width;
+    if (left < 0) left = 0;
+    if (left > window.innerWidth - panelRect.width) left = window.innerWidth - panelRect.width;
 
-      if (left < 0) left = 0;
-      const maxLeft = window.innerWidth - panelRect.width;
-      if (left > maxLeft) left = maxLeft;
+    let bottom = window.innerHeight - btnRect.top + 10;
+    if (bottom < 0) bottom = 0;
+    if (bottom > window.innerHeight - panelRect.height) bottom = window.innerHeight - panelRect.height;
 
-      const maxBottom = window.innerHeight - panelRect.height;
-      if (bottom > maxBottom) bottom = maxBottom;
-      if (bottom < 0) bottom = 0;
+    win.style.left = `${left}px`;
+    win.style.bottom = `${bottom}px`;
 
-      win.style.left = `${left}px`;
-      win.style.bottom = `${bottom}px`;
-    });
-  }
+    // Guardar posición y estado
+    localStorage.setItem(
+      posKeyWin,
+      JSON.stringify({ left, bottom, open: true })
+    );
+  });
 
-  // Hooks Turbo
-  document.addEventListener("turbo:load", initChatbot);
-  document.addEventListener("turbo:render", initChatbot);
-  document.addEventListener("DOMContentLoaded", initChatbot);
+  /* -------------------------
+     MINIMIZAR (cerrar ventana)
+     ------------------------- */
+  const minimizeBtn = document.getElementById("minimize-chat");
+  minimizeBtn?.addEventListener("click", () => {
+    win.style.display = "none";
+    localStorage.setItem(stateKey, "closed");
 
+    const saved = localStorage.getItem(posKeyWin);
+    if (saved) {
+      let pos = JSON.parse(saved);
+      pos.open = false;
+      localStorage.setItem(posKeyWin, JSON.stringify(pos));
+    }
+  });
+
+  /* -------------------------
+     RESIZE → reposicionar y guardar
+     ------------------------- */
+  window.addEventListener("resize", () => {
+    if (win.style.display !== "block") return;
+
+    const btnRect = btn.getBoundingClientRect();
+    const panelRect = win.getBoundingClientRect();
+
+    let left = btnRect.left + (btnRect.width / 2) - (panelRect.width / 2);
+    if (left < 0) left = 0;
+    if (left > window.innerWidth - panelRect.width) left = window.innerWidth - panelRect.width;
+
+    let bottom = window.innerHeight - btnRect.top + 10;
+    if (bottom < 0) bottom = 0;
+    if (bottom > window.innerHeight - panelRect.height) bottom = window.innerHeight - panelRect.height;
+
+    win.style.left = `${left}px`;
+    win.style.bottom = `${bottom}px`;
+
+    localStorage.setItem(
+      posKeyWin,
+      JSON.stringify({ left, bottom, open: true })
+    );
+  });
+}
+
+document.addEventListener("turbo:load", initChatbot);
+document.addEventListener("turbo:render", initChatbot);
+document.addEventListener("DOMContentLoaded", initChatbot);
 </script>
