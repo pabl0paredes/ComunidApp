@@ -76,6 +76,9 @@
   </div>
 
   <!-- Acciones de reservas -->
+  <%= link_to "Mis reservas", common_space_bookings_path(@common_space), data: { turbo_frame: "my_bookings" }%>
+  <%= turbo_frame_tag "my_bookings"%>
+
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h3 class="fw-bold text-primary mb-0">
       <i class="fa-solid fa-calendar-check me-2"></i>
