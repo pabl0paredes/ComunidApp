@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_12_05_210231) do
+ActiveRecord::Schema[7.1].define(version: 2025_12_06_065214) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "vector"
@@ -60,6 +60,13 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_05_210231) do
     t.vector "embedding"
     t.index ["common_space_id"], name: "index_bookings_on_common_space_id"
     t.index ["resident_id"], name: "index_bookings_on_resident_id"
+  end
+
+  create_table "chat_sessions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_chat_sessions_on_user_id"
   end
 
   create_table "chats", force: :cascade do |t|
@@ -144,6 +151,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_05_210231) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.vector "question_embedding"
+    t.bigint "chat_session_id", null: false
+    t.index ["chat_session_id"], name: "index_questions_on_chat_session_id"
     t.index ["user_id"], name: "index_questions_on_user_id"
   end
 
@@ -322,6 +332,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_05_210231) do
   add_foreign_key "administrators", "users"
   add_foreign_key "bookings", "common_spaces"
   add_foreign_key "bookings", "residents"
+  add_foreign_key "chat_sessions", "users"
   add_foreign_key "chats", "communities"
   add_foreign_key "common_expenses", "communities"
   add_foreign_key "common_spaces", "communities"
@@ -329,6 +340,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_05_210231) do
   add_foreign_key "expense_details", "common_expenses"
   add_foreign_key "messages", "chats"
   add_foreign_key "messages", "users"
+  add_foreign_key "questions", "chat_sessions"
   add_foreign_key "questions", "users"
   add_foreign_key "residents", "communities"
   add_foreign_key "residents", "users"

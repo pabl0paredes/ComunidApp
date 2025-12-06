@@ -1,11 +1,8 @@
 <div id="<%= dom_id(question) %>" class="question my-3">
-  <%= turbo_stream_from dom_id(question) %>
-
   <p class="user-question fw-semibold">
-    🧑‍💻 <%= question.user_question %>
+    <%= question.user_question %>
   </p>
-
   <p class="ai-answer">
-    🤖 <%= question.ai_answer || "..." %>
+    <%= question.ai_answer.presence || "..." %>
   </p>
 </div>

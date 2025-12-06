@@ -9,14 +9,14 @@ class UsableHour < ApplicationRecord
 
   private
 
-  def set_embedding
+ def set_embedding
     client = OpenAI::Client.new
 
     text = <<~TEXT
       Horario disponible:
       - Espacio común: #{common_space.name}
-      - Fecha: #{date}
-      - Hora: #{start_time} a #{end_time}
+      - Inicio: #{start}
+      - Fin: #{self.end}
       - Disponible: #{is_available}
     TEXT
 
