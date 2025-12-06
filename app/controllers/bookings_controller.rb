@@ -1,6 +1,7 @@
 class BookingsController < ApplicationController
   before_action :set_common_space, only: [:index, :new, :create]
   before_action :set_booking, only: [:show, :edit, :update, :destroy]
+
   def index
     @bookings = policy_scope(@common_space.bookings.order(start: :asc))
     authorize Booking
@@ -9,11 +10,13 @@ class BookingsController < ApplicationController
   def show
     authorize @booking
   end
+
   def new
     @booking = Booking.new
     @usable_hours = UsableHour.where(common_space: @common_space)
     authorize @booking
   end
+
   def create
     @booking = Booking.new(booking_params)
     @booking.end = @booking.start + 1.hour
@@ -22,6 +25,8 @@ class BookingsController < ApplicationController
     authorize @booking
 
     if @booking.save
+      usable_hour = UsableHour.find_by(common_space: @common_space, start: @booking.start)
+      usable_hour.update(is_available: false)
       respond_to do |format|
         format.html {redirect_to common_space_bookings_path(@common_space), notice: "Reserva creada con éxito."}
         format.turbo_stream
