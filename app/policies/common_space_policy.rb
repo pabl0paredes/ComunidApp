@@ -30,10 +30,7 @@ class CommonSpacePolicy < ApplicationPolicy
     admin_of_existing_space?
   end
 
-
-
   private
-
 
   def admin_of_community_for_new_space?
     record.is_a?(Community) && record.administrator_id == user.id

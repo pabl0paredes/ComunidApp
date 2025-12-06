@@ -1,40 +1,29 @@
 <div class="container">
   <h1><%= @common_space.name %></h1>
-
   <p><%= @common_space.description %></p>
   <p>Precio: S/ <%= @common_space.price %></p>
-
   <hr>
-
   <h3>Horarios Disponibles</h3>
-
   <% @usable_hours.each do |hour| %>
     <p>
       <strong><%= Date::DAYNAMES[hour.start.wday] %>:</strong>
       <%= hour.start.strftime("%H:%M") %> - <%= hour.end.strftime("%H:%M") %>
     </p>
   <% end %>
-
   <hr>
-
-  <% if current_user.resident.present? %>
+  <% if current_user.resident %>
     <%= link_to "Mis reservas aquí",
-        common_space_bookings_path(@common_space, resident_id: current_user.resident.id),
-        data: { turbo_frame: "new_booking" },
-        class: "btn btn-success mb-3 rounded-pill" %>
-
-    <%= turbo_frame_tag "new_booking" %>
+      common_space_bookings_path(@common_space, resident_id: current_user.resident.id),
+      data: { turbo_frame: "new_booking" },
+      class: "btn btn-success mb-3 rounded-pill" %>
+    <%= turbo_frame_tag "new_booking"%>
   <% end %>
-
   <h3>Reservas</h3>
-
   <%= link_to "Nueva reserva",
       new_common_space_booking_path(@common_space),
       data: { turbo_frame: "new_booking" },
       class: "btn btn-success mb-3 rounded-pill" %>
-
-  <%= turbo_frame_tag "new_booking" %>
-
+  <%= turbo_frame_tag "new_booking"%>
   <ul class="list-group">
     <% @bookings.each do |booking| %>
       <div id="bookings">
@@ -42,8 +31,7 @@
       </div>
     <% end %>
   </ul>
-
   <%= link_to "← Volver a espacios comunes",
-      community_common_spaces_path(@common_space.community),
-      class: "btn btn-secondary mt-3 mb-3 rounded-pill" %>
+    community_common_spaces_path(@common_space.community),
+    class: "btn btn-secondary mt-3 mb-3 rounded-pill" %>
 </div>
