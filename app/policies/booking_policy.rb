@@ -33,4 +33,12 @@ class BookingPolicy < ApplicationPolicy
     # boking.user == current_user
     record.resident == user.resident
   end
+
+  def available_hours?
+    true
+  end
+
+  def available_dates?
+    true
+  end
 end

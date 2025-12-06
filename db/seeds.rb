@@ -118,6 +118,7 @@ puts "Creando horarios para los espacios…"
 [espacio1, espacio2, espacio3].each do |esp|
   (1..15).each do |i|
     (0..5).each do |j|
+      puts 15+j
       UsableHour.create!(
         common_space: esp,
         start: Time.new(2025,12,i,15+j,0,0),

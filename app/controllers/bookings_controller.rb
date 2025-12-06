@@ -11,11 +11,12 @@ class BookingsController < ApplicationController
   end
   def new
     @booking = Booking.new
-    # @usable_weekdays = UsableHour.where(common_space_id: @common_space.id).pluck(:weekday)
+    @usable_hours = UsableHour.where(common_space: @common_space)
     authorize @booking
   end
   def create
     @booking = Booking.new(booking_params)
+    @booking.end = @booking.start + 1.hour
     @booking.common_space = @common_space
     @booking.resident = current_user.resident
     authorize @booking
@@ -48,6 +49,34 @@ class BookingsController < ApplicationController
     @booking.destroy
     redirect_to common_space_bookings_path(@booking.common_space), notice: "Reserva eliminada"
   end
+
+  def available_hours
+    authorize Booking
+    date = Date.parse(params[:date])
+    common_space = CommonSpace.find(params[:common_space_id])
+
+    usable_hours = UsableHour
+      .where(common_space: common_space)
+      .where("DATE(start) = ?", date)
+      .where(is_available: true)
+      .order(:start)
+
+    render json: usable_hours.map { |u| u.attributes.slice("id", "start", "end") }
+  end
+
+  def available_dates
+    authorize Booking
+    common_space = CommonSpace.find(params[:common_space_id])
+
+    dates = UsableHour
+              .where(common_space: common_space, is_available: true)
+              .pluck(:start)
+              .map { |d| d.to_date }
+              .uniq
+
+    render json: dates
+  end
+
 
   private
 

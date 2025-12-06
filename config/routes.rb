@@ -28,13 +28,17 @@ Rails.application.routes.draw do
 
   resources :common_spaces, only: [:show, :destroy, :edit, :update] do
     # resources :bookings, only: [:create] #para ver las reservas dentro de los common spaces y posteriormente hacer una reserva
-    resources :bookings, only: [:index, :new, :create, :show]
+    resources :bookings, only: [:index, :new, :create, :show]  do
+      collection do
+        get :available_hours
+        get :available_dates
+      end
+    end
     resources :usable_hours, only: [:create, :update]
   end
 
   resources :usable_hours, only: [:destroy]
 
-  #resources :bookings, only: [:show, :destroy, :edit, :update, :index]
   resources :bookings, only: [:destroy, :edit, :update]
 
   resources :common_expenses, only: [:show, :destroy, :edit, :update] do
