@@ -9,6 +9,8 @@ class User < ApplicationRecord
   has_many :show_chats
   has_many :messages
 
+  has_many :questions
+
   validates :name, presence: true
   validates :phone, presence: true
 end
