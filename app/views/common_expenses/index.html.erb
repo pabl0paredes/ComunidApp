@@ -1,88 +1,75 @@
 <div class="container mt-4 common-expenses-page">
-
   <!-- Breadcrumb / volver -->
   <div class="mb-3">
     <%= link_to "← Volver a Comunidad", @community, class: "text-decoration-none text-primary fw-semibold" %>
   </div>
-
   <!-- Título -->
   <h1 class="h3 mb-4">Gastos Comunes – <%= @community.name %></h1>
-
   <% if @community.administrator.user == current_user %>
-
     <!-- =============================== ADMIN =============================== -->
-
     <div class="d-flex justify-content-end mb-3">
       <%= link_to "Nuevo Gasto Común",
           new_community_common_expense_path(@community),
           class: "btn btn-primary" %>
     </div>
-
     <% if @common_expenses.any? %>
-
       <% @common_expenses.each do |common_expense| %>
-
         <% all_edns = common_expense.expense_details_residents %>
         <% approved = all_edns.count { |e| e.approved? } %>
         <% total = all_edns.count %>
         <% progress = total > 0 ? ((approved.to_f / total) * 100).round : 0 %>
-
         <!-- CARD ADMIN -->
         <div class="admin-expense-card shadow-sm">
-
           <div class="aec-header">
             <div>
               <div class="aec-date"><%= common_expense.date.strftime("%d/%m/%Y") %></div>
               <div class="aec-total">Total: <%= number_to_currency(common_expense.total) %></div>
             </div>
-
-            <div class="aec-actions">
-              <%= link_to "Detalles",
-                common_expense_expense_details_path(common_expense),
-                class: "btn btn-sm btn-outline-success" %>
-
-              <% if policy(common_expense).edit? %>
-                <%= link_to "Editar",
-                    edit_common_expense_path(common_expense),
-                    class: "btn btn-sm btn-outline-primary" %>
+            <div class="aec-actions d-flex gap-2">
+              <!-- DETALLES -->
+              <%= link_to common_expense_expense_details_path(common_expense),
+      class: "text-primary action-icon",
+      title: "Detalles" do %>
+                <i class="bi bi-eye-fill"></i>
               <% end %>
-
+              <!-- EDITAR -->
+              <% if policy(common_expense).edit? %>
+                <%= link_to edit_common_expense_path(common_expense),
+        class: "text-blue-600 action-icon",
+        title: "Editar" do %>
+                  <i class="bi bi-pencil-fill"></i>
+                <% end %>
+              <% end %>
+              <!-- ELIMINAR -->
               <% if policy(common_expense).destroy? %>
-                <%= link_to "Eliminar",
-                    common_expense_path(common_expense),
-                    data: {
-                      turbo_method: :delete,
-                      turbo_confirm: "¿Seguro que deseas eliminar este gasto común?"
-                    },
-                    class: "btn btn-sm btn-outline-danger" %>
+                <%= link_to common_expense_path(common_expense),
+        data: {
+          turbo_method: :delete,
+          turbo_confirm: "¿Seguro que deseas eliminar este gasto común?"
+        },
+        class: "text-red-500 action-icon",
+        title: "Eliminar" do %>
+                  <i class="bi bi-trash-fill"></i>
+                <% end %>
               <% end %>
             </div>
           </div>
-
           <!-- Barra de progreso -->
           <div class="aec-progress-wrapper">
             <div class="aec-progress-bar" style="width: <%= progress %>%"></div>
           </div>
-
           <div class="aec-progress-label">
             <%= progress %>% aprobado
           </div>
         </div>
-
       <% end %>
-
     <% else %>
-
       <div class="alert alert-info text-center">
         Todavía no se registraron gastos comunes en esta comunidad.
       </div>
-
     <% end %>
-
   <% else %>
-
     <!-- =============================== VECINO =============================== -->
-
     <!-- Resumen -->
     <div class="resident-summary mb-4">
       <div class="summary-card shadow-sm">
@@ -97,54 +84,39 @@
         </div>
       </div>
     </div>
-
     <% if @common_expenses.any? %>
-
       <div class="expense-cards">
-
         <% @common_expenses.each do |ce| %>
-
           <% amount_for_user = @resident_amounts[ce.id] || 0 %>
           <% edns = ce.expense_details_residents.where(resident: current_user.resident) %>
-
           <% approved_count = edns.count { |e| e.approved? } %>
           <% total_count = edns.count %>
           <% progress = total_count > 0 ? ((approved_count.to_f / total_count) * 100).round : 0 %>
-
           <!-- CARD CLICKEABLE (Vecino) -->
           <div
             class="expense-card shadow-sm"
             data-controller="click-card"
             data-click-card-url-value="<%= common_expense_expense_details_path(ce) %>"
             data-action="click->click-card#go"
-          >
+            >
             <div class="card-header-line">
               <span class="date"><%= ce.date.strftime("%d/%m/%Y") %></span>
               <span class="progress-pill"><%= progress %>% completado</span>
             </div>
-
             <div class="amount mb-2">
               <strong>Tu parte:</strong> <%= number_to_currency(amount_for_user) %>
             </div>
-
             <!-- BARRA -->
             <div class="progress-container">
               <div class="progress-bar" style="width: <%= progress %>%"></div>
             </div>
-
           </div>
-
         <% end %>
       </div>
-
     <% else %>
-
       <div class="alert alert-info text-center mx-auto" style="max-width: 400px;">
         Todavía no tenés gastos comunes asignados.
       </div>
-
     <% end %>
-
   <% end %>
-
 </div>

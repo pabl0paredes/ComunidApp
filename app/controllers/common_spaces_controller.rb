@@ -1,11 +1,12 @@
 class CommonSpacesController < ApplicationController
     before_action :set_common_space, only: [:show, :edit, :update, :destroy]
     before_action :set_community, only: [:new, :create]
+    skip_after_action :verify_authorized, only: :index
 
   def index
     @community = Community.find(params[:community_id])
     @common_spaces = policy_scope(@community.common_spaces)
-    authorize @common_spaces
+   
   end
 
   def show
@@ -24,14 +25,15 @@ class CommonSpacesController < ApplicationController
   def new
     @community = Community.find(params[:community_id])
     @common_space = CommonSpace.new
-    authorize @common_space
+    authorize @community, policy_class: CommonSpacePolicy
   end
 
   def create
     @community = Community.find(params[:community_id])
     @common_space = CommonSpace.new(common_space_params)
     @common_space.community = @community
-    authorize @common_space
+    authorize @community, policy_class: CommonSpacePolicy
+
 
     if @common_space.save
       redirect_to edit_common_space_path(@common_space), notice: "Espacio creado correctamente"
