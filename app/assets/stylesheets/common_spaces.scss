@@ -1,0 +1,42 @@
+.common-spaces-page {
+  .card {
+    border-radius: 20px;
+    transition: 0.25s ease;
+    border: 1px solid #e5e7eb;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+    }
+  }
+
+  .space-icon-circle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f2f0ff;
+    width: 85px;
+    height: 85px;
+    border-radius: 25px;
+    margin: 0 auto 10px auto;
+    transition: 0.2s ease;
+
+    i {
+      font-size: 42px !important;
+      color: #3B5BDB !important;
+    }
+  }
+
+  .availability {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .availability-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+}

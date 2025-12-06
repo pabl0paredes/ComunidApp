@@ -1,4 +1,4 @@
-<div class="container mt-4">
+<div class="container mt-4 common-spaces-page">
   <div>
     <%= link_to "Volver a Comunidad", @community %>
   </div>
@@ -6,7 +6,7 @@
     <i class="fa-solid fa-building" style="color:#7360f2;"></i>
     Espacios comunes de <%= @community.name %>
   </h1>
-  <% if policy(CommonSpace.new(community: @community)).create? %>
+  <% if @community.administrator.user == current_user%>
     <div class="text-end mb-3">
       <%= link_to new_community_common_space_path(@community),
         class: "btn btn-primary rounded-pill" do %>
@@ -23,13 +23,23 @@
               <%= link_to common_space_path(space), class: "space-icon-circle text-decoration-none" do %>
                 <% case space.name.downcase %>
                 <% when "quincho" %>
-                  <i class="fa-solid fa-utensils"></i>
-                <% when "sala multiusos" %>
-                  <i class="fa-solid fa-people-group"></i>
-                <% when "cancha", "cancha deportiva" %>
-                  <i class="fa-solid fa-futbol"></i>
+                  <i class="fa-solid fa-burger" style="color:#3B5BDB; font-size:42px;"></i>
+                <% when "sala multiuso", "sala multiusos" %>
+                  <i class="fa-solid fa-users" style="color:#3B5BDB; font-size:42px;"></i>
+                <% when "cancha", "cancha deportiva", "cancha de tennis", "cancha tenis" %>
+                  <i class="fa-solid fa-basketball" style="color:#3B5BDB; font-size:42px;"></i>
+                <% when "piscina", "piscina climatizada" %>
+                  <i class="fa-solid fa-person-swimming" style="color:#3B5BDB; font-size:42px;"></i>
+                <% when "jaula perros", "jaula de perros", "zona para gatos", "gatos", "perros", "mascotas" %>
+                  <i class="fa-solid fa-paw" style="color:#3B5BDB; font-size:42px;"></i>
+                <% when "sala del te", "salón de té", "te" %>
+                  <i class="fa-solid fa-mug-saucer" style="color:#3B5BDB; font-size:42px;"></i>
+                <% when "salon de juegos", "sala de juegos" %>
+                  <i class="fa-solid fa-gamepad" style="color:#3B5BDB; font-size:42px;"></i>
+                <% when "gimnasio", "gym" %>
+                  <i class="fa-solid fa-dumbbell" style="color:#3B5BDB; font-size:42px;"></i>
                 <% else %>
-                  <i class="fa-solid fa-building"></i>
+                  <i class="fa-solid fa-building" style="color:#3B5BDB; font-size:42px;"></i>
                 <% end %>
               <% end %>
               <h5 class="fw-normal text-center mt-2"><%= space.name %></h5>
