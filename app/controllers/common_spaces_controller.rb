@@ -1,5 +1,6 @@
 class CommonSpacesController < ApplicationController
     before_action :set_common_space, only: [:show, :edit, :update, :destroy]
+    before_action :set_community, only: [:new, :create]
 
   def index
     @community = Community.find(params[:community_id])
@@ -8,7 +9,7 @@ class CommonSpacesController < ApplicationController
   end
 
   def show
-    authorize @common_space 
+    authorize @common_space
     @bookings = @common_space.bookings.order(start: :desc)
     @usable_hours = @common_space.usable_hours.order(:start)
     # @usable_weekdays = UsableHour.where(common_space_id: @common_space.id).pluck(:weekday)
@@ -22,12 +23,12 @@ class CommonSpacesController < ApplicationController
 
   def create
     @community = Community.find(params[:community_id])
-    @common_spaces= CommonSpace.new(common_space_params)
+    @common_space = CommonSpace.new(common_space_params)
     @common_space.community = @community
     authorize @common_space
 
     if @common_space.save
-      redirect_to community_common_spaces_path(@community), notice: "Espacio creado correctamente"
+      redirect_to edit_common_space_path(@common_space), notice: "Espacio creado correctamente"
     else
       render :new, status: :unprocessable_entity
     end
@@ -35,6 +36,7 @@ class CommonSpacesController < ApplicationController
 
   def edit
     authorize @common_space
+    @usable_hour = UsableHour.new
   end
 
   def update
@@ -59,6 +61,11 @@ class CommonSpacesController < ApplicationController
   end
 
   def common_space_params
-    params.require(:common_space).permit(:name, :description, :price, :is_avaible)
+    params.require(:common_space).permit(:name, :description, :price, :is_available)
   end
+
+  def set_community
+    @community = Community.find(params[:community_id])
+  end
+
 end

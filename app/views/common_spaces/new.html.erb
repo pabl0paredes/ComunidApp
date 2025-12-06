@@ -1,0 +1,34 @@
+<div class="container mt-4">
+  <h1 class="h4 text-primary mb-4">Nuevo Espacio Común</h1>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+
+      <%= form_with model: [@community, @common_space], local: true do |f| %>
+
+        <div class="mb-3">
+          <%= f.label :name, "Nombre", class: "form-label fw-semibold" %>
+          <%= f.text_field :name, class: "form-control" %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :description, "Descripción", class: "form-label fw-semibold" %>
+          <%= f.text_area :description, class: "form-control" %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :price, "Precio", class: "form-label fw-semibold" %>
+          <%= f.number_field :price, class: "form-control" %>
+        </div>
+
+        <div class="form-check mb-3">
+          <%= f.check_box :is_available, class: "form-check-input", id: "is_available" %>
+          <%= f.label :is_available, "Disponible", class: "form-check-label" %>
+        </div>
+
+        <%= f.submit "Crear Espacio Común", class: "btn btn-primary" %>
+
+      <% end %>
+
+    </div>
+  </div
