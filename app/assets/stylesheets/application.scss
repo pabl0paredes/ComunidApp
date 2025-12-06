@@ -80,3 +80,21 @@
 .container-fluid {
   color: white !important;
 }
+
+.hour-button {
+  border-width: 2px !important;
+  transition: 0.2s ease;
+}
+
+.hour-button:hover {
+  transform: translateY(-1px);
+  background-color: rgba(13,110,253,0.15);
+}
+
+.active-hour {
+  background-color: #0d6efd !important;
+  color: white !important;
+  border-color: #0d6efd !important;
+  transform: translateY(-2px);
+  box-shadow: 0 0 12px rgba(13,110,253,0.35);
+}

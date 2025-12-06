@@ -1,0 +1,41 @@
+<div class="container mt-4">
+  <h2 class="fw-bold">Nueva reserva para <%= @common_space.name %></h2>
+
+  <div class="mt-3">
+    <%= simple_form_for [@common_space, @booking] do |f| %>
+
+        <div class="row">
+          <div class="col-md-6">
+            <%# <%= f.input :start, as: :string, label:"Inicio", input_html: { data: { controller: "flatpickr", flatpickr_weekdays_value: @usable_weekdays.to_json } }, class: "form-control rounded-pill datetime-picker", placeholder: "Selecciona fecha y hora" %> %>
+            <div class="col-md-6">
+              <%= f.input :date,
+                  as: :string,
+                  label: "Fecha",
+                  input_html: { data: { controller: "booking-date" } },
+                  required: true %>
+            </div>
+
+            <div class="col-md-6">
+              <%= f.input :start,
+                  collection: [],
+                  label: "Hora de inicio",
+                  input_html: { data: { booking_date_target: "hoursSelect" } },
+                  required: true %>
+            </div>
+
+          </div>
+
+
+        </div>
+
+        <%= f.submit "Crear reserva", class: "btn btn-primary mt-3 rounded-pill" %>
+
+      <% if @booking.errors.any? %>
+        <p class="text-danger">La fecha ya esta ocupada por otro vecino</p>
+      <% end %>
+    <% end %>
+  </div>
+
+  <%= link_to "Volver", common_space_path(@common_space),
+      class: "btn btn-secondary mt-3 rounded-pill" %>
+</div>
