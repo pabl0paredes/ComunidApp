@@ -10,38 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_12_06_065214) do
+ActiveRecord::Schema[7.1].define(version: 2025_12_06_155747) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "vector"
-
-  create_table "active_storage_attachments", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "record_type", null: false
-    t.bigint "record_id", null: false
-    t.bigint "blob_id", null: false
-    t.datetime "created_at", null: false
-    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
-    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
-  end
-
-  create_table "active_storage_blobs", force: :cascade do |t|
-    t.string "key", null: false
-    t.string "filename", null: false
-    t.string "content_type"
-    t.text "metadata"
-    t.string "service_name", null: false
-    t.bigint "byte_size", null: false
-    t.string "checksum"
-    t.datetime "created_at", null: false
-    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
-  end
-
-  create_table "active_storage_variant_records", force: :cascade do |t|
-    t.bigint "blob_id", null: false
-    t.string "variation_digest", null: false
-    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
-  end
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -85,7 +57,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_06_065214) do
     t.datetime "end"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.vector "embedding"
+    t.vector "embedding", limit: 1536
     t.index ["common_space_id"], name: "index_bookings_on_common_space_id"
     t.index ["resident_id"], name: "index_bookings_on_resident_id"
   end
@@ -112,7 +84,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_06_065214) do
     t.integer "total", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.vector "embedding"
+    t.vector "embedding", limit: 1536
     t.index ["community_id"], name: "index_common_expenses_on_community_id"
   end
 
@@ -124,7 +96,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_06_065214) do
     t.boolean "is_available"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.vector "embedding"
+    t.vector "embedding", limit: 1536
     t.index ["community_id"], name: "index_common_spaces_on_community_id"
   end
 
@@ -138,7 +110,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_06_065214) do
     t.float "latitude"
     t.float "longitude"
     t.integer "notifications", default: 0
-    t.vector "embedding"
+    t.vector "embedding", limit: 1536
     t.index ["administrator_id"], name: "index_communities_on_administrator_id"
   end
 
@@ -148,7 +120,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_06_065214) do
     t.integer "amount"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.vector "embedding"
+    t.vector "embedding", limit: 1536
     t.index ["common_expense_id"], name: "index_expense_details_on_common_expense_id"
   end
 
@@ -179,7 +151,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_06_065214) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.vector "question_embedding"
+    t.vector "question_embedding", limit: 1536
     t.bigint "chat_session_id", null: false
     t.index ["chat_session_id"], name: "index_questions_on_chat_session_id"
     t.index ["user_id"], name: "index_questions_on_user_id"
@@ -193,7 +165,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_06_065214) do
     t.datetime "updated_at", null: false
     t.string "unit"
     t.boolean "is_accepted", default: false
-    t.vector "embedding"
+    t.vector "embedding", limit: 1536
     t.index ["community_id"], name: "index_residents_on_community_id"
     t.index ["user_id"], name: "index_residents_on_user_id"
   end
@@ -336,7 +308,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_06_065214) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "is_available"
-    t.vector "embedding"
+    t.vector "embedding", limit: 1536
     t.index ["common_space_id"], name: "index_usable_hours_on_common_space_id"
   end
 
