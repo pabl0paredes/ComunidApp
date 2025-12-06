@@ -9,11 +9,17 @@ class CommonSpacesController < ApplicationController
   end
 
   def show
+    @bookings = @common_space.bookings.order(start: :asc)
+    @usable_hours = @common_space.usable_hours.sort_by { |h| [h.start.wday, h.start] }
+
+    if current_user.resident.present?
+      @usable_weekdays = @usable_hours.map { |h| h.start.wday }.uniq
+    else
+      @usable_weekdays = []
+    end
     authorize @common_space
-    @bookings = @common_space.bookings.order(start: :desc)
-    @usable_hours = @common_space.usable_hours.order(:start)
-    # @usable_weekdays = UsableHour.where(common_space_id: @common_space.id).pluck(:weekday)
   end
+
 
   def new
     @community = Community.find(params[:community_id])
