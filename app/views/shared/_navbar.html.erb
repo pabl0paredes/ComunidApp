@@ -1,50 +1,72 @@
-<nav class="navbar navbar-expand-sm navbar-light navbar-lewagon">
-  <div class="container-fluid">
-  <%= link_to root_path, class: "navbar-brand" do %>
-    <%= image_tag "logo1.png", alt: "Logo", class: "navbar-logo" %>
-  <% end %>
+<nav id="mainNavbar"
+     class="navbar navbar-expand-lg fixed-top navbar-dark nav-over-hero">
+  <div class="container-fluid px-4">
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <!-- LOGO -->
+    <%= link_to root_path, class: "navbar-brand d-flex align-items-center gap-2" do %>
+      <%= image_tag "comunidapp_icon.png", alt: "Logo", height: 42, class: "rounded-3 shadow-sm" %>
+    <% end %>
+
+    <!-- TOGGLER -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarMenu" aria-controls="navbarMenu"
+            aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ms-auto align-items-center">
+    <!-- MENU -->
+    <div class="collapse navbar-collapse" id="navbarMenu">
+      <ul class="navbar-nav ms-auto align-items-center gap-2">
+
         <% if user_signed_in? %>
-          <li class="nav-item active">
-            <%= link_to "Inicio", root_path, class: "nav-link" %>
-          </li>
+
+          <!-- Inicio -->
           <li class="nav-item">
-            <%= link_to "Admin Comunidades", communities_path, class: "nav-link" %>
+            <%= link_to "Inicio", root_path,
+              class: "btn btn-outline-light rounded-pill px-4 py-1 fw-semibold shadow-sm" %>
           </li>
+
+          <!-- Admin Comunidades -->
+          <li class="nav-item">
+            <%= link_to "Administrar", communities_path,
+              class: "btn btn-outline-light rounded-pill px-4 py-1 fw-semibold shadow-sm" %>
+          </li>
+
+          <!-- Mi Comunidad -->
           <li class="nav-item">
             <% community = current_user.community %>
-            <% if community.present? %>
-              <%= link_to "Mi Comunidad", community_path(community), class: "nav-link" %>
-            <% else %>
-              <%= link_to "Mi Comunidad", no_community_path, class: "nav-link" %>
-            <% end %>
+            <%= link_to "Mi Comunidad",
+              (community.present? ? community_path(community) : no_community_path),
+              class: "btn btn-primary rounded-pill px-4 py-1 fw-semibold shadow-sm" %>
           </li>
-          <li class="nav-item">
-            <div class="nav-link">
-              <%= current_user.email %>
+
+          <!-- USER + DROPDOWN -->
+          <li class="nav-item dropdown ms-3">
+            <a href="#" id="navbarDropdown" data-bs-toggle="dropdown"
+               class="d-flex align-items-center text-decoration-none">
+              <div class="avatar-custom d-flex justify-content-center align-items-center shadow-sm">
+                <i class="fa-solid fa-user"></i>
+              </div>
+              <span class="ms-2 fw-semibold"><%= current_user.name %></span>
+            </a>
+
+            <div class="dropdown-menu dropdown-menu-end shadow">
+              <%= link_to "Cerrar sesión", destroy_user_session_path,
+                    data: { turbo_method: :delete }, class: "dropdown-item" %>
             </div>
           </li>
-          <li class="nav-item dropdown">
-          <a href="#" class="avatar" id="navbarDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fa-solid fa-user avatar-icon"></i>
-          </a>
-            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-              <%= link_to "Action", "#", class: "dropdown-item" %>
-              <%= link_to "Another action", "#", class: "dropdown-item" %>
-              <%= link_to "Log out", destroy_user_session_path, data: {turbo_method: :delete}, class: "dropdown-item" %>
-            </div>
-          </li>
+
         <% else %>
+
+          <!-- Login -->
           <li class="nav-item">
-            <%= link_to "Login", new_user_session_path, class: "nav-link" %>
+            <%= link_to "Iniciar sesión",
+              new_user_session_path,
+              class: "btn btn-outline-light rounded-pill px-4 py-2 fw-semibold shadow-sm" %>
           </li>
+
         <% end %>
+
       </ul>
     </div>
   </div>

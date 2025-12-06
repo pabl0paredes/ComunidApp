@@ -18,7 +18,7 @@ class ChatsController < ApplicationController
     }
 
     hidden_chat_ids = ShowChat.where(user: current_user, is_hidden: true).pluck(:chat_id)
-    @visible_chats = @chats.where.not(id: hidden_chat_ids)
+    @visible_chats = @chats.where.not(id: hidden_chat_ids).includes(messages: :user)
     @hidden_chats  = @chats.where(id: hidden_chat_ids)
   end
 

@@ -25,7 +25,7 @@ class ResidentsController < ApplicationController
     @resident = Resident.new(resident_params)
     authorize @resident
     @resident.user = current_user
-
+    
     users_count = Resident.where(community_id: @resident.community.id).size + 1
 
     @resident.common_expense_fraction = 1.0 / users_count

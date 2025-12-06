@@ -1,63 +1,65 @@
-<div class="container mt-4">
-  <h2 class="fw-bold">Nueva reserva para <%= @common_space.name %></h2>
+<%= turbo_frame_tag "new_booking" do %>
+  <div class="container mt-4">
+    <h2 class="fw-bold">Nueva reserva para <%= @common_space.name %></h2>
 
-  <div class="mt-3">
+    <div class="mt-3">
 
-    <%= simple_form_for [@common_space, @booking],
-        html: {
-          data: {
-            controller: "booking-date",
-            # 👇 Stimulus value: booking-date-common-space-id-value
-            "booking-date-common-space-id-value": @common_space.id
-          }
-        } do |f| %>
+      <%= simple_form_for [@common_space, @booking],
+          html: {
+            data: {
+              controller: "booking-date",
+              # 👇 Stimulus value: booking-date-common-space-id-value
+              "booking-date-common-space-id-value": @common_space.id
+            }
+          } do |f| %>
 
-      <div class="row">
-        <div class="col-md-6">
+        <div class="row">
+          <div class="col-md-6">
 
-          <!-- FECHA -->
-          <div class="mb-3">
-            <label class="form-label">Fecha</label>
+            <!-- FECHA -->
+            <div class="mb-3">
+              <label class="form-label">Fecha</label>
 
-            <input type="text"
-              class="form-control"
-              placeholder="Selecciona una fecha"
-              data-controller="flatpickr"
-              data-action="change->booking-date#updateHours"
-              data-booking-date-target="dateInput"
-              data-flatpickr-alt-format-value="d-m-Y"
-              data-flatpickr-date-format-value="Y-m-d"
-              data-flatpickr-common-space-id-value="<%= @common_space.id %>">
+              <input type="text"
+                class="form-control"
+                placeholder="Selecciona una fecha"
+                data-controller="flatpickr"
+                data-action="change->booking-date#updateHours"
+                data-booking-date-target="dateInput"
+                data-flatpickr-alt-format-value="d-m-Y"
+                data-flatpickr-date-format-value="Y-m-d"
+                data-flatpickr-common-space-id-value="<%= @common_space.id %>">
 
-          </div>
-
-          <!-- HORAS DISPONIBLES -->
-          <div class="mb-3">
-            <label class="form-label fw-semibold text-primary">Horas disponibles</label>
-
-            <div
-              class="d-flex flex-wrap gap-3"
-              data-booking-date-target="hoursContainer">
-              <!-- ← Aquí Stimulus insertará los botones -->
             </div>
 
-            <!-- Campo oculto que enviará el valor @booking.start -->
-            <%= f.input :start, as: :hidden, input_html: { data: { booking_date_target: "startField" } } %>
+            <!-- HORAS DISPONIBLES -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold text-primary">Horas disponibles</label>
+
+              <div
+                class="d-flex flex-wrap gap-3"
+                data-booking-date-target="hoursContainer">
+                <!-- ← Aquí Stimulus insertará los botones -->
+              </div>
+
+              <!-- Campo oculto que enviará el valor @booking.start -->
+              <%= f.input :start, as: :hidden, input_html: { data: { booking_date_target: "startField" } } %>
+            </div>
+
+
           </div>
-
-
         </div>
-      </div>
 
-      <%= f.submit "Crear reserva", class: "btn btn-primary mt-3 rounded-pill" %>
+        <%= f.submit "Crear reserva", class: "btn btn-primary mt-3 rounded-pill" %>
 
-      <% if @booking.errors.any? %>
-        <p class="text-danger">La fecha ya está ocupada por otro vecino</p>
+        <% if @booking.errors.any? %>
+          <p class="text-danger">La fecha ya está ocupada por otro vecino</p>
+        <% end %>
+
       <% end %>
+    </div>
 
-    <% end %>
+    <%= link_to "Volver", common_space_path(@common_space),
+        class: "btn btn-secondary mt-3 rounded-pill" %>
   </div>
-
-  <%= link_to "Volver", common_space_path(@common_space),
-      class: "btn btn-secondary mt-3 rounded-pill" %>
-</div>
+<%end %>

@@ -4,6 +4,7 @@ class ShowChatsController < ApplicationController
   def create
     @show_chat = ShowChat.new(show_chat_params)
     @show_chat.user = current_user
+    authorize @show_chat
 
     if @show_chat.save
       redirect_back fallback_location: root_path
@@ -13,6 +14,8 @@ class ShowChatsController < ApplicationController
   end
 
   def update
+    authorize @show_chat
+
     if @show_chat.update(show_chat_params)
       redirect_back fallback_location: root_path
     else

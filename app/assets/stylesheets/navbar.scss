@@ -1,0 +1,111 @@
+.navbar {
+  transition: background-color 0.3s ease;
+}
+
+/* Avatar bonito */
+.avatar-custom {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  transition: all 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.avatar-custom:hover {
+  background: rgba(255,255,255,0.3);
+  transform: translateY(-2px);
+}
+
+/* Hover de botones */
+.nav-link, .btn-outline-light, .btn-primary {
+  transition: all 0.2s ease;
+}
+
+.btn-outline-light:hover {
+  background-color: rgba(255,255,255,0.2);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 0 12px rgba(13,110,253,0.45);
+}
+
+/* Cuando está sobre el HERO (fondo oscuro) */
+.nav-over-hero {
+  background: transparent;
+  backdrop-filter: blur(6px);
+}
+
+.nav-over-hero .btn-outline-light {
+  color: white !important;
+  border-color: white !important;
+}
+
+.nav-over-hero .btn-outline-light:hover {
+  background: rgba(255,255,255,0.2) !important;
+}
+
+.nav-over-hero .avatar-custom {
+  background: rgba(255,255,255,0.15);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.4);
+}
+
+.nav-over-hero .avatar-custom:hover {
+  background: rgba(255,255,255,0.32);
+  transform: translateY(-2px);
+}
+
+/* Cuando está sobre fondo blanco */
+.nav-on-white {
+  background: white !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.nav-on-white .navbar-brand span {
+  color: #0743a1 !important;
+}
+
+/* Aquí cambiamos los botones para que se vean sobre blanco */
+.nav-on-white .btn-outline-light {
+  color: #0d6efd !important;
+  border-color: #0d6efd !important;
+}
+
+.nav-on-white .btn-outline-light:hover {
+  background-color: rgba(13,110,253,0.1) !important;
+}
+
+.nav-on-white .btn-primary {
+  background-color: #0d6efd !important;
+  border-color: #0d6efd !important;
+  color: white !important;
+}
+
+.nav-on-white .avatar-custom {
+  background: rgba(0,0,0,0.05);
+  color: #0d6efd; /* azul principal */
+  border: 1px solid rgba(13,110,253,0.3);
+}
+
+.nav-on-white .avatar-custom:hover {
+  background: rgba(13,110,253,0.1);
+  transform: translateY(-2px);
+}
+
+/* Altura de la navbar (ajústala si es necesario) */
+:root {
+  --navbar-height: 76px;
+}
+
+/* Solo homepage NO tiene padding */
+body.homepage {
+  padding-top: 0 !important;
+}
+
+/* Todas las otras páginas: dejan espacio para la navbar */
+body.with-navbar-padding {
+  padding-top: var(--navbar-height);
+}
