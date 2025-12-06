@@ -54,7 +54,8 @@ residents = []
     password: "123456",
     name: "Vecino #{i+1}",
     phone: "#{900000000 + i}",
-    picture: "https://example.com/profile#{i+1}.jpg"
+    picture: "https://example.com/profile#{i+1}.jpg",
+    time_zone: "America/Santiago" 
   )
 
   residents << Resident.create!(
