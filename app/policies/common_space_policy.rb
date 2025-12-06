@@ -29,5 +29,9 @@ class CommonSpacePolicy < ApplicationPolicy
   def index?
     true
   end
-  
+
+  def manage_hours?
+    record.community.administrator_id == user.id
+  end
+
 end
