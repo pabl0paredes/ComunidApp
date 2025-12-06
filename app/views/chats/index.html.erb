@@ -55,16 +55,30 @@
         <% category_chats = @visible_chats.select { |c| c.category == cat } %>
 
         <% if category_chats.any? %>
-
           <div class="chat-cards-container">
 
             <% category_chats.each do |chat| %>
-              <div class="chat-card section-card">
+              <div class="chat-card section-card" data-href="<%= chat_path(chat) %>">
 
                 <div class="chat-card-header">
-                  <%= link_to chat.name, chat_path(chat), class: "chat-card-title" %>
+                  <%= chat.name %>
                   <span class="chat-tag"><%= chat.category %></span>
                 </div>
+
+                <% last_message = chat.messages.last %>
+                <% if last_message %>
+                  <div class="chat-card-body">
+                    <small class="text-muted">Último mensaje:</small>
+                    <strong><%= last_message.user.name %></strong>:
+                    <%= truncate(last_message.content, length: 50) %>
+                    <br>
+                    <small class="text-muted"><%= last_message.created_at.strftime("%d/%m/%Y %H:%M") %></small>
+                  </div>
+                <% else %>
+                  <div class="chat-card-body text-muted">
+                    Sin mensajes todavía
+                  </div>
+                <% end %>
 
                 <div class="chat-card-actions mt-3">
                   <% if current_user.administrator.present? %>
@@ -84,7 +98,6 @@
             <% end %>
 
           </div>
-
         <% else %>
           <p class="text-muted">No hay chats en esta categoría.</p>
         <% end %>
@@ -96,14 +109,13 @@
     <div class="tab-pane fade" id="content-ocultos" role="tabpanel">
 
       <% if @hidden_chats.any? %>
-
         <div class="chat-cards-container">
 
           <% @hidden_chats.each do |chat| %>
-            <div class="chat-card section-card">
+            <div class="chat-card section-card" data-href="<%= chat_path(chat) %>">
 
               <div class="chat-card-header">
-                <%= link_to chat.name, chat_path(chat), class: "chat-card-title" %>
+                <%= chat.name %>
                 <span class="chat-tag bg-secondary">Oculto</span>
               </div>
 
@@ -119,7 +131,6 @@
           <% end %>
 
         </div>
-
       <% else %>
         <p class="text-muted">No tienes chats ocultos.</p>
       <% end %>
@@ -128,3 +139,17 @@
 
   </div>
 </div>
+
+<!-- JS para hacer clic en la card -->
+<script>
+  document.addEventListener("turbo:load", () => {
+    document.querySelectorAll(".chat-card").forEach(card => {
+      card.addEventListener("click", (e) => {
+        // Ignora clicks en botones o links
+        if (!e.target.closest("a") && !e.target.closest("button")) {
+          window.location.href = card.dataset.href;
+        }
+      });
+    });
+  });
+</script>

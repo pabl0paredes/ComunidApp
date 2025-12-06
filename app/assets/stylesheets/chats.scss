@@ -2,7 +2,7 @@
   WRAPPER GENERAL DEL CHAT
 ========================================= */
 .chat-page {
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 24px 16px;
 }
@@ -25,6 +25,7 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
   border: 1px solid #dbe2ef;
   transition: background 0.15s;
+  width: 100%;
 }
 
 .chat-card:hover {
@@ -297,9 +298,9 @@
 
 /* Contenedor de tarjetas */
 .chat-cards-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 1rem;
+  display: flex;
+  flex-direction: column; /* apila verticalmente */
+  gap: 1rem;             /* espacio entre cards */
 }
 
 /* Banderita categoría */
@@ -529,4 +530,24 @@ h2 {
   display: inline-block !important;
   margin-top: 18px !important;
   margin-bottom: 12px !important;
+
+  color: #0b3c5d !important;     /* azul oscuro */
+  font-weight: 700 !important;   /* negrita */
+  text-decoration: none !important; /* quita subrayado */
+}
+
+.header-left .back-link:hover {
+  color: #072f49 !important;     /* azul más intenso al pasar el mouse */
+  text-decoration: underline !important; /* opcional, efecto hover */
+}
+
+a.text-secondary.text-decoration-none.small {
+  color: #0b3c5d !important;
+  font-weight: 700 !important;
+  text-decoration: none !important;
+}
+
+a.text-secondary.text-decoration-none.small:hover {
+  color: #072f49 !important;
+  text-decoration: underline !important;
 }
