@@ -1,15 +1,14 @@
 class CommonSpacesController < ApplicationController
-    before_action :set_common_space, only: [:show, :edit, :update, :destroy]
-    before_action :set_community, only: [:new, :create]
-    skip_after_action :verify_authorized, only: :index
+  before_action :set_common_space, only: [:show, :edit, :update, :destroy]
+  before_action :set_community, only: [:index, :new, :create]
+  skip_after_action :verify_authorized, only: :index
 
   def index
-    @community = Community.find(params[:community_id])
     @common_spaces = policy_scope(@community.common_spaces)
-   
   end
 
   def show
+    authorize @common_space
     @bookings = @common_space.bookings.order(start: :asc)
     @usable_hours = @common_space.usable_hours.sort_by { |h| [h.start.wday, h.start] }
 
@@ -18,22 +17,18 @@ class CommonSpacesController < ApplicationController
     else
       @usable_weekdays = []
     end
+  end
+
+  def new
+    @common_space = CommonSpace.new(community: @community)
     authorize @common_space
   end
 
-
-  def new
-    @community = Community.find(params[:community_id])
-    @common_space = CommonSpace.new
-    authorize @community, policy_class: CommonSpacePolicy
-  end
-
   def create
-    @community = Community.find(params[:community_id])
     @common_space = CommonSpace.new(common_space_params)
     @common_space.community = @community
-    authorize @community, policy_class: CommonSpacePolicy
 
+    authorize @common_space
 
     if @common_space.save
       redirect_to edit_common_space_path(@common_space), notice: "Espacio creado correctamente"
@@ -58,8 +53,9 @@ class CommonSpacesController < ApplicationController
 
   def destroy
     authorize @common_space
+    community = @common_space.community
     @common_space.destroy
-    redirect_to community_common_spaces_path(@common_space.comunity), notice: "Espacio eliminado"
+    redirect_to community_common_spaces_path(community), notice: "Espacio eliminado"
   end
 
   private
@@ -68,12 +64,11 @@ class CommonSpacesController < ApplicationController
     @common_space = CommonSpace.find(params[:id])
   end
 
-  def common_space_params
-    params.require(:common_space).permit(:name, :description, :price, :is_available)
-  end
-
   def set_community
     @community = Community.find(params[:community_id])
   end
 
+  def common_space_params
+    params.require(:common_space).permit(:name, :description, :price, :is_available)
+  end
 end

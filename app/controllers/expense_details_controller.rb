@@ -5,11 +5,15 @@ class ExpenseDetailsController < ApplicationController
   def index
     @common_expense = CommonExpense.find(params[:common_expense_id])
 
-    if current_user.id == @common_expense.community.administrator_id
+    if current_user == @common_expense.community.administrator.user
+
+      # Admin ve todos los detalles
       @expense_details = @common_expense
                           .expense_details
                           .order(updated_at: :desc)
+
     elsif current_user.resident.present?
+      # Resident solo ve sus asignaciones
       @expense_details = @common_expense
                           .expense_details
                           .joins(:expense_details_residents)
@@ -18,7 +22,7 @@ class ExpenseDetailsController < ApplicationController
                           .distinct
     end
 
-    authorize @expense_details
+    authorize ExpenseDetail
   end
 
   def new
