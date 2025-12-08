@@ -1,6 +1,11 @@
 <div class="container mt-4">
-  <h1 class="h4 text-primary mb-4">Nuevo Espacio Común</h1>
 
+  <div class="mb-3">
+    <%= link_to "← Volver a espacios comunes",
+        community_common_spaces_path(@common_space.community),
+        class: "text-decoration-none text-primary fw-semibold" %>
+  </div>
+ <h1 class="h4 text-primary mb-4">Nuevo Espacio Común</h1>
   <div class="card shadow-sm">
     <div class="card-body">
 
