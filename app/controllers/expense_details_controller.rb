@@ -18,7 +18,7 @@ class ExpenseDetailsController < ApplicationController
                           .distinct
     end
 
-    authorize @expense_details
+    authorize ExpenseDetail
   end
 
   def new
