@@ -1,0 +1,32 @@
+<%= turbo_frame_tag "new_booking" do %>
+  <%= simple_form_for [common_space, booking],
+      html: {
+        data: {
+          controller: "booking-date",
+          "booking-date-common-space-id-value": common_space.id
+        }
+      } do |f| %>
+
+    <div class="mb-3">
+      <div
+        id="calendar"
+        data-controller="flatpickr"
+        data-action="change->booking-date#updateHours"
+        data-booking-date-target="dateInput"
+        data-flatpickr-inline-value="true"
+        data-flatpickr-date-format-value="Y-m-d"
+        data-flatpickr-alt-format-value="d-m-Y"
+        data-flatpickr-common-space-id-value="<%= common_space.id %>">
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label fw-semibold text-primary">Horas disponibles</label>
+      <div class="d-flex flex-wrap gap-2" data-booking-date-target="hoursContainer"></div>
+      <%= f.input :start, as: :hidden, input_html: { data: { booking_date_target: "startField" } } %>
+    </div>
+
+    <%= f.submit "Reservar", class: "btn btn-primary w-100 rounded-pill fw-semibold py-2" %>
+
+  <% end %>
+<% end %>

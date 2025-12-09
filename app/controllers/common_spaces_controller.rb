@@ -6,10 +6,11 @@ class CommonSpacesController < ApplicationController
   def index
     @community = Community.find(params[:community_id])
     @common_spaces = policy_scope(@community.common_spaces)
-   
+
   end
 
   def show
+    @booking = Booking.new
     @bookings = @common_space.bookings.order(start: :asc)
     @usable_hours = @common_space.usable_hours.sort_by { |h| [h.start.wday, h.start] }
 

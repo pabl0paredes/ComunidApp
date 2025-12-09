@@ -28,13 +28,23 @@ class BookingsController < ApplicationController
       usable_hour = UsableHour.find_by(common_space: @common_space, start: @booking.start)
       usable_hour.update(is_available: false)
       respond_to do |format|
-        format.html {redirect_to common_space_bookings_path(@common_space), notice: "Reserva creada con éxito."}
+        format.html { redirect_to common_space_path(@common_space), notice: "Reserva creada con éxito." }
         format.turbo_stream
       end
     else
-      render :new, status: :unprocessable_entity
+      # 🔥 Necesario para volver a dibujar el show correctamente
+      @bookings = @common_space.bookings.order(:start)
+      @usable_hours = UsableHour.where(common_space: @common_space)
+
+      render "common_spaces/_booking_form",
+           status: :unprocessable_entity,
+           locals: {
+             common_space: @common_space,
+             booking: @booking
+           }
     end
   end
+
 
   def edit
     authorize @booking

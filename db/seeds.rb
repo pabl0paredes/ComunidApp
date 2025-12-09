@@ -23,6 +23,8 @@ Community.delete_all
 Administrator.delete_all
 User.delete_all
 
+Time.zone = "America/Santiago"
+
 puts "Creando usuarios y administrador…"
 
 admin_user = User.create!(
@@ -55,7 +57,7 @@ residents = []
     name: "Vecino #{i+1}",
     phone: "#{900000000 + i}",
     picture: "https://example.com/profile#{i+1}.jpg",
-    time_zone: "America/Santiago" 
+    time_zone: "America/Santiago"
   )
 
   residents << Resident.create!(
@@ -119,12 +121,12 @@ puts "Creando horarios para los espacios…"
 [espacio1, espacio2, espacio3].each do |esp|
   (1..15).each do |i|
     (0..5).each do |j|
-      puts 15+j
+      is_av = !([7,8,9,10,11,12,13].include?(i) && j==1)
       UsableHour.create!(
         common_space: esp,
         start: Time.new(2025,12,i,15+j,0,0),
         end: Time.new(2025,12,i,15+j+1,0,0),
-        is_available: [true, true, false].sample
+        is_available: is_av
       )
     end
   end
@@ -193,19 +195,19 @@ end
 
 puts "Creando reservas (bookings)…"
 
-days = rand(1..10).days
+days = 0
 7.times do
   resident = residents.sample
   espacio = [espacio1, espacio2, espacio3].sample
 
-  days += 1.days
-
   Booking.create!(
     resident: resident,
     common_space: espacio,
-    start: DateTime.now + days,
-    end: DateTime.now + days + 2.hours
+    start: Time.new(2025,12,7 + days,16,0,0),
+    end: Time.new(2025,12,7 + days,16+1,0,0)
   )
+
+  days += 1
 end
 
 puts "Seed completado con éxito 🎉"

@@ -75,38 +75,48 @@
     </div>
   </div>
 
-  <!-- Acciones de reservas -->
-<%= link_to "Mis reservas", common_space_bookings_path(@common_space),
-    data: { turbo_frame: "my_bookings" },
-    class: "btn btn-outline-primary rounded-pill fw-semibold mb-3" %>
-  
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h3 class="fw-bold text-primary mb-0">
-      <i class="fa-solid fa-calendar-check me-2"></i> 
-      Reservas
-    </h3>
-    
-  <%= turbo_frame_tag "my_bookings" %>
+<!-- Acciones de reservas -->
+<div class="row mt-5">
 
-    <%= link_to new_common_space_booking_path(@common_space),
-        data: { turbo_frame: "new_booking" },
-        class: "btn btn-primary btn-lg rounded-3 shadow-sm px-4" do %>
-      <i class="fa-solid fa-plus me-1"></i> Nueva reserva
+  <!-- IZQUIERDA: Lista de reservas -->
+  <div class="col-md-6">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h3 class="fw-bold text-primary mb-0">
+        <i class="fa-solid fa-calendar-check me-2"></i> Reservas
+      </h3>
+    </div>
+
+    <% if @bookings.any? %>
+      <div class="list-group shadow-sm rounded-4 mb-4">
+        <div class="list-group shadow-sm rounded-4 mb-4">
+          <div id="bookings">
+            <% @bookings.each do |booking| %>
+              <%= render "booking", booking: booking %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% else %>
+      <p class="text-muted fst-italic">Todavía no hay reservas para este espacio.</p>
     <% end %>
+
   </div>
 
-  <%= turbo_frame_tag "new_booking" %>
+  <!-- DERECHA: Calendario + seleccionar horario -->
+  <div class="col-md-6 d-flex justify-content-end">
 
-  <% if @bookings.any? %>
-    <div class="list-group shadow-sm rounded-4 mb-4">
-      <div id="bookings">
-        <% @bookings.each do |booking| %>
-          <%= render "booking", booking: booking %>
-        <% end %>
-      </div>
+    <div class="p-4 shadow-sm border-0 rounded-4 bg-white sticky-top"
+        style="top: 100px; width: 90%; max-width: 420px;">
+
+      <h4 class="fw-bold text-primary mb-3 text-start">Reservar ahora</h4>
+
+      <%= render "booking_form", common_space: @common_space, booking: @booking %>
     </div>
-  <% else %>
-    <p class="text-muted fst-italic mb-4">Todavía no hay reservas para este espacio.</p>
-  <% end %>
+
+  </div>
+
+</div>
+
 
 </div>

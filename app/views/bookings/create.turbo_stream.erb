@@ -1,2 +1,5 @@
 <%= turbo_stream.prepend "bookings", partial: "common_spaces/booking", locals: {booking: @booking} %>
-<%= turbo_stream.update "new_booking", "" %>
+
+<%= turbo_stream.replace "new_booking" do %>
+  <%= render "common_spaces/booking_form", common_space: @common_space, booking: Booking.new %>
+<% end %>
