@@ -3,6 +3,6 @@
     <%= question.user_question %>
   </p>
   <p class="ai-answer">
-    <%= question.ai_answer.presence || "..." %>
+    <%= (question.ai_answer.presence || "...").html_safe %>
   </p>
 </div>

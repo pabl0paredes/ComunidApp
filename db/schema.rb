@@ -57,7 +57,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_06_190130) do
     t.datetime "end"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.vector "embedding", limit: 1536
+    t.vector "embedding"
     t.index ["common_space_id"], name: "index_bookings_on_common_space_id"
     t.index ["resident_id"], name: "index_bookings_on_resident_id"
   end
@@ -84,7 +84,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_06_190130) do
     t.integer "total", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.vector "embedding", limit: 1536
+    t.vector "embedding"
     t.index ["community_id"], name: "index_common_expenses_on_community_id"
   end
 
@@ -96,7 +96,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_06_190130) do
     t.boolean "is_available"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.vector "embedding", limit: 1536
+    t.vector "embedding"
     t.index ["community_id"], name: "index_common_spaces_on_community_id"
   end
 
@@ -110,7 +110,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_06_190130) do
     t.float "latitude"
     t.float "longitude"
     t.integer "notifications", default: 0
-    t.vector "embedding", limit: 1536
+    t.vector "embedding"
     t.index ["administrator_id"], name: "index_communities_on_administrator_id"
   end
 
@@ -120,7 +120,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_06_190130) do
     t.integer "amount"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.vector "embedding", limit: 1536
+    t.vector "embedding"
     t.index ["common_expense_id"], name: "index_expense_details_on_common_expense_id"
   end
 
@@ -151,7 +151,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_06_190130) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.vector "question_embedding", limit: 1536
+    t.vector "question_embedding"
     t.bigint "chat_session_id", null: false
     t.index ["chat_session_id"], name: "index_questions_on_chat_session_id"
     t.index ["user_id"], name: "index_questions_on_user_id"
@@ -165,7 +165,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_06_190130) do
     t.datetime "updated_at", null: false
     t.string "unit"
     t.boolean "is_accepted", default: false
-    t.vector "embedding", limit: 1536
+    t.vector "embedding"
     t.index ["community_id"], name: "index_residents_on_community_id"
     t.index ["user_id"], name: "index_residents_on_user_id"
   end
@@ -308,7 +308,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_06_190130) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "is_available"
-    t.vector "embedding", limit: 1536
+    t.vector "embedding"
     t.index ["common_space_id"], name: "index_usable_hours_on_common_space_id"
   end
 

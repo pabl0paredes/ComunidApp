@@ -13,7 +13,7 @@ class Community < ApplicationRecord
 
   after_create :set_embedding
 
-  
+
   validates :name, :address, :latitude, :longitude, :size, presence: true
   validates :name, uniqueness: true
   validates :name, length: { maximum: 100 }
