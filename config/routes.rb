@@ -61,6 +61,7 @@ Rails.application.routes.draw do
   patch "expense_details_residents/:id/reject",  to: "expense_details_residents#reject",  as: :reject_expense
 
   resources :questions, only: [:index, :create]
+  get "/chatbot", to: "questions#index", as: :chatbot
 
   resource :chat_session, only: [] do
     post :reset

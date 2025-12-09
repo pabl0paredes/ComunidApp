@@ -1,0 +1,7 @@
+<%= turbo_stream.append "questions" do %>
+  <%= render @question %>
+<% end %>
+
+<%= turbo_stream.replace "new_question_form" do %>
+  <%= render "form", question: Question.new(chat_session: @question.chat_session, user: @question.user) %>
+<% end %>
