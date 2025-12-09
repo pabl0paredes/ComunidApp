@@ -5,8 +5,19 @@ export default class extends Controller {
   static values = { commonSpaceId: Number }
 
   async updateHours() {
-    const date = this.dateInputTarget.value
-    if (!date) return
+    let date // 👈 solo la declaramos una vez
+
+    // Si flatpickr está inicializado, tomamos la fecha seleccionada desde ahí
+    const fp = this.dateInputTarget._flatpickr
+    if (fp && fp.selectedDates && fp.selectedDates[0]) {
+      const selected = fp.selectedDates[0]           // objeto Date
+      date = selected.toISOString().split("T")[0]   // "YYYY-MM-DD"
+    } else if (this.dateInputTarget.value) {
+      // Fallback: si por alguna razón no hay flatpickr, usamos el value del input
+      date = this.dateInputTarget.value
+    } else {
+      return // no hay fecha => no pedimos horas
+    }
 
     const url = `/common_spaces/${this.commonSpaceIdValue}/bookings/available_hours?date=${encodeURIComponent(date)}`
 
@@ -41,6 +52,7 @@ export default class extends Controller {
       this.hoursContainerTarget.appendChild(btn)
     })
   }
+
 
   selectHour(button) {
     // limpiar selección previa

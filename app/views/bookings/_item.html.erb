@@ -1,0 +1,19 @@
+<li class="list-group-item d-flex justify-content-between align-items-center p-3">
+  <div>
+    <strong class="text-primary"><%= booking.resident.user.name %></strong><br>
+    <small class="text-muted">
+      <%= l booking.start, format: :long %> → <%= l booking.end, format: :long %>
+    </small>
+  </div>
+
+  <div class="d-flex gap-2">
+    <% if policy(booking).edit? %>
+      <%= link_to "Editar", edit_booking_path(booking),
+          class: "btn btn-warning btn-sm rounded-pill shadow-sm" %>
+    <% end %>
+    <%= link_to "Eliminar",
+        booking_path(booking),
+        data: { turbo_method: :delete, turbo_confirm: "¿Seguro?" },
+        class: "btn btn-danger btn-sm rounded-pill shadow-sm" %>
+  </div>
+</li>

@@ -5,11 +5,20 @@ class CommonSpacesController < ApplicationController
 
   def index
     @common_spaces = policy_scope(@community.common_spaces)
+
   end
 
   def show
     authorize @common_space
-    @bookings = @common_space.bookings.order(start: :asc)
+    @booking = Booking.new
+    # @bookings = @common_space.bookings.order(start: :asc)
+    if policy(@common_space).update?   # administrador o encargado
+      @bookings = @common_space.bookings.includes(resident: :user)
+    else
+      @bookings = @common_space.bookings
+                              .where(resident: current_user.resident)
+                              .includes(resident: :user)
+    end
     @usable_hours = @common_space.usable_hours.sort_by { |h| [h.start.wday, h.start] }
 
     if current_user.resident.present?

@@ -6,20 +6,21 @@ export default class extends Controller {
     dateFormat: String,
     altFormat: String,
     defaultDate: String,
-    commonSpaceId: Number
+    commonSpaceId: Number,
+    inline: Boolean
   }
 
   async connect() {
     const allowedDates = await this.fetchAvailableDates()
 
     flatpickr(this.element, {
-      altInput: true,
+      inline: this.inlineValue || false, // 👈 AHORA SOPORTA DIV INLINE
+      altInput: !this.inlineValue,       // 👈 sin input extra cuando inline
       altFormat: this.altFormatValue || "d-m-Y",
       dateFormat: this.dateFormatValue || "Y-m-d",
       defaultDate: this.defaultDateValue,
       disableMobile: true,
-
-      enable: allowedDates.map(date => date) // Flatpickr solo deja clicar estas fechas
+      enable: allowedDates
     })
   }
 
@@ -29,10 +30,10 @@ export default class extends Controller {
     const response = await fetch(url)
     if (!response.ok) return []
 
-    const dates = await response.json()
-    return dates // formato ["2025-12-01", "2025-12-08", ...]
+    return await response.json()
   }
 }
+
 
 // // app/javascript/controllers/flatpickr_controller.js
 // import { Controller } from "@hotwired/stimulus";

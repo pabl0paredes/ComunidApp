@@ -40,3 +40,25 @@
     border-radius: 50%;
   }
 }
+
+
+.hour-button {
+  font-size: 0.85rem;
+  padding: 0.45rem 1rem !important;
+  border-radius: 14px !important;
+  border: 1px solid #0743a1 !important;
+  background: white !important;
+  color: #0743a1 !important;
+  transition: all 0.2s ease-in-out;
+}
+
+.hour-button:hover {
+  background: #eef2ff !important;
+}
+
+.active-hour {
+  background: #0743a1 !important;
+  color: white !important;
+  border-color: #0743a1 !important;
+  box-shadow: 0px 3px 6px rgba(7, 67, 161, 0.15);
+}

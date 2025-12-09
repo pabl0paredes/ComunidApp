@@ -1,8 +1,19 @@
-<div id="<%= dom_id(question) %>" class="question my-3">
-  <p class="user-question fw-semibold">
-    <%= question.user_question %>
-  </p>
-  <p class="ai-answer">
-    <%= (question.ai_answer.presence || "...").html_safe %>
-  </p>
+<div id="<%= dom_id(question) %>" class="my-2">
+
+  <!-- Pregunta del usuario -->
+  <div class="d-flex justify-content-end mb-1">
+    <div class="p-2 rounded-3 text-white"
+         style="max-width: 80%; background: #0d6efd;">
+      <%= simple_format(question.user_question) %>
+    </div>
+  </div>
+
+  <!-- Respuesta de IA -->
+  <div class="d-flex justify-content-start">
+    <div class="p-2 rounded-3"
+         style="max-width: 80%; background: #e9ecef; color: #333;">
+      <%= simple_format(question.ai_answer.presence || "•••") %>
+    </div>
+  </div>
+
 </div>
