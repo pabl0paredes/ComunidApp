@@ -1,13 +1,47 @@
-<% if current_user %>
-  <%= turbo_stream_from "questions_user_#{current_user.id}" %>
-<% end %>
+<turbo-frame id="chatbot_frame">
+  <% if current_user %>
+    <%= turbo_stream_from "questions_user_#{current_user.id}" %>
+  <% end %>
 
-<div class="container chatbot mt-4">
-  <h1 class="h3 mb-4">Chat con ComunidApp</h1>
+  <div class="chatbot-container d-flex flex-column" style="height: 100%; padding: 0;">
 
-  <div id="questions">
-    <%= render @questions %>
+    <!-- Header -->
+    <div class="chatbot-header d-flex align-items-center justify-content-between px-3 py-2 bg-primary text-white">
+      <span class="fw-semibold">Asistente ComunidApp</span>
+    </div>
+
+    <!-- Chat messages -->
+    <div id="questions"
+        class="chatbot-messages flex-grow-1 overflow-auto px-3 py-2"
+        style="background: #f7f7f7;">
+      <%= render @questions %>
+    </div>
+
+    <!-- Form input -->
+    <div class="chatbot-input border-top px-2 py-2 bg-white">
+      <%= render "form", question: @question %>
+    </div>
+
   </div>
 
-  <%= render "form", question: @question %>
-</div>
+</turbo-frame>
+
+<script>
+function scrollChatbotToBottom() {
+  const box = document.getElementById("questions");
+  if (!box) return;
+  box.scrollTop = box.scrollHeight;
+}
+
+/* Cuando Turbo re-renderiza la vista del chatbot */
+document.addEventListener("turbo:render", scrollChatbotToBottom);
+
+/* Cuando la vista termina de procesar un submit */
+document.addEventListener("turbo:submit-end", () => {
+  setTimeout(scrollChatbotToBottom, 50);
+});
+
+/* Cuando el Turbo Frame carga contenido por primera vez */
+document.addEventListener("turbo:frame-load", scrollChatbotToBottom);
+</script>
+
