@@ -27,6 +27,14 @@ class BookingsController < ApplicationController
     if @booking.save
       usable_hour = UsableHour.find_by(common_space: @common_space, start: @booking.start)
       usable_hour.update(is_available: false)
+      # MUST: refrescar las reservas según perfil
+      @bookings =
+        if policy(@common_space).update?
+          @common_space.bookings.includes(resident: :user).order(:start)
+        else
+          @common_space.bookings.where(resident: current_user.resident)
+                      .includes(resident: :user).order(:start)
+        end
       respond_to do |format|
         format.html { redirect_to common_space_path(@common_space), notice: "Reserva creada con éxito." }
         format.turbo_stream
@@ -48,6 +56,7 @@ class BookingsController < ApplicationController
 
   def edit
     authorize @booking
+    @common_space = @booking.common_space
   end
 
   def update
@@ -62,7 +71,7 @@ class BookingsController < ApplicationController
   def destroy
     authorize @booking
     @booking.destroy
-    redirect_to common_space_bookings_path(@booking.common_space), notice: "Reserva eliminada"
+    redirect_to common_space_path(@booking.common_space), notice: "Reserva eliminada"
   end
 
   def available_hours

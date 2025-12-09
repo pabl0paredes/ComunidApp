@@ -81,53 +81,7 @@
         </div>
       </div>
     </div>
-  </div>
 
-<!-- Acciones de reservas -->
-<div class="row mt-5">
-
-  <!-- IZQUIERDA: Lista de reservas -->
-  <div class="col-md-6">
-
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h3 class="fw-bold text-primary mb-0">
-        <i class="fa-solid fa-calendar-check me-2"></i> Reservas
-      </h3>
-    </div>
-
-    <% if @bookings.any? %>
-      <div class="list-group shadow-sm rounded-4 mb-4">
-        <div class="list-group shadow-sm rounded-4 mb-4">
-          <div id="bookings">
-            <% @bookings.each do |booking| %>
-              <%= render "booking", booking: booking %>
-            <% end %>
-          </div>
-        </div>
-      </div>
-    <% else %>
-      <p class="text-muted fst-italic">Todavía no hay reservas para este espacio.</p>
-    <% end %>
-
-  </div>
-
-  <!-- DERECHA: Calendario + seleccionar horario -->
-  <div class="col-md-6 d-flex justify-content-end">
-
-    <div class="p-4 shadow-sm border-0 rounded-4 bg-white sticky-top"
-        style="top: 100px; width: 90%; max-width: 420px;">
-
-      <h4 class="fw-bold text-primary mb-3 text-start">Reservar ahora</h4>
-
-      <%= render "booking_form", common_space: @common_space, booking: @booking %>
-    </div>
-
-  </div>
-
-</div>
-
-
-    <!-- Acciones del administrador -->
     <!-- Acciones del administrador -->
     <% if policy(@common_space).update? %>
       <div class="d-flex justify-content-end gap-3 mb-4">
@@ -149,38 +103,55 @@
         <% end %>
       </div>
     <% end %>
-    <!-- Acciones de reservas -->
-    <% if current_user.resident.present? %>
-    <%= link_to "Mis reservas", common_space_bookings_path(@common_space),
-      data: { turbo_frame: "my_bookings" },
-      class: "btn btn-outline-primary rounded-pill fw-semibold mb-3" %>
-      <% end %>
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h3 class="fw-bold text-primary mb-0">
-        <i class="fa-solid fa-calendar-check me-2"></i>
-        Reservas
-      </h3>
-      <%= turbo_frame_tag "my_bookings" %>
-      <!-- SOLO LOS VECINOS PUEDEN RESERVAR -->
-      <% if current_user.resident.present? %>
-        <%= link_to new_common_space_booking_path(@common_space),
-          data: { turbo_frame: "new_booking" },
-          class: "btn btn-primary btn-lg rounded-3 shadow-sm px-4" do %>
-          <i class="fa-solid fa-plus me-1"></i> Nueva reserva
-        <% end %>
-      <% end %>
+
+  <!-- Acciones de reservas -->
+  <div class="row mt-5">
+
+    <!-- IZQUIERDA: Mis reservas del usuario -->
+    <div class="col-md-6">
+      <%= turbo_frame_tag "bookings_list" do %>
+
+        <div class="p-4 shadow-sm border-0 rounded-4 bg-white mb-4">
+
+          <h4 class="fw-bold text-primary mb-3">
+            <i class="fa-solid fa-calendar-check me-2"></i>
+            <%= current_user.administrator.present? ? "Reservas" : "Mis Reservas" %>
+          </h4>
+
+          <% if @bookings.any? %>
+            <ul class="list-group list-group-flush mb-4">
+              <% @bookings.each do |booking| %>
+                <%= render "bookings/item", booking: booking %>
+              <% end %>
+            </ul>
+          <% else %>
+            <p class="text-muted fst-italic text-center mb-4">
+              Aún no tienes reservas para este espacio.
+            </p>
+          <% end %>
+
+        </div>
+
+      <% end %> <!-- turbo-frame -->
     </div>
-  </div>
-  <%= turbo_frame_tag "new_booking" %>
-  <% if @bookings.any? %>
-    <div class="list-group shadow-sm rounded-4 mb-4">
-      <div id="bookings">
-        <% @bookings.each do |booking| %>
-          <%= render "booking", booking: booking %>
-        <% end %>
+
+
+
+    <!-- DERECHA: Calendario + seleccionar horario -->
+    <div class="col-md-6 d-flex justify-content-end">
+
+      <div class="p-4 shadow-sm border-0 rounded-4 bg-white sticky-top"
+          style="top: 100px; width: 90%; max-width: 420px;">
+
+        <h4 class="fw-bold text-primary mb-3 text-start">Reservar ahora</h4>
+
+        <%= render "booking_form", common_space: @common_space, booking: @booking %>
       </div>
+
     </div>
-  <% else %>
-    <p class="text-muted fst-italic mb-4">Todavía no hay reservas para este espacio.</p>
-  <% end %>
+
+  </div>
+
+
+
 </div>

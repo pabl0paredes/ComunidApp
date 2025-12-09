@@ -3,3 +3,8 @@
 <%= turbo_stream.replace "new_booking" do %>
   <%= render "common_spaces/booking_form", common_space: @common_space, booking: Booking.new %>
 <% end %>
+
+<%= turbo_stream.replace "bookings_list" do %>
+  <%= render partial: "common_spaces/bookings_list",
+             locals: { common_space: @common_space, bookings: @bookings } %>
+<% end %>

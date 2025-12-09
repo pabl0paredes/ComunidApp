@@ -1,20 +1,14 @@
 <%= turbo_frame_tag "my_bookings" do %>
-  <div class="container py-5">
 
-    <!-- Título -->
-    <h2 class="fw-bold text-primary mb-4 text-center">
-      Reservas de <%= @common_space.name %>
-    </h2>
+  <div class="p-4 shadow-sm border-0 rounded-4 bg-white mb-4">
 
-    <!-- Botón nueva reserva -->
-    <div class="d-flex justify-content-center mb-4">
-      <%= link_to "Nueva reserva",
-          new_common_space_booking_path(@common_space),
-          class: "btn btn-primary btn-lg px-4 rounded-3 shadow-sm" %>
-    </div>
+    <h4 class="fw-bold text-primary mb-3">
+      <i class="fa-solid fa-calendar-check me-2"></i>
+      Mis reservas
+    </h4>
 
     <% if @bookings.any? %>
-      <ul class="list-group shadow-sm rounded-4 mb-4">
+      <ul class="list-group list-group-flush mb-4">
         <% @bookings.each do |booking| %>
           <li class="list-group-item d-flex justify-content-between align-items-center p-3">
             <div>
@@ -38,13 +32,17 @@
         <% end %>
       </ul>
     <% else %>
-      <p class="text-muted fst-italic text-center mt-3 mb-4">Aún no hay reservas para este espacio.</p>
+      <p class="text-muted fst-italic text-center mb-4">
+        Aún no tienes reservas para este espacio.
+      </p>
     <% end %>
 
-    <!-- Botón cerrar -->
-    <div class="d-flex justify-content-center">
-      <%= link_to "Cerrar", common_space_path(@common_space),
-        class: "btn btn-outline-primary btn-lg px-4 rounded-3 shadow-sm" %>
+    <div class="text-center">
+      <%= link_to "Cerrar",
+          common_space_path(@common_space),
+          class: "btn btn-outline-primary btn-lg px-4 rounded-pill shadow-sm" %>
     </div>
+
   </div>
+
 <% end %>
