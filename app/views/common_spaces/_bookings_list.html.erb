@@ -1,0 +1,20 @@
+<div class="p-4 shadow-sm border-0 rounded-4 bg-white mb-4">
+
+  <h4 class="fw-bold text-primary mb-3">
+    <i class="fa-solid fa-calendar-check me-2"></i>
+    <%= current_user.administrator.present? ? "Reservas" : "Mis Reservas" %>
+  </h4>
+
+  <% if bookings.any? %>
+    <ul class="list-group list-group-flush mb-4">
+      <% bookings.each do |booking| %>
+        <%= render "bookings/item", booking: booking %>
+      <% end %>
+    </ul>
+  <% else %>
+    <p class="text-muted fst-italic text-center mb-4">
+      Aún no tienes reservas para este espacio.
+    </p>
+  <% end %>
+
+</div>
