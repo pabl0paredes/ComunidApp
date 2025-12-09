@@ -5,6 +5,7 @@ import "bootstrap"
 import "./map";
 import "./maps/show_map";
 import "./maps/communities_map";
+import "./toggle_residents"
 // Flatpickr JS
 // import flatpickr from "flatpickr"
 

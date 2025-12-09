@@ -1,68 +1,86 @@
 <div class="container mt-4 common-spaces-page">
-  <div>
-    <%= link_to "Volver a Comunidad", @community %>
+  <div class="mb-3">
+    <%= link_to "← Volver a Comunidad", @community, class: "text-decoration-none text-primary fw-semibold" %>
   </div>
+
   <h1 class="fw-bold">
     <i class="fa-solid fa-building" style="color:#7360f2;"></i>
     Espacios comunes de <%= @community.name %>
   </h1>
-  <% if @community.administrator.user == current_user%>
+
+  <% if @community.administrator.user == current_user %>
     <div class="text-end mb-3">
-      <%= link_to new_community_common_space_path(@community),
-        class: "btn btn-primary rounded-pill" do %>
+      <%= link_to new_community_common_space_path(@community), class: "btn btn-primary rounded-pill" do %>
         <i class="fa-solid fa-plus"></i> Nuevo espacio
       <% end %>
     </div>
   <% end %>
+
   <% if @common_spaces.any? %>
     <div class="row">
       <% @common_spaces.each do |space| %>
         <div class="col-md-4">
           <div class="card shadow-sm mb-4">
             <div class="card-body">
+
               <%= link_to common_space_path(space), class: "space-icon-circle text-decoration-none" do %>
-                <% case space.name.downcase %>
-                <% when "quincho" %>
+                <% name = space.name.downcase %>
+
+                <% case true %>
+                <% when name.include?("quincho") %>
                   <i class="fa-solid fa-burger" style="color:#3B5BDB; font-size:42px;"></i>
-                <% when "sala multiuso", "sala multiusos" %>
+
+                <% when name.include?("sala") && name.include?("uso") %>
                   <i class="fa-solid fa-users" style="color:#3B5BDB; font-size:42px;"></i>
-                <% when "cancha", "cancha deportiva", "cancha de tennis", "cancha tenis" %>
+
+                <% when name.include?("cancha") || name.include?("tenis") || name.include?("tennis") || name.include?("deport") %>
                   <i class="fa-solid fa-basketball" style="color:#3B5BDB; font-size:42px;"></i>
-                <% when "piscina", "piscina climatizada" %>
+
+                <% when name.include?("piscina") || name.include?("pileta") %>
                   <i class="fa-solid fa-person-swimming" style="color:#3B5BDB; font-size:42px;"></i>
-                <% when "jaula perros", "jaula de perros", "zona para gatos", "gatos", "perros", "mascotas" %>
+
+                <% when name.include?("perro") || name.include?("gato") || name.include?("mascota") || name.include?("pet") %>
                   <i class="fa-solid fa-paw" style="color:#3B5BDB; font-size:42px;"></i>
-                <% when "sala del te", "salón de té", "te" %>
+
+                <% when name.include?("té") || name.include?("te ") || name.include?("mug") || name.include?("café") %>
                   <i class="fa-solid fa-mug-saucer" style="color:#3B5BDB; font-size:42px;"></i>
-                <% when "salon de juegos", "sala de juegos" %>
+
+                <% when name.include?("juego") || name.include?("game") %>
                   <i class="fa-solid fa-gamepad" style="color:#3B5BDB; font-size:42px;"></i>
-                <% when "gimnasio", "gym" %>
+
+                <% when name.include?("gimnasio") || name.include?("gym") %>
                   <i class="fa-solid fa-dumbbell" style="color:#3B5BDB; font-size:42px;"></i>
+
                 <% else %>
                   <i class="fa-solid fa-building" style="color:#3B5BDB; font-size:42px;"></i>
                 <% end %>
-              <% end %>
+              <% end %> <!-- cierre link_to -->
+
               <h5 class="fw-normal text-center mt-2"><%= space.name %></h5>
+
               <!-- Indicador de disponibilidad -->
               <div class="d-flex align-items-center justify-content-center mt-2">
                 <div
-      style="
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        background-color: <%= space.is_available ? '#28a745' : '#dc3545' %>;
-        margin-right: 8px;
-      ">
+                  style="
+                    width: 12px;
+                    height: 12px;
+                    border-radius: 50%;
+                    background-color: <%= space.is_available ? '#28a745' : '#dc3545' %>;
+                    margin-right: 8px;
+                  ">
                 </div>
+
                 <span class="fw-semibold <%= space.is_available ? 'text-success' : 'text-danger' %>">
                   <%= space.is_available ? 'Disponible' : 'No disponible' %>
                 </span>
               </div>
+
             </div>
           </div>
         </div>
       <% end %>
     </div>
+
   <% else %>
     <p class="text-muted">No hay espacios comunes creados todavía.</p>
   <% end %>

@@ -6,24 +6,24 @@ class CommonSpacePolicy < ApplicationPolicy
   end
 
 
-
   def new?
-    admin_of_community_for_new_space?
+    admin?
   end
+
   def show?
     true
   end
 
   def create?
-    admin_of_community_for_new_space?
+    admin?
   end
 
   def update?
-    admin_of_existing_space?
+    admin?
   end
 
   def destroy?
-    admin_of_existing_space?
+    admin?
   end
 
   def manage_hours?
@@ -32,8 +32,8 @@ class CommonSpacePolicy < ApplicationPolicy
 
   private
 
-  def admin_of_community_for_new_space?
-    record.is_a?(Community) && record.administrator_id == user.id
+  def admin?
+    record.community.administrator.user == user
   end
 
 

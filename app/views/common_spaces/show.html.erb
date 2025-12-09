@@ -1,5 +1,4 @@
 <div class="container py-4">
-
   <!-- Botón volver -->
   <div class="mb-3">
     <%= link_to community_common_spaces_path(@common_space.community),
@@ -7,16 +6,29 @@
       <i class="fa-solid fa-arrow-left"></i> Volver a espacios comunes
     <% end %>
   </div>
-
   <!-- Header con icono -->
   <div class="text-center mb-4">
-    <% icon = case @common_space.name.downcase
-              when "quincho" then "fa-utensils"
-              when "sala multiusos" then "fa-people-group"
-              when "cancha", "cancha deportiva" then "fa-futbol"
-              else "fa-building"
+    <% name = @common_space.name.to_s.downcase %>
+    <% icon = case true
+              when name.include?("quincho")
+                "fa-burger"
+              when name.include?("sala") && name.include?("uso")
+                "fa-users"
+              when name.include?("cancha") || name.include?("tenis") || name.include?("tennis") || name.include?("deport")
+                "fa-basketball"
+              when name.include?("piscina") || name.include?("pileta")
+                "fa-person-swimming"
+              when name.include?("perro") || name.include?("gato") || name.include?("mascota") || name.include?("pet")
+                "fa-paw"
+              when name.include?("té") || name.include?("te ") || name.include?("mug") || name.include?("café")
+                "fa-mug-saucer"
+              when name.include?("juego") || name.include?("game")
+                "fa-gamepad"
+              when name.include?("gimnasio") || name.include?("gym")
+                "fa-dumbbell"
+              else
+                "fa-building"
               end %>
-
     <div class="mx-auto mb-3"
          style="
            width: 100px;
@@ -28,16 +40,13 @@
            justify-content:center;">
       <i class="fa-solid <%= icon %>" style="font-size: 2.8rem; color:#0743a1;"></i>
     </div>
-
     <h1 class="fw-bold text-primary"><%= @common_space.name %></h1>
     <p class="text-muted fs-5"><%= @common_space.description %></p>
-
     <!-- Disponibilidad -->
     <span class="badge <%= @common_space.is_available ? 'bg-success' : 'bg-danger' %> px-3 py-2 rounded-pill fs-6">
       <%= @common_space.is_available ? "Disponible" : "No disponible" %>
     </span>
   </div>
-
   <!-- Info: Precio + horarios -->
   <div class="row g-4 mb-5">
     <div class="col-md-4">
@@ -50,13 +59,11 @@
         </p>
       </div>
     </div>
-
     <div class="col-md-8">
       <div class="p-4 shadow-sm border-0 rounded-4 bg-white">
         <h5 class="fw-bold text-primary mb-3">
           <i class="fa-solid fa-clock me-2"></i> Horarios Disponibles
         </h5>
-
         <% if @usable_hours.any? %>
           <ul class="list-group list-group-flush">
             <%# @usable_hours.each do |hour| %>
@@ -66,11 +73,12 @@
                   <%#= hour.start.strftime("%H:%M") %> – <%#= hour.end.strftime("%H:%M") %>
                 </span>
               </li>
-            <%# end %>
-          </ul>
-        <% else %>
-          <p class="text-muted fst-italic">No se configuraron horarios.</p>
-        <% end %>
+              <%# end %>
+            </ul>
+          <% else %>
+            <p class="text-muted fst-italic">No se configuraron horarios.</p>
+          <% end %>
+        </div>
       </div>
     </div>
   </div>
@@ -119,4 +127,60 @@
 </div>
 
 
+    <!-- Acciones del administrador -->
+    <!-- Acciones del administrador -->
+    <% if policy(@common_space).update? %>
+      <div class="d-flex justify-content-end gap-3 mb-4">
+        <!-- Editar espacio -->
+        <%= link_to edit_common_space_path(@common_space),
+          class: "btn rounded-pill px-4 fw-semibold shadow-sm",
+          style: "background:#3B5BDB; color:white; border:none;" do %>
+          <i class="fa-solid fa-pen-to-square me-2"></i>
+          Editar espacio
+        <% end %>
+        <!-- Eliminar espacio -->
+        <%= link_to common_space_path(@common_space),
+          method: :delete,
+          data: { confirm: '¿Seguro que deseas eliminar este espacio común?' },
+          class: "btn rounded-pill px-4 fw-semibold shadow-sm",
+          style: "background:#0743A1; color:white; border:none;" do %>
+          <i class="fa-solid fa-trash me-2"></i>
+          Eliminar espacio
+        <% end %>
+      </div>
+    <% end %>
+    <!-- Acciones de reservas -->
+    <% if current_user.resident.present? %>
+    <%= link_to "Mis reservas", common_space_bookings_path(@common_space),
+      data: { turbo_frame: "my_bookings" },
+      class: "btn btn-outline-primary rounded-pill fw-semibold mb-3" %>
+      <% end %>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h3 class="fw-bold text-primary mb-0">
+        <i class="fa-solid fa-calendar-check me-2"></i>
+        Reservas
+      </h3>
+      <%= turbo_frame_tag "my_bookings" %>
+      <!-- SOLO LOS VECINOS PUEDEN RESERVAR -->
+      <% if current_user.resident.present? %>
+        <%= link_to new_common_space_booking_path(@common_space),
+          data: { turbo_frame: "new_booking" },
+          class: "btn btn-primary btn-lg rounded-3 shadow-sm px-4" do %>
+          <i class="fa-solid fa-plus me-1"></i> Nueva reserva
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+  <%= turbo_frame_tag "new_booking" %>
+  <% if @bookings.any? %>
+    <div class="list-group shadow-sm rounded-4 mb-4">
+      <div id="bookings">
+        <% @bookings.each do |booking| %>
+          <%= render "booking", booking: booking %>
+        <% end %>
+      </div>
+    </div>
+  <% else %>
+    <p class="text-muted fst-italic mb-4">Todavía no hay reservas para este espacio.</p>
+  <% end %>
 </div>
