@@ -23,6 +23,12 @@ class ChatbotJob < ApplicationJob
 
     new_content = chatgpt_response.dig("choices", 0, "message", "content")
 
+    # 🔧 Normalizar enlaces de reserva (forzar show del espacio)
+    new_content = new_content.gsub(
+      /\/common_spaces\/(\d+)\/bookings(\/new)?/,
+      '/common_spaces/\1'
+    )
+
     @question.update!(ai_answer: new_content)
 
     # IMPORTANTE: usamos el broadcast de la propia pregunta
@@ -47,7 +53,6 @@ class ChatbotJob < ApplicationJob
     # Identificación del usuario
     user_role = @question.user.administrator.present? ? "admin" : "resident"
     community_id = @question.user.community&.id || Community.find_by(administrator_id: @question.user.id)&.id
-
 
     system_text = <<~TEXT
       Eres el asistente oficial de ComunidApp.
@@ -101,7 +106,7 @@ class ChatbotJob < ApplicationJob
       2) Si el usuario es "resident":
           - Responde:
             "Para crear este tipo de recurso necesitas permisos de administrador.
-            Puedes ver la información de la comunidad aquí:
+            Puedes contactarte con un Administrador o ver la información de la comunidad aquí:
             <a href='/communities/#{community_id}'>Ver información de la comunidad</a>"
 
       --- SOBRE EL ADMINISTRADOR ---
