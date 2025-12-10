@@ -7,9 +7,9 @@ class UsableHoursGenerator
 
   def initialize(common_space, params)
     @common_space = common_space
-    @days = Array(params[:days_of_week]).map(&:to_i)
-    @start_time = params[:start_time]
-    @end_time = params[:end_time]
+    @days        = Array(params[:days_of_week]).map(&:to_i) # 0..6
+    @start_time  = params[:start_time].to_i
+    @end_time    = params[:end_time].to_i
   end
 
   def call
@@ -17,7 +17,6 @@ class UsableHoursGenerator
     return Result.new(false, "La hora de fin debe ser mayor a la de inicio") if invalid_time_range?
 
     generate_hours
-
     Result.new(true, nil)
   end
 
@@ -32,7 +31,7 @@ class UsableHoursGenerator
     last_day = today.end_of_month
 
     (today..last_day).each do |date|
-      weekday = convert_to_monday_first(date.wday)
+      weekday = date.wday               # Ruby → 0..6
       next unless @days.include?(weekday)
 
       generate_daily_slots(date)
@@ -40,10 +39,7 @@ class UsableHoursGenerator
   end
 
   def generate_daily_slots(date)
-    start_hour = @start_time.to_i
-    end_hour = @end_time.to_i
-
-    (start_hour...end_hour).each do |hour|
+    (@start_time...@end_time).each do |hour|
       start_dt = DateTime.new(date.year, date.month, date.day, hour, 0, 0)
       end_dt   = start_dt + 1.hour
 
@@ -59,11 +55,5 @@ class UsableHoursGenerator
 
   def duplicate_slot?(start_dt, end_dt)
     @common_space.usable_hours.exists?(start: start_dt, end: end_dt)
-  end
-
-  # Ruby wday → L=1 ... D=7
-  def convert_to_monday_first(wday)
-    wday = 7 if wday == 0
-    wday
   end
 end

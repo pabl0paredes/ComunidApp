@@ -23,7 +23,7 @@
         <!-- Días de la semana -->
         <div class="mb-3">
           <label class="form-label fw-semibold">Días disponibles</label><br>
-          <% [["Lunes",1],["Martes",2],["Miércoles",3],["Jueves",4],["Viernes",5],["Sábado",6],["Domingo",7]].each do |day_name, day_value| %>
+          <% [["Lunes",1],["Martes",2],["Miércoles",3],["Jueves",4],["Viernes",5],["Sábado",6],["Domingo",0]].each do |day_name, day_value| %>
             <div class="form-check form-check-inline">
               <%= check_box_tag "days_of_week[]", day_value, false, class: "form-check-input", id: "day_#{day_value}" %>
               <%= label_tag "day_#{day_value}", day_name, class: "form-check-label" %>
