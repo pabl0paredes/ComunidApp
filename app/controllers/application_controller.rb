@@ -19,7 +19,9 @@ class ApplicationController < ActionController::Base
     Time.use_zone(current_user.time_zone) {yield}
   end
 
-
+  def after_sign_in_path_for(resource)
+    root_path
+  end
 
   private
 

@@ -1,5 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 import flatpickr from "flatpickr"
+import { Spanish } from "flatpickr/l10n/es"
 
 export default class extends Controller {
   static values = {
@@ -14,8 +15,9 @@ export default class extends Controller {
     const allowedDates = await this.fetchAvailableDates()
 
     flatpickr(this.element, {
-      inline: this.inlineValue || false, // 👈 AHORA SOPORTA DIV INLINE
-      altInput: !this.inlineValue,       // 👈 sin input extra cuando inline
+      locale: Spanish,
+      inline: this.inlineValue || false,
+      altInput: !this.inlineValue,
       altFormat: this.altFormatValue || "d-m-Y",
       dateFormat: this.dateFormatValue || "Y-m-d",
       defaultDate: this.defaultDateValue,
@@ -26,10 +28,8 @@ export default class extends Controller {
 
   async fetchAvailableDates() {
     const url = `/common_spaces/${this.commonSpaceIdValue}/bookings/available_dates`
-
     const response = await fetch(url)
     if (!response.ok) return []
-
     return await response.json()
   }
 }

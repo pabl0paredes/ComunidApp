@@ -6,7 +6,6 @@
       <i class="fa-solid fa-arrow-left"></i> Volver a espacios comunes
     <% end %>
   </div>
-
   <!-- Header con icono -->
   <div class="text-center mb-4">
     <% name = @common_space.name.to_s.downcase %>
@@ -30,7 +29,6 @@
               else
                 "fa-building"
               end %>
-
     <div class="mx-auto mb-3"
          style="
            width: 100px;
@@ -42,62 +40,49 @@
            justify-content:center;">
       <i class="fa-solid <%= icon %>" style="font-size: 2.8rem; color:#0743a1;"></i>
     </div>
-
     <h1 class="fw-bold text-primary"><%= @common_space.name %></h1>
     <p class="text-muted fs-5"><%= @common_space.description %></p>
-
     <!-- Disponibilidad -->
     <span class="badge <%= @common_space.is_available ? 'bg-success' : 'bg-danger' %> px-3 py-2 rounded-pill fs-6">
       <%= @common_space.is_available ? "Disponible" : "No disponible" %>
     </span>
   </div>
-
   <!-- Info: Precio + horarios -->
   <div class="row g-4 mb-5">
-
     <!-- PRECIO (SIMPLE, FORMATO EXACTO: $10000) -->
     <div class="col-md-4">
       <div class="p-4 shadow-sm border-0 rounded-4 bg-white">
         <h5 class="fw-bold text-primary mb-3">
           <i class="fa-solid fa-tag me-2"></i> Precio
         </h5>
-
         <p class="fs-5 fw-semibold text-dark">
           $<%= @common_space.price.to_i %>
         </p>
       </div>
     </div>
-
     <!-- HORARIOS -->
     <div class="col-md-8">
       <div class="p-4 shadow-sm border-0 rounded-4 bg-white">
         <h5 class="fw-bold text-primary mb-3">
           <i class="fa-solid fa-clock me-2"></i> Horarios
         </h5>
-
+        <% day_names_es = I18n.t("date.day_names", locale: :es) %>
         <% week_hours = @usable_hours.group_by { |h| h.start.wday } %>
-
         <% week_hours.each do |wday, hours| %>
           <% ordered = hours.sort_by(&:start) %>
-
           <% first_hour = ordered.first.start %>
           <% last_hour  = ordered.last.end %>
-
           <p>
-            <strong><%= I18n.t("date.day_names")[wday].capitalize %>:</strong>
-            <%= first_hour.strftime("%-I:%M %P") %> - <%= last_hour.strftime("%-I:%M %P") %>
+            <strong><%= day_names_es[wday].capitalize %>:</strong>
+            <%= first_hour.strftime("%H:%M") %> - <%= last_hour.strftime("%H:%M") %>
           </p>
         <% end %>
-
       </div>
     </div>
-
   </div>
-
   <!-- Acciones del administrador -->
   <% if policy(@common_space).update? %>
     <div class="d-flex justify-content-end gap-3 mb-4">
-
       <!-- Editar espacio -->
       <%= link_to edit_common_space_path(@common_space),
         class: "btn rounded-pill px-4 fw-semibold shadow-sm",
@@ -105,7 +90,6 @@
         <i class="fa-solid fa-pen-to-square me-2"></i>
         Editar espacio
       <% end %>
-
       <!-- Eliminar espacio -->
       <%= link_to common_space_path(@common_space),
         data: { turbo_method: :delete,
@@ -115,13 +99,10 @@
         <i class="fa-solid fa-trash me-2"></i>
         Eliminar espacio
       <% end %>
-
     </div>
   <% end %>
-
   <!-- Acciones de reservas -->
   <div class="row mt-5">
-
     <!-- IZQUIERDA: Mis reservas del usuario -->
     <div class="col-md-6">
       <%= turbo_frame_tag "bookings_list" do %>
@@ -130,7 +111,6 @@
             <i class="fa-solid fa-calendar-check me-2"></i>
             <%= current_user.administrator.present? ? "Reservas" : "Mis Reservas" %>
           </h4>
-
           <% if @bookings.any? %>
             <ul class="list-group list-group-flush mb-4">
               <% @bookings.each do |booking| %>
@@ -142,22 +122,16 @@
               Aún no tienes reservas para este espacio.
             </p>
           <% end %>
-
         </div>
       <% end %>
     </div>
-
     <!-- DERECHA: Calendario + formulario -->
     <div class="col-md-6 d-flex justify-content-end">
       <div class="p-4 shadow-sm border-0 rounded-4 bg-white sticky-top"
         style="top: 100px; width: 90%; max-width: 420px;">
         <h4 class="fw-bold text-primary mb-3 text-start">Reservar ahora</h4>
-
         <%= render "booking_form", common_space: @common_space, booking: @booking %>
-
       </div>
     </div>
-
   </div>
-
 </div>
