@@ -38,6 +38,6 @@ class CommonSpacePolicy < ApplicationPolicy
 
 
   def admin_of_existing_space?
-    record.respond_to?(:community) && record.community.administrator_id == user.id
+    record.community.administrator.user_id == user.id
   end
 end

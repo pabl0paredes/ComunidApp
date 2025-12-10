@@ -18,7 +18,8 @@ pin_all_from "app/javascript/controllers", under: "controllers"
 pin "bootstrap", to: "bootstrap.min.js", preload: true
 pin "@popperjs/core", to: "popper.js", preload: true
 pin "flatpickr", to: "https://ga.jspm.io/npm:flatpickr@4.6.13/dist/esm/index.js", preload: true
-# Flatpickr JS y CSS desde CDN
+pin "flatpickr/l10n/es", to: "https://ga.jspm.io/npm:flatpickr@4.6.13/dist/l10n/es.js"
+
 # pin "flatpickr" # @4.6.13
 # pin "flatpickr/dist/flatpickr.min.css", to: "https://ga.jspm.io/npm:flatpickr@4.6.13/dist/flatpickr.min.css"
 # pin "flatpickr/dist/themes/material_blue.css", to: "https://ga.jspm.io/npm:flatpickr@4.6.13/dist/themes/material_blue.css"
