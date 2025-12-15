@@ -23,6 +23,7 @@ Rails.application.routes.draw do
     member do
       get :auth_waiting
       get :already_resident
+      resources :resident_summary, only: [:index, :show]
     end
   end
 
@@ -32,6 +33,7 @@ Rails.application.routes.draw do
       collection do
         get :available_hours
         get :available_dates
+
       end
     end
     resources :usable_hours, only: [:create, :update]
@@ -66,5 +68,7 @@ Rails.application.routes.draw do
   resource :chat_session, only: [] do
     post :reset
   end
+
+
 
 end
