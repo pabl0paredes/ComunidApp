@@ -1,2 +1,27 @@
-<h1>ResidentSummary#index</h1>
-<p>Find me in app/views/resident_summary/index.html.erb</p>
+<%# No pienses en HTML todavía. Pensá en secciones:
+Contexto
+“Este es tu resumen”
+Comunidad / período (si suma claridad)
+Estado general
+Total asignado
+Total pagado
+Total pendiente
+(este bloque es el protagonista)
+Desglose personal
+Solo gastos que lo afectan
+“Tu parte”
+Estado / progreso personal
+Acción implícita
+Ir al detalle
+Nada administrativo
+Empty state
+Mensaje claro y humano si no hay datos
+Si una parte no entra en uno de esos bloques, probablemente sobra. %>
+<p>Resumen personal</p>
+
+<p>Comunidad <%=current_user.community.name%></p>
+
+<p>Estado general</p>
+<p>Total asignado <%= current_user.resident.expense_details_residents %></p>
+<p>Total pagado  <%= current_user.resident.expense_details_residents.where(paid: true)%> </p>
+<p>Total pendiente <%= current_user.resident.expense_details_residents.where(paid: false)%></p>
