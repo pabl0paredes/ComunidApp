@@ -11,8 +11,7 @@ class CommonSpacesController < ApplicationController
   def show
     authorize @common_space
     @booking = Booking.new
-    # @bookings = @common_space.bookings.order(start: :asc)
-    if policy(@common_space).update?   # administrador o encargado
+    if policy(@common_space).update?
       @bookings = @common_space.bookings.includes(resident: :user)
     else
       @bookings = @common_space.bookings

@@ -26,12 +26,15 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :resident_summary, only: [:index, :show]
+
   resources :common_spaces, only: [:show, :destroy, :edit, :update] do
     # resources :bookings, only: [:create] #para ver las reservas dentro de los common spaces y posteriormente hacer una reserva
     resources :bookings, only: [:index, :new, :create, :show]  do
       collection do
         get :available_hours
         get :available_dates
+
       end
     end
     resources :usable_hours, only: [:create, :update]
@@ -66,5 +69,7 @@ Rails.application.routes.draw do
   resource :chat_session, only: [] do
     post :reset
   end
+
+
 
 end
