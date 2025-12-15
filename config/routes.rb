@@ -23,9 +23,10 @@ Rails.application.routes.draw do
     member do
       get :auth_waiting
       get :already_resident
-      resources :resident_summary, only: [:index, :show]
     end
   end
+
+  resources :resident_summary, only: [:index, :show]
 
   resources :common_spaces, only: [:show, :destroy, :edit, :update] do
     # resources :bookings, only: [:create] #para ver las reservas dentro de los common spaces y posteriormente hacer una reserva
